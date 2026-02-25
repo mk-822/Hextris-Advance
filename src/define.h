@@ -1,0 +1,6 @@
+#define HEXTRISDEFINEHEADER
+#ifndef HEXTRISDEFINEHEADER
+
+
+
+#endif
