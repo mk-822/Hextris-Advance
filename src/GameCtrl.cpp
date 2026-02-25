@@ -2,9 +2,7 @@
 #include "logo.h"
 #include "soloplay.h"
 #include "title.h"
-#include "option.h"
 #include "ScoreDisplay.h"
-#include "multiplay.h"
 
 GameCtrl::GameCtrl(){
 	// ゲーム開始からのフレーム数
@@ -86,12 +84,12 @@ void GameCtrl::ChangeScene(){
 	case SINGLE_SCENE:
 		mode = new SoloPlay();
 		break;
-	case MULTI_SCENE:
-		mode = new MultiPlay();
-		break;
-	case OPTION_SCENE://Clockが追加しますた
-		mode = new Option();
-		break;
+	// case MULTI_SCENE:
+	// 	mode = new MultiPlay();
+	// 	break;
+	// case OPTION_SCENE://Clockが追加しますた
+	// 	mode = new Option();
+	// 	break;
 	}
 	mode->Initialize(&scene,&dxg,&image,&input);
 }

@@ -1,10 +1,8 @@
-#include <windows.h>
 #include "DxGraph.h"
 #include "GameCtrl.h"
 #include "StdAfx.h"
 #include "main.h"
 #include "keydefine.h"
-#include "debug.h"
 #include "common.h"
 #include "Joypad.h"
 #include "DataFileLoader.h"

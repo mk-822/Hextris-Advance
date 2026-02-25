@@ -1,7 +1,6 @@
 #ifndef JOYPADHEADER
 #define JOYPADHEADER
 
-#pragma comment(lib, "winmm.lib")
 #include "keydefine.h"
 
 typedef unsigned int INPUT;

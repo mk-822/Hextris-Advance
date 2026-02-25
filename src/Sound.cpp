@@ -1,5 +1,4 @@
 #include "Sound.h"
-#include "DxLib.h"
 #include "common.h"
 
 int Sound::bgm_no;

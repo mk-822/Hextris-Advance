@@ -3,8 +3,6 @@
 
 #include "Joypad.h"
 #include "common.h"
-#include "DxLib.h"
-#include <windows.h>
 #include <math.h>
 
 JoyPadCtrl::JoyPadCtrl(){

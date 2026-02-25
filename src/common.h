@@ -34,10 +34,10 @@ static const int MULTI_IMG = 32;
 //シーン管理定義
 static const int LOGO_SCENE = 0;			// ロゴ画面
 static const int TITLE_SCENE = 1;			// タイトル画面
-static const int OPTION_SCENE = 2;			//オプション
+//static const int OPTION_SCENE = 2;			//オプション
 static const int SCORE_SCENE = 3;			// スコアランキング
 static const int SINGLE_SCENE = 4;		// シングルプレイ
-static const int MULTI_SCENE = 5;		// マルチプレイ
+//static const int MULTI_SCENE = 5;		// マルチプレイ
 
 //ブレンド方法定義
 static const int NORMAL_BLEND = 0;	// 通常ブレンド
