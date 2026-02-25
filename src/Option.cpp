@@ -1,11 +1,11 @@
-// Option.cpp: Option ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// Option.cpp: Option ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "Option.h"
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 //	GetPrivateProfileString(JOYNAME[i],KEYNAME[0],NULL,str,100,JOYINIPATH)
 Option::Option(){
@@ -28,7 +28,7 @@ Option::Option(){
 			SRAM[i] = mode[i];
 	}
 }
-//ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Åinit‚©‚ç‚Ì“Ç‚Ýž‚Ý
+//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§initã‹ã‚‰ã®èª­ã¿è¾¼ã¿
 
 
 
@@ -50,7 +50,7 @@ void Option :: Main(){
 		Height--;
 	if(input->GetKeyState(0,1) & DOWN)
 		Height++;
-	//////////Height‚Ì§Œä/////////
+	//////////Heightã®åˆ¶å¾¡/////////
 	if(Height >= Option_Menu)
 		Height = 0;
 	if(Height < 0)
@@ -60,7 +60,7 @@ void Option :: Main(){
 		mode[Height]--;
 	if(input->GetKeyState(0,1) & RIGHT)
 		mode[Height]++;
-	///////mode‚Ì§Œä//////////
+	///////modeã®åˆ¶å¾¡//////////
 	switch(Height){
 	case 1:
 		break;
@@ -75,14 +75,14 @@ void Option :: Main(){
 			mode[Height] = 2;
 		break;
 	}
-	//‚±‚ê‚Å‰¼‘zã‚ÌƒJ[ƒ\ƒ‹‚ÌˆÊ’u‚ÍŒˆ’è//////////
-	/////////////////////ƒCƒxƒ“ƒg//////////////////////
+	//ã“ã‚Œã§ä»®æƒ³ä¸Šã®ã‚«ãƒ¼ã‚½ãƒ«ã®ä½ç½®ã¯æ±ºå®š//////////
+	/////////////////////ã‚¤ãƒ™ãƒ³ãƒˆ//////////////////////
 	if(Height == Appry && input->GetKeyState(0,1) & BUTTON[0])
 		OptionEnd();
 	if(Height == Cancel && input->GetKeyState(0,1) & BUTTON[0])
 		OptionEnd(false);
 	//////////////////////////////////////////////////////
-	//////////ƒJ[ƒ\ƒ‹•`‰æ////////////////////////////////////
+	//////////ã‚«ãƒ¼ã‚½ãƒ«æç”»////////////////////////////////////
 	if(Height == ChangeWindowSize){
 		DrawImageFont(20,50,dxg,image->i[FONT_IMG],"WindowSize");
 		switch(mode[Height]){
@@ -107,7 +107,7 @@ void Option :: Main(){
 
 
 
-/////////ini‚É‘‚«ž‚Ý[/////////////////
+/////////iniã«æ›¸ãè¾¼ã¿ãƒ¼/////////////////
 void Option::WriteInitFile()
 {
 	switch(mode[ChangeWindowSize]){
@@ -127,7 +127,7 @@ void Option::WriteInitFile()
 }
 //////////////////////////////////////////////////
 
-//////ƒIƒvƒVƒ‡ƒ“‚ðI‚í‚ç‚¹‚Ä‚¢‚½‚¾‚«‚Ü‚·///////////
+//////ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’çµ‚ã‚ã‚‰ã›ã¦ã„ãŸã ãã¾ã™///////////
 void Option ::OptionEnd(bool flag)
 {
 	if(flag){
@@ -145,18 +145,18 @@ void Option ::OptionEnd(bool flag)
 
 /*
 
-V‚µ‚¢ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ðŠJ‚­•û–@(ƒvƒ‰ƒCƒ}ƒŠ[ƒXƒŒƒbƒh‚àì¬‚Å‚«‚éAPI‚Å‚Í‚±‚ê‚ðŽg‚¨‚¤II)
+æ–°ã—ã„ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’é–‹ãæ–¹æ³•(ãƒ—ãƒ©ã‚¤ãƒžãƒªãƒ¼ã‚¹ãƒ¬ãƒƒãƒ‰ã‚‚ä½œæˆã§ãã‚‹APIã§ã¯ã“ã‚Œã‚’ä½¿ãŠã†ï¼ï¼)
 BOOL CreateProcess(
-  LPCTSTR lpApplicationName,                 // ŽÀs‰Â”\ƒ‚ƒWƒ…[ƒ‹‚Ì–¼‘O
-  LPTSTR lpCommandLine,                      // ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Ì•¶Žš—ñ
-  LPSECURITY_ATTRIBUTES lpProcessAttributes, // ƒZƒLƒ…ƒŠƒeƒB‹LqŽq
-  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // ƒZƒLƒ…ƒŠƒeƒB‹LqŽq
-  BOOL bInheritHandles,                      // ƒnƒ“ƒhƒ‹‚ÌŒp³ƒIƒvƒVƒ‡ƒ“
-  DWORD dwCreationFlags,                     // ì¬‚Ìƒtƒ‰ƒO
-  LPVOID lpEnvironment,                      // V‚µ‚¢ŠÂ‹«ƒuƒƒbƒN
-  LPCTSTR lpCurrentDirectory,                // ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚Ì–¼‘O
-  LPSTARTUPINFO lpStartupInfo,               // ƒXƒ^[ƒgƒAƒbƒvî•ñ
-  LPPROCESS_INFORMATION lpProcessInformation // ƒvƒƒZƒXî•ñ
+  LPCTSTR lpApplicationName,                 // å®Ÿè¡Œå¯èƒ½ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®åå‰
+  LPTSTR lpCommandLine,                      // ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®æ–‡å­—åˆ—
+  LPSECURITY_ATTRIBUTES lpProcessAttributes, // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è¨˜è¿°å­
+  LPSECURITY_ATTRIBUTES lpThreadAttributes,  // ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£è¨˜è¿°å­
+  BOOL bInheritHandles,                      // ãƒãƒ³ãƒ‰ãƒ«ã®ç¶™æ‰¿ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+  DWORD dwCreationFlags,                     // ä½œæˆã®ãƒ•ãƒ©ã‚°
+  LPVOID lpEnvironment,                      // æ–°ã—ã„ç’°å¢ƒãƒ–ãƒ­ãƒƒã‚¯
+  LPCTSTR lpCurrentDirectory,                // ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®åå‰
+  LPSTARTUPINFO lpStartupInfo,               // ã‚¹ã‚¿ãƒ¼ãƒˆã‚¢ãƒƒãƒ—æƒ…å ±
+  LPPROCESS_INFORMATION lpProcessInformation // ãƒ—ãƒ­ã‚»ã‚¹æƒ…å ±
 );
 */
 

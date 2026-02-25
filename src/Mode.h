@@ -9,7 +9,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int 
 void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* format, ...);
 char* FrameCountToStr(int count,char* timestr);
 
-// Œp³‚µ‚Äg‚Á‚Ä‚­‚¾‚³‚¢
+// ç¶™æ‰¿ã—ã¦ä½¿ã£ã¦ãã ã•ã„
 class Mode{
 protected:
 	int* scene;

@@ -6,13 +6,13 @@
 #include "common.h"
 #include "Mode.h"
 
-// BMP ƒtƒHƒ“ƒg‚ðŽg‚Á‚Ä•¶Žš‚ð•`‰æB‰p”Žš‚¾‚¯B
+// BMP ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½¿ã£ã¦æ–‡å­—ã‚’æç”»ã€‚è‹±æ•°å­—ã ã‘ã€‚
 void DrawImageFont(int x, int y, draw* dxg, int font, const char*, ...);
 
-// FPS ƒJƒEƒ“ƒ^B•Ô’l‚Í FPS
+// FPS ã‚«ã‚¦ãƒ³ã‚¿ã€‚è¿”å€¤ã¯ FPS
 int CalcuFps();
 
-// ƒQ[ƒ€ŠÇ—‚Ì‚¢‚¿‚Î‚ñ‚¾‚¢‚¶‚È‚Æ‚±‚ë
+// ã‚²ãƒ¼ãƒ ç®¡ç†ã®ã„ã¡ã°ã‚“ã ã„ã˜ãªã¨ã“ã‚
 class GameCtrl{
 private:
 	float posX, posY;

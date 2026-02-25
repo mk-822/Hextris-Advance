@@ -8,28 +8,28 @@
 class Dmusic{
 public:
 	bool init(HWND hWnd);
-	//‰Šú‰»‚µ‚Ü‚·Bp1 ‚É‚ÍƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	//åˆæœŸåŒ–ã—ã¾ã™ã€‚p1 ã«ã¯ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 
 	bool play(char* filename,int loop);
-	//“Ç‚İ‚İ•Ä¶‚µ‚Ü‚·Bp1 ‚É‚Íƒtƒ@ƒCƒ‹–¼(‘Š‘ÎƒpƒX‰Â)Ap2 ‚É‚Íƒ‹[ƒv‰ñ”(-1‚Å–³ŒÀƒ‹[ƒv)
+	//èª­ã¿è¾¼ã¿ï¼†å†ç”Ÿã—ã¾ã™ã€‚p1 ã«ã¯ãƒ•ã‚¡ã‚¤ãƒ«å(ç›¸å¯¾ãƒ‘ã‚¹å¯)ã€p2 ã«ã¯ãƒ«ãƒ¼ãƒ—å›æ•°(-1ã§ç„¡é™ãƒ«ãƒ¼ãƒ—)
 
 	bool stop();
-	//Ä¶‚ğ’â~‚µ‚Ü‚·B
+	//å†ç”Ÿã‚’åœæ­¢ã—ã¾ã™ã€‚
 
 	bool volume(long vol);
-	//ƒ{ƒŠƒ…[ƒ€‚ğİ’è‚µ‚Ü‚·B
+	//ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’è¨­å®šã—ã¾ã™ã€‚
 
 	long volume();
-	//ƒ{ƒŠƒ…[ƒ€‚ğæ“¾‚µ‚Ü‚·B
+	//ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’å–å¾—ã—ã¾ã™ã€‚
 
 	bool release();
-	//‰ğ•ú‚µ‚Ü‚·B
+	//è§£æ”¾ã—ã¾ã™ã€‚
 
 private:
-	// DirectMusic‚Ì•Ï”
-	IDirectMusicPerformance8* g_lpPerformance;		// ƒpƒtƒH[ƒ}ƒ“ƒX
-	IDirectMusicLoader8* g_lpLoader;		// ƒ[ƒ_[
-	IDirectMusicSegment8* g_lpSegment;		// ƒZƒOƒƒ“ƒg
+	// DirectMusicã®å¤‰æ•°
+	IDirectMusicPerformance8* g_lpPerformance;		// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒãƒ³ã‚¹
+	IDirectMusicLoader8* g_lpLoader;		// ãƒ­ãƒ¼ãƒ€ãƒ¼
+	IDirectMusicSegment8* g_lpSegment;		// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ
 };
 
 #endif

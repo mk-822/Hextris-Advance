@@ -1,4 +1,4 @@
-// ScoreManager.cpp: ScoreManager ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// ScoreManager.cpp: ScoreManager ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -6,12 +6,12 @@
 #include "ScoreManager.h"
 
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 
 ScoreManager::ScoreManager()
 {
-	//ƒXƒRƒAî•ñ‚ğƒtƒ@ƒCƒ‹‚©‚ç“Ç‚İ‚İ
+	//ã‚¹ã‚³ã‚¢æƒ…å ±ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­ã¿è¾¼ã¿
 	static FILE *fp;
 	fp = fopen("./Data/easyscore.dat","r");
 	for(int i=0 ; i<10 ; i++){
@@ -82,7 +82,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	ScoreList[difficulty].record[order].time = time;
 	strcpy(ScoreList[difficulty].record[order].name,name);
 
-	//ƒXƒRƒAî•ñ‚ğƒtƒ@ƒCƒ‹‚É‘‚«‚İ
+	//ã‚¹ã‚³ã‚¢æƒ…å ±ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã¿
 	static FILE *fp;
 	fp = fopen("./Data/easyscore.dat","w");
 	for(int i=0 ; i<10 ; i++){

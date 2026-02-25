@@ -24,7 +24,7 @@ static const char* rankname[]={
 
 void SoloPlay::Main(){
 	switch(phase){
-	case 0: //‘O‰Šú‰»
+	case 0: //å‰åˆæœŸåŒ–
 		Sound::ChangeBgm(-1);
 		drawData.game_pos_x = 112;
 		drawData.game_pos_y = 0;
@@ -36,19 +36,19 @@ void SoloPlay::Main(){
 		hCtrl.Initialize(dxg,image,input,&gameData);
 
 		phase++; count = 0;
-		// ‚ ‚¦‚Äbreak ‚ğ“ü‚ê‚Ä‚¢‚Ü‚¹‚ñ
-	case 1:	// ƒtƒF[ƒhƒCƒ“
-		// ”wŒi‚Ì•`‰æ
+		// ã‚ãˆã¦break ã‚’å…¥ã‚Œã¦ã„ã¾ã›ã‚“
+	case 1:	// ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
 
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,count*8);
 
 		if(count == 32){
 			phase++; count = 0;
 		}
 		break;
-	case 2:	// ‰Šú‰»
+	case 2:	// åˆæœŸåŒ–
 		Sound::ChangeBgm(1);
 		srand(GetTickCount());
 
@@ -67,15 +67,15 @@ void SoloPlay::Main(){
 		cntLevel = 0;
 		phase++;
 
-		// ‚ ‚¦‚Ä break ‚ğ“ü‚ê‚Ä‚¢‚Ü‚¹‚ñ
+		// ã‚ãˆã¦ break ã‚’å…¥ã‚Œã¦ã„ã¾ã›ã‚“
 		cur_diffic = 0;
 		difficulty = -1;
-	case 3: // “ïˆÕ“x‘I‘ğ
-		// ”wŒi‚Ì•`‰æ
+	case 3: // é›£æ˜“åº¦é¸æŠ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255);
-		// ƒXƒRƒAŠÖ˜A‚Ì•`‰æ
+		// ã‚¹ã‚³ã‚¢é–¢é€£ã®æç”»
 		DrawScore();
 
 		difficulty = SelectDifficulty();
@@ -87,11 +87,11 @@ void SoloPlay::Main(){
 		break;
 	case 4: // Ready ...?
 		Sound::ChangeBgm(-1);
-		// ”wŒi‚Ì•`‰æ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255);
-		// ƒXƒRƒAŠÖ˜A‚Ì•`‰æ
+		// ã‚¹ã‚³ã‚¢é–¢é€£ã®æç”»
 		DrawScore();
 
 		dxg->TexturePos(80,112,80,16);
@@ -139,11 +139,11 @@ void SoloPlay::Main(){
 		}
 
 		break;
-	case 5:	// ƒQ[ƒ€’†
-		// ”wŒi‚Ì•`‰æ
+	case 5:	// ã‚²ãƒ¼ãƒ ä¸­
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
 
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		if(hCtrl.Main(0)){
 			cur_pos = 120;
 			Sound::ChangeBgm(-1);
@@ -152,15 +152,15 @@ void SoloPlay::Main(){
 		hCtrl.Draw(&drawData);
 
 		cntTime++;
-		// ƒXƒRƒA‚È‚Ç‚Ìˆ—
+		// ã‚¹ã‚³ã‚¢ãªã©ã®å‡¦ç†
 		if(hCtrl.queFix){
 			hCtrl.queFix = 0;
 			cntFall++;
 			cntLevel++;
-			if(!(cntLevel%100)&&(cntLevel!=0)){	// ƒ‰ƒCƒ“Á‚µ‚¶‚á‚È‚¢‚Æ“ïˆÕ“x‚ÍƒAƒbƒv‚µ‚È‚¢
+			if(!(cntLevel%100)&&(cntLevel!=0)){	// ãƒ©ã‚¤ãƒ³æ¶ˆã—ã˜ã‚ƒãªã„ã¨é›£æ˜“åº¦ã¯ã‚¢ãƒƒãƒ—ã—ãªã„
 				cntLevel--;
 			}
-			if(hCtrl.queErace){	// Á‹‚ÌƒXƒRƒA‰ÁZ—¦ combo ‚Í˜A‘±‚ÅÁ‚µ‚½‚Æ‚«‚Ì“¾“_ã¸”{—¦
+			if(hCtrl.queErace){	// æ¶ˆå»æ™‚ã®ã‚¹ã‚³ã‚¢åŠ ç®—ç‡ combo ã¯é€£ç¶šã§æ¶ˆã—ãŸã¨ãã®å¾—ç‚¹ä¸Šæ˜‡å€ç‡
 				effect.erace = 1;
 				switch(hCtrl.queErace){
 				case 1:
@@ -179,7 +179,7 @@ void SoloPlay::Main(){
 				score += getscore;
 				cntErace += hCtrl.queErace;
 				cntLevel += hCtrl.queErace;
-				if(cntLevel%100 < (cntLevel-hCtrl.queErace)%100){ // “ïˆÕ“xã¸
+				if(cntLevel%100 < (cntLevel-hCtrl.queErace)%100){ // é›£æ˜“åº¦ä¸Šæ˜‡
 					Sound::PlaySe(7);
 					switch(cntLevel/100){
 					case 2:
@@ -199,13 +199,13 @@ void SoloPlay::Main(){
 					BGImage.Change(image->i[BG_IMG[cntLevel/100+1]],8);
 					effect.levelup = 1;
 					hCtrl.ChangeLevel(&gameData.difficultyData[difficulty][cntLevel/100]);
-					if((difficulty==0)&&(cntLevel>=300)){ // EASYƒNƒŠƒA
+					if((difficulty==0)&&(cntLevel>=300)){ // EASYã‚¯ãƒªã‚¢
 						Sound::ChangeBgm(6);
 						cntLevel = 300;
 						cur_pos = 240;
 						phase++;
 					}
-					if(cntLevel>=1000){	//ƒNƒŠƒA[
+					if(cntLevel>=1000){	//ã‚¯ãƒªã‚¢ãƒ¼
 						Sound::ChangeBgm(6);
 						cntLevel = 1000;
 						cur_pos = 240;
@@ -213,10 +213,10 @@ void SoloPlay::Main(){
 					}
 				}
 				cntCombo++;
-				if(cntCombo>=2){ // 2ƒRƒ“ƒ{ˆÈã
+				if(cntCombo>=2){ // 2ã‚³ãƒ³ãƒœä»¥ä¸Š
 					effect.combo = 1;
 				}
-				if(score >= gameData.borderScore[grade]){ // ƒOƒŒ[ƒh(SS,S,ABCDEF)ƒAƒbƒv
+				if(score >= gameData.borderScore[grade]){ // ã‚°ãƒ¬ãƒ¼ãƒ‰(SS,S,ABCDEF)ã‚¢ãƒƒãƒ—
 					Sound::PlaySe(10);
 					grade++;
 					effect.gradeup = 1;
@@ -228,27 +228,27 @@ void SoloPlay::Main(){
 			}
 		}
 
-		// ƒXƒRƒA‚È‚Ç•`‰æ
+		// ã‚¹ã‚³ã‚¢ãªã©æç”»
 		DrawScore();
 
 		break;
-	case 6:	// €–S
+	case 6:	// æ­»äº¡
 		hCtrl.CountUp();
 
-		// ”wŒi‚Ì•`‰æ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.Draw(&drawData);
-		// ƒXƒRƒA‚È‚Ç•`‰æ
+		// ã‚¹ã‚³ã‚¢ãªã©æç”»
 		DrawScore();
 
 		cur_pos--;
 
-		// ƒQ[ƒ€ƒI[ƒo‰æ‘œ
+		// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒç”»åƒ
 		dxg->TexturePos(96,0,96,176-(int)(176/60*cur_pos)-8);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40+(176/60*cur_pos));
 
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255,false);
 
 		if(cur_pos <= 0){
@@ -260,17 +260,17 @@ void SoloPlay::Main(){
 			}
 		}
 		break;
-	case 7: // ‚¤‚¥‚¢‚Æ ‚à‚µ‚­‚Í‚¨‚ß‚Å‚Æ‚¤
-		// ”wŒi‚Ì•`‰æ
+	case 7: // ã†ã‡ã„ã¨ ã‚‚ã—ãã¯ãŠã‚ã§ã¨ã†
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.Draw(&drawData);
-		// ƒXƒRƒA‚È‚Ç•`‰æ
+		// ã‚¹ã‚³ã‚¢ãªã©æç”»
 		DrawScore();
-		// ƒQ[ƒ€ƒI[ƒo‰æ‘œ
+		// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒç”»åƒ
 		dxg->TexturePos(96,0,96,176);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255,false);
 		
 		if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
@@ -312,7 +312,7 @@ void SoloPlay::Main(){
 		if(cur_pos <= 0){
 			if(ScoreData.JudgeOrder(score,difficulty) != -1){
 				phase += 1;
-					// –¼‘O“ü‚ê—pˆ—
+					// åå‰å…¥ã‚Œç”¨å‡¦ç†
 				strcpy(name.name,"   ");
 				name.cur_pos = 0;
 				name.cur_word = 65;
@@ -326,18 +326,18 @@ void SoloPlay::Main(){
 			}
 		}
 		break;
-	case 8: // ƒnƒCƒXƒRƒA‚É‚Í‚¢‚ê‚é‚æ‚¤‚¾
+	case 8: // ãƒã‚¤ã‚¹ã‚³ã‚¢ã«ã¯ã„ã‚Œã‚‹ã‚ˆã†ã 
 		Sound::ChangeBgm(8);
-		// ”wŒi‚Ì•`‰æ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒXƒRƒA‚È‚Ç•`‰æ
+		// ã‚¹ã‚³ã‚¢ãªã©æç”»
 		DrawScore();
-		// •Ç‚ğ‚Ñ‚å‚¤‚ª
+		// å£ã‚’ã³ã‚‡ã†ãŒ
 		hCtrl.DrawField(&drawData,255);
-		// ƒQ[ƒ€ƒI[ƒo‰æ‘œ
+		// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒç”»åƒ
 		dxg->TexturePos(96,0,96,176);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255,false);
 
 		{
@@ -368,16 +368,16 @@ void SoloPlay::Main(){
 			cur_pos = 0;
 		}
 		break;
-	case 9: // Ÿ‚ÌƒQ[ƒ€‚Ö
+	case 9: // æ¬¡ã®ã‚²ãƒ¼ãƒ ã¸
 		Sound::ChangeBgm(3);
-		// ”wŒi‚Ì•`‰æ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
-		// ƒXƒRƒA‚È‚Ç•`‰æ
+		// ã‚¹ã‚³ã‚¢ãªã©æç”»
 		DrawScore();
-		// •Ç‚ğ‚Ñ‚å‚¤‚ª
+		// å£ã‚’ã³ã‚‡ã†ãŒ
 		hCtrl.DrawField(&drawData,255);
 
-		// ƒQ[ƒ€ƒI[ƒo‰æ‘œ
+		// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒç”»åƒ
 		dxg->TexturePos(96,0,96,(int)cur_pos-8);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40+176-cur_pos);
 
@@ -395,7 +395,7 @@ void SoloPlay::Main(){
 			phase++;
 		}
 		if(input->GetKeyState(0,2)&BUTTON[0]){
-			// 1ƒvƒŒƒC‚µ‚Ä–ß‚Á‚Ä‚«‚½—p‚É‚à‚¤ˆê“x‰Šú‰»
+			// 1ãƒ—ãƒ¬ã‚¤ã—ã¦æˆ»ã£ã¦ããŸæ™‚ç”¨ã«ã‚‚ã†ä¸€åº¦åˆæœŸåŒ–
 			hCtrl.Initialize(dxg,image,input,&gameData);
 			// BGImage
 			BGImage.Change(image->i[BG_IMG[0]],8);
@@ -403,13 +403,13 @@ void SoloPlay::Main(){
 			phase = 2;
 		}
 		break;
-	case 10: // ƒtƒF[ƒhƒAƒEƒg
-		// ”wŒi‚Ì•`‰æ
+	case 10: // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¢ã‚¦ãƒˆ
+		// èƒŒæ™¯ã®æç”»
 		BGImage.Draw(dxg);
 
 		dxg->TexturePos();
 		dxg->Draw(image->i[BLANK_IMG],0,0,true,count*8);
-		// ƒƒCƒ“ƒQ[ƒ€‚Ì•`‰æ
+		// ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã®æç”»
 		hCtrl.DrawField(&drawData,255-count*8);
 
 		if(count == 32){
@@ -500,7 +500,7 @@ int SoloPlay::SelectDifficulty()
 			dxg->Draw(image->i[WORDS_IMG], (float)drawData.game_pos_x+8, (float)(drawData.game_pos_y+ 80 +i*16), false, 128);
 		}
 	}
-	// ƒJƒŒƒ“ƒg‰æ‘œ
+	// ã‚«ãƒ¬ãƒ³ãƒˆç”»åƒ
 	if(count%4){
 		dxg->TexturePos(0,16*cur_diffic+128,80,16);
 	}else{
@@ -530,7 +530,7 @@ int SoloPlay::SelectDifficulty()
 
 void SoloPlay::DrawScore()
 {
-	// ƒvƒŒƒCŠÔ•`‰æ
+	// ãƒ—ãƒ¬ã‚¤æ™‚é–“æç”»
 	char time[9];
 	DrawImageFont(
 		drawData.game_pos_x-2, 220, dxg,
@@ -539,13 +539,13 @@ void SoloPlay::DrawScore()
 		"%s", FrameCountToStr(cntTime,time)
 	);
 
-	// ƒXƒRƒA‚È‚Ç‚Ì”wŒi‚ğˆÃ‚­‚·‚éˆ—
+	// ã‚¹ã‚³ã‚¢ãªã©ã®èƒŒæ™¯ã‚’æš—ãã™ã‚‹å‡¦ç†
 	dxg->TexturePos(0,0,96,64);
 	dxg->Draw(image->i[BLANK_IMG],212,76,true,128);
-	// ƒ‰ƒ“ƒN‚Ì•`‰æ
+	// ãƒ©ãƒ³ã‚¯ã®æç”»
 	dxg->TexturePos((grade+1)*32,0,32,32);
 	dxg->Draw(image->i[RANK_IMG],224,40);
-	// ƒXƒRƒA‚È‚Ç‚Ì•`‰æ
+	// ã‚¹ã‚³ã‚¢ãªã©ã®æç”»
 	DrawImageFont(216,80,dxg,image->i[FONT_IMG],"SCORE:%d",score);
 	DrawImageFont(216,88,dxg,image->i[FONT_IMG],"NEXT :%d",gameData.borderScore[grade]);
 	DrawImageFont(216,96,dxg,image->i[FONT_IMG],"ERASE:%d",cntErace);
@@ -564,7 +564,7 @@ void SoloPlay::DrawScore()
 		DrawImageFont(216,120,dxg,image->i[FONT_IMG],"MODE :%s",difficname[difficulty]);
 	}
 
-	// ƒGƒtƒFƒNƒg‚È‚Ç•`‰æ
+	// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆãªã©æç”»
 	if(effect.combo){
 		ComboEffect();
 	}

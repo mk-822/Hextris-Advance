@@ -1,65 +1,65 @@
 #include "StdAfx.h"
 #include "dmusic.h"
 
-// DirectMusic‚Ì‰Šú‰»
+// DirectMusicã®åˆæœŸåŒ–
 bool Dmusic::init(HWND hWnd)
 {
-	g_lpPerformance	= NULL;		// ƒpƒtƒH[ƒ}ƒ“ƒX
-	g_lpLoader		= NULL;		// ƒ[ƒ_[
+	g_lpPerformance	= NULL;		// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒžãƒ³ã‚¹
+	g_lpLoader		= NULL;		// ãƒ­ãƒ¼ãƒ€ãƒ¼
 	
 	HRESULT hr;
 
-	// ƒpƒtƒH[ƒ}ƒ“ƒX‚Ìì¬
+	// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒžãƒ³ã‚¹ã®ä½œæˆ
 	hr = CoCreateInstance( CLSID_DirectMusicPerformance, NULL, CLSCTX_INPROC,
 						   IID_IDirectMusicPerformance8, (LPVOID*)&g_lpPerformance );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "DirectMusicPerformance8ƒIƒuƒWƒFƒNƒg‚Ìì¬‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "DirectMusicPerformance8ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
-	// ƒpƒtƒH[ƒ}ƒ“ƒX‚Ì‰Šú‰»
+	// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒžãƒ³ã‚¹ã®åˆæœŸåŒ–
 	hr = g_lpPerformance->InitAudio( 
-		NULL,									// IDirectMusicƒCƒ“ƒ^[ƒtƒFƒCƒX‚Í•s—v
-		NULL,									// IDirectSoundƒCƒ“ƒ^[ƒtƒFƒCƒX‚Í•s—v
-		hWnd,									// ƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
-		DMUS_APATH_SHARED_STEREOPLUSREVERB,		// ƒfƒtƒHƒ‹ƒg‚ÌƒI[ƒfƒBƒIƒpƒXƒ^ƒCƒv
-		64,										// ƒpƒtƒH[ƒ}ƒ“ƒXƒ`ƒƒƒ“ƒlƒ‹‚Ì”
-		DMUS_AUDIOF_ALL,						// ƒVƒ“ƒZƒTƒCƒU‚Ì‹@”\
-		NULL );									// ƒI[ƒfƒBƒIƒpƒ‰ƒ[ƒ^‚É‚ÍƒfƒtƒHƒ‹ƒg‚ðŽg—p
+		NULL,									// IDirectMusicã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã¯ä¸è¦
+		NULL,									// IDirectSoundã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã¯ä¸è¦
+		hWnd,									// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
+		DMUS_APATH_SHARED_STEREOPLUSREVERB,		// ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ã‚¹ã‚¿ã‚¤ãƒ—
+		64,										// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒžãƒ³ã‚¹ãƒãƒ£ãƒ³ãƒãƒ«ã®æ•°
+		DMUS_AUDIOF_ALL,						// ã‚·ãƒ³ã‚»ã‚µã‚¤ã‚¶ã®æ©Ÿèƒ½
+		NULL );									// ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã«ã¯ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚’ä½¿ç”¨
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "DirectMusicPerformance8‚Ì‰Šú‰»‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "DirectMusicPerformance8ã®åˆæœŸåŒ–ã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
-	// ƒ[ƒ_[‚Ìì¬
+	// ãƒ­ãƒ¼ãƒ€ãƒ¼ã®ä½œæˆ
 	hr = CoCreateInstance( CLSID_DirectMusicLoader, NULL, CLSCTX_INPROC,
 						   IID_IDirectMusicLoader8, (LPVOID*)&g_lpLoader );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "DirectMusicLoader8ƒIƒuƒWƒFƒNƒg‚Ìì¬‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "DirectMusicLoader8ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½œæˆã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
-	// ƒ[ƒ_[‚Ì‰Šú‰»iŒŸõƒpƒX‚ðƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ÉÝ’èj
+	// ãƒ­ãƒ¼ãƒ€ãƒ¼ã®åˆæœŸåŒ–ï¼ˆæ¤œç´¢ãƒ‘ã‚¹ã‚’ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã«è¨­å®šï¼‰
 	CHAR strPath[ MAX_PATH ];
 	DWORD i = GetCurrentDirectory( MAX_PATH, strPath );
 	if( i==0 || MAX_PATH<i )
 	{
-		DXTRACE_MSG( "ƒJƒŒƒ“ƒgƒfƒBƒŒƒNƒgƒŠ‚ÌŽæ“¾‚ÉŽ¸”s" );
+		DXTRACE_MSG( "ã‚«ãƒ¬ãƒ³ãƒˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å–å¾—ã«å¤±æ•—" );
 		return FALSE;
 	}
 
-	// ƒ}ƒ‹ƒ`ƒoƒCƒg•¶Žš‚ðUNICODE‚É•ÏŠ·
+	// ãƒžãƒ«ãƒãƒã‚¤ãƒˆæ–‡å­—ã‚’UNICODEã«å¤‰æ›
 	WCHAR wstrSearchPath[ MAX_PATH ];
 	MultiByteToWideChar( CP_ACP, 0, strPath, -1, wstrSearchPath, MAX_PATH );
 
-	// ƒ[ƒ_[‚ÉŒŸõƒpƒX‚ðÝ’è
+	// ãƒ­ãƒ¼ãƒ€ãƒ¼ã«æ¤œç´¢ãƒ‘ã‚¹ã‚’è¨­å®š
 	hr = g_lpLoader->SetSearchDirectory( GUID_DirectMusicAllTypes, wstrSearchPath, FALSE );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "ŒŸõƒpƒX‚ÌÝ’è‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "æ¤œç´¢ãƒ‘ã‚¹ã®è¨­å®šã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
@@ -68,35 +68,35 @@ bool Dmusic::init(HWND hWnd)
 
 bool Dmusic::play(char* filename,int loop)
 {
-	g_lpSegment		= NULL;		// ƒZƒOƒƒ“ƒg
+	g_lpSegment		= NULL;		// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ
 	HRESULT hr;
 
 	stop();
 
-	// ƒZƒOƒƒ“ƒgì¬
+	// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆä½œæˆ
 	WCHAR wstrFileName[MAX_PATH];
 	MultiByteToWideChar( CP_ACP, 0, filename, -1, wstrFileName, MAX_PATH );
 	hr = g_lpLoader->LoadObjectFromFile( CLSID_DirectMusicSegment, IID_IDirectMusicSegment8,
 										 wstrFileName, (LPVOID*)&g_lpSegment );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "ƒZƒOƒƒ“ƒg‚Ìƒ[ƒh‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
-	// MIDIƒtƒ@ƒCƒ‹‚Ìê‡‚ÍAƒpƒ‰ƒ[ƒ^‚ðÝ’è‚·‚é
+	// MIDIãƒ•ã‚¡ã‚¤ãƒ«ã®å ´åˆã¯ã€ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¨­å®šã™ã‚‹
 	hr = g_lpSegment->SetParam( GUID_StandardMIDIFile, 0xFFFFFFFF, 0, 0, NULL );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR( "ƒZƒOƒƒ“ƒg‚Ìƒpƒ‰ƒ[ƒ^Ý’è‚ÉŽ¸”s", hr );
+		DXTRACE_ERR( "ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿è¨­å®šã«å¤±æ•—", hr );
 		return FALSE;
 	}
 
-	// ƒoƒ“ƒh‚Ìƒ_ƒEƒ“ƒ[ƒh
+	// ãƒãƒ³ãƒ‰ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
 	hr = g_lpSegment->Download( g_lpPerformance );
 	if( FAILED(hr) )
 	{
-		DXTRACE_ERR("ƒZƒOƒƒ“ƒg‚P‚Ìƒoƒ“ƒh‚Ìƒ_ƒEƒ“ƒ[ƒh‚ÉŽ¸”s", hr);
+		DXTRACE_ERR("ã‚»ã‚°ãƒ¡ãƒ³ãƒˆï¼‘ã®ãƒãƒ³ãƒ‰ã®ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—", hr);
 		return FALSE;
 	}
 
@@ -106,16 +106,16 @@ bool Dmusic::play(char* filename,int loop)
 		g_lpSegment->SetRepeats( loop );
 	}
 
-	// ƒZƒOƒƒ“ƒg‚ÌÄ¶
+	// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®å†ç”Ÿ
 	g_lpPerformance->PlaySegmentEx(
-		g_lpSegment,	// ‰‰‘t‚·‚éƒZƒOƒƒ“ƒg
-		NULL,			// Žg—p‚µ‚È‚¢
-		NULL,			// ƒgƒ‰ƒ“ƒUƒNƒVƒ‡ƒ“—p
-		0,				// ƒtƒ‰ƒO
-		0,				// ŠJŽnƒ^ƒCƒ€A0 ‚Í‘¦Žž
-		NULL,			// ƒZƒOƒƒ“ƒgó‘Ô‚ðŽó‚¯Žæ‚éƒ|ƒCƒ“ƒ^
-		NULL,			// ’âŽ~‚·‚éƒIƒuƒWƒFƒNƒg
-		NULL			// ƒI[ƒfƒBƒIƒpƒXAƒfƒtƒHƒ‹ƒg‚Å‚È‚¢ê‡
+		g_lpSegment,	// æ¼”å¥ã™ã‚‹ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ
+		NULL,			// ä½¿ç”¨ã—ãªã„
+		NULL,			// ãƒˆãƒ©ãƒ³ã‚¶ã‚¯ã‚·ãƒ§ãƒ³ç”¨
+		0,				// ãƒ•ãƒ©ã‚°
+		0,				// é–‹å§‹ã‚¿ã‚¤ãƒ ã€0 ã¯å³æ™‚
+		NULL,			// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆçŠ¶æ…‹ã‚’å—ã‘å–ã‚‹ãƒã‚¤ãƒ³ã‚¿
+		NULL,			// åœæ­¢ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+		NULL			// ã‚ªãƒ¼ãƒ‡ã‚£ã‚ªãƒ‘ã‚¹ã€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§ãªã„å ´åˆ
 	);
 
 	return TRUE;
@@ -124,12 +124,12 @@ bool Dmusic::play(char* filename,int loop)
 bool Dmusic::stop(){
 	HRESULT hr;
 
-	// ‰‰‘t’âŽ~
+	// æ¼”å¥åœæ­¢
 	if( g_lpPerformance )
 	{
 		hr = g_lpPerformance->Stop( NULL, NULL, 0, 0 );
 		if( FAILED(hr) )
-			DXTRACE_ERR( "‘SƒZƒOƒƒ“ƒg‚Ì‰‰‘t’âŽ~‚ÉŽ¸”s", hr );
+			DXTRACE_ERR( "å…¨ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®æ¼”å¥åœæ­¢ã«å¤±æ•—", hr );
 	}
 
 	return TRUE;
@@ -147,34 +147,34 @@ long Dmusic::volume(){
 }
 
 
-// DirectMusic‚ÌI—¹ˆ—
+// DirectMusicã®çµ‚äº†å‡¦ç†
 bool Dmusic::release()
 {
 	HRESULT hr;
 
-	// ‰‰‘t’âŽ~
+	// æ¼”å¥åœæ­¢
 	stop();
 
-	// ƒZƒOƒƒ“ƒg‚ÌƒAƒ“ƒ[ƒh
+	// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
 	if( g_lpSegment )
 	{
 		hr = g_lpSegment->Unload( g_lpPerformance );
 		if( FAILED(hr) )
-			DXTRACE_ERR( "ƒZƒOƒƒ“ƒg‚ÌƒAƒ“ƒ[ƒh‚ÉŽ¸”s", hr );
+			DXTRACE_ERR( "ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã«å¤±æ•—", hr );
 	}
 
-	// ƒZƒOƒƒ“ƒg‚ðŠJ•ú
+	// ã‚»ã‚°ãƒ¡ãƒ³ãƒˆã‚’é–‹æ”¾
 	RELEASE( g_lpSegment );
 
-	// ƒ[ƒ_‚ðŠJ•ú
+	// ãƒ­ãƒ¼ãƒ€ã‚’é–‹æ”¾
 	RELEASE( g_lpLoader );
 
-	// ƒpƒtƒH[ƒ}ƒ“ƒX‚ð‰ð•ú
+	// ãƒ‘ãƒ•ã‚©ãƒ¼ãƒžãƒ³ã‚¹ã‚’è§£æ”¾
 	if( g_lpPerformance )
 	{
 		hr = g_lpPerformance->CloseDown();
 		if( FAILED(hr) )
-			DXTRACE_ERR( "IDirectMusicPerformance8::CloseDown‚ÉŽ¸”s", hr );
+			DXTRACE_ERR( "IDirectMusicPerformance8::CloseDownã«å¤±æ•—", hr );
 	}
 	RELEASE( g_lpPerformance );
 

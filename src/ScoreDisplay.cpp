@@ -1,10 +1,10 @@
-// ScoreDisplay.cpp: ScoreDisplay ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// ScoreDisplay.cpp: ScoreDisplay ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 #include "ScoreDisplay.h"
 
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 char* FrameCountToStr(int,char*);
 ScoreDisplay :: ScoreDisplay()
@@ -62,7 +62,7 @@ void ScoreDisplay :: Main()
 		GetBackAnimateion();
 	else
 		num = animateion(num);
-	////////////////ƒfƒoƒbƒN—p///////////////////////////////////////////
+	////////////////ãƒ‡ãƒãƒƒã‚¯ç”¨///////////////////////////////////////////
 	//DrawImageFont(300, 10, dxg, image->i[GRAYFONT_IMG], "%d",count);
 	//DrawImageFont(300, 100, dxg, image->i[GRAYFONT_IMG], "%d",Speed);
 	//DrawImageFont(300, 200, dxg, image->i[GRAYFONT_IMG], "%d",num);

@@ -8,7 +8,7 @@ random :: random()
 	for(int i = 0; i < 10 ; i++)
 	{
 		cnt[i].num = i;
-		cnt[i].count2 = Sub;//‘å‘Ì
+		cnt[i].count2 = Sub;//ï¿½ï¿½ï¿½
 	}
 }
 

@@ -2,7 +2,7 @@
 
 void Title::Main(){
 	switch(phase){
-	case 0:	//o‚é‚Æ‚«
+	case 0:	//å‡ºã‚‹ã¨ã
 		if(!count){
 			menu_pos = 320;
 			cur_pos = 240;
@@ -21,7 +21,7 @@ void Title::Main(){
 			cur_pos = 0;
 		}
 		break;
-	case 1:	//‘I‚Ô‚Æ‚«
+	case 1:	//é¸ã¶ã¨ã
 		dxg->TexturePos();
 		dxg->Draw(image->i[TITLE_IMG], 0, 0);
 		scene_tmp = Select();
@@ -33,7 +33,7 @@ void Title::Main(){
 			cur_movemove = (float)-0.1;
 		}
 		break;
-	case 2:	// Á‚¦‚é‚Æ‚«
+	case 2:	// æ¶ˆãˆã‚‹ã¨ã
 		dxg->TexturePos();
 		dxg->Draw(image->i[TITLE_IMG], 0, 0, true, 255-count*(256/FADETIME));
 		OutMenu();
@@ -65,9 +65,9 @@ void Title::Main(){
 	cur_count++;
 }
 
-// ƒƒjƒ…[‚ª“ü‚Á‚Ä‚­‚éƒƒ\ƒbƒh
+// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒå…¥ã£ã¦ãã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 void Title::InMenu(){
-	// ƒƒjƒ…[‚ÌˆÊ’u‚ğ•ÏX
+	// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ä½ç½®ã‚’å¤‰æ›´
 	menu_pos = (MENUX + menu_pos*7) / 8;
 	cur_pos = (MENUY + cur_pos*7) / 8;
 	
@@ -76,14 +76,14 @@ void Title::InMenu(){
 		dxg->Draw(image->i[WORDS_IMG], menu_pos, (float)(MENUY+i*16), true, count*(128/FADETIME));
 	}
 
-	// ƒJƒŒƒ“ƒgƒAƒjƒ
+	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡
 	dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
 	dxg->Draw(image->i[WORDS_IMG], MENUX-8, (float)cur_pos, true, count*(256/FADETIME));
 }
 
-// ‘I‚Ôƒƒ\ƒbƒh
+// é¸ã¶ãƒ¡ã‚½ãƒƒãƒ‰
 int Title::Select(){
-	// ƒJƒŒƒ“ƒgƒAƒjƒ‚ÌˆÊ’u‚ğ•ÏX
+	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡ã®ä½ç½®ã‚’å¤‰æ›´
 	cur_pos = (current + cur_pos*(MOVESPEED-1)) / (MOVESPEED);
 
 	dxg->ColorChange(1);
@@ -93,10 +93,10 @@ int Title::Select(){
 			dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+i*16), false, 128);
 		}
 	}
-	// ƒJƒŒƒ“ƒg‰æ‘œ
+	// ã‚«ãƒ¬ãƒ³ãƒˆç”»åƒ
 	dxg->TexturePos(80,16*current,80,16);
 	dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+16*current), true, 255);
-	// ƒJƒŒƒ“ƒgƒAƒjƒ
+	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡
 	dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
 	dxg->Draw(image->i[WORDS_IMG], MENUX-8, (float)(MENUY+(int)(16*cur_pos+0.5)), true, 255);
 
@@ -120,14 +120,14 @@ int Title::Select(){
 	return -1;
 }
 
-// ƒƒjƒ…[‚ªo‚Ä‚­ƒƒ\ƒbƒh
+// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒå‡ºã¦ããƒ¡ã‚½ãƒƒãƒ‰
 void Title::OutMenu(){
 	for(int i=0; i<=MENUMAX; i++){
 		dxg->TexturePos(0,i*16,80,16);
 		dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+i*16), true, 127-count*(128/FADETIME));
 	}
 	
-	// ƒJƒŒƒ“ƒgƒAƒjƒ
+	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡
 	cur_movemove *= (float)OUTMOVESPEED;
 	cur_move += cur_movemove;
 	cur_pos += cur_move;

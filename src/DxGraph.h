@@ -1,15 +1,9 @@
 #ifndef DXGRAPHHEADER
 #define DXGRAPHHEADER
 
-#include <windows.h>
 #include <stdio.h>
-//#include <d3dx9.h>
-//#include <dxerr9.h>
-#include <tchar.h>
-#include <crtdbg.h>
-#include "DxLib.h"
 
-const int IMG_MAX = 64; // Å‘å•Û‘¶‰Â”\‰æ‘œ”
+const int IMG_MAX = 64; // æœ€å¤§ä¿å­˜å¯èƒ½ç”»åƒæ•°
 const float pai = 3.141592f;
 struct Image{
 	int i[IMG_MAX];
@@ -25,16 +19,16 @@ public:
 	draw();
 	~draw();
 	void TexturePos(int x = 0 , int y = 0 , int w = 320 , int h = 240);
-	bool Initialize(bool,int,int,int);//ƒtƒ‹‚©‚Ç‚¤‚©bool , ‰ğ‘œ“xX , ‰ğ‘œ“xY)
+	bool Initialize(bool,int,int,int);//ãƒ•ãƒ«ã‹ã©ã†ã‹bool , è§£åƒåº¦X , è§£åƒåº¦Y)
 	void releaseDXG();
 	int LoadImage(char*,int,int R, int G, int B);
-	void Draw(int NUM, float transX, float transY, bool flag = true, int tr_all = 255, int r = 255 , int g = 255 , int b = 255);//rgbAtr_all‚Éˆö”‚ª‚È‚¢ê‡255‚É‚È‚é
-	void ColorChange(int,bool flag=false);	// ƒuƒŒƒ“ƒh•û–@‚Ì•ÏXBƒtƒ‰ƒO‚ğÈ—ª‚·‚é‚ÆŠO•”‚©‚çŒÄ‚Ño‚·—p
-	//RGB‚ğw’è‚µ‚Ätrans‚àw’è‚Å‚«‚é						//RGB‚ğw’è‚µ‚È‚¢‚Åtrans‚ğw’è‚·‚é‚±‚Æ‚Í‚Å‚«‚È‚¢
-	//RGB‚ğw’è‚µ‚Ätrans‚ğw’è‚µ‚È‚¢‚±‚Æ‚ª‚Å‚«‚é
-	//RGB‚ğw’è‚µ‚È‚¢‚Åtrans‚ğw’è‚µ‚È‚¢‚±‚Æ‚ª‚Å‚«‚é
+	void Draw(int NUM, float transX, float transY, bool flag = true, int tr_all = 255, int r = 255 , int g = 255 , int b = 255);//rgbã€tr_allã«å› æ•°ãŒãªã„å ´åˆ255ã«ãªã‚‹
+	void ColorChange(int,bool flag=false);	// ãƒ–ãƒ¬ãƒ³ãƒ‰æ–¹æ³•ã®å¤‰æ›´ã€‚ãƒ•ãƒ©ã‚°ã‚’çœç•¥ã™ã‚‹ã¨å¤–éƒ¨ã‹ã‚‰å‘¼ã³å‡ºã™ç”¨
+	//RGBã‚’æŒ‡å®šã—ã¦transã‚‚æŒ‡å®šã§ãã‚‹						//RGBã‚’æŒ‡å®šã—ãªã„ã§transã‚’æŒ‡å®šã™ã‚‹ã“ã¨ã¯ã§ããªã„
+	//RGBã‚’æŒ‡å®šã—ã¦transã‚’æŒ‡å®šã—ãªã„ã“ã¨ãŒã§ãã‚‹
+	//RGBã‚’æŒ‡å®šã—ãªã„ã§transã‚’æŒ‡å®šã—ãªã„ã“ã¨ãŒã§ãã‚‹
 
-	void DrawBegin(bool);//ˆø”‚Í‰½F‚Å‰Šú‰»‚·‚é‚©
+	void DrawBegin(bool);//å¼•æ•°ã¯ä½•è‰²ã§åˆæœŸåŒ–ã™ã‚‹ã‹
 	void DrawEnd();
 private:
 	bool match_vpos;

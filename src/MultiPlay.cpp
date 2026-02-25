@@ -1,4 +1,4 @@
-// MultiPlay.cpp: MultiPlay ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// MultiPlay.cpp: MultiPlay ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -6,10 +6,10 @@
 #include "MultiPlay.h"
 
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 
-/* ƒRƒsƒy—p
+/* ã‚³ãƒ”ãƒšç”¨
 for(int i=0 ; i<PLAYER_MAX ; i++){
 */
 
@@ -21,21 +21,21 @@ static const int COLOR_PLAYER[8] = {-1,0,-1,1,-1,2,3,-1};
 void MultiPlay::Main()
 {
 	switch(phase){
-	case 0: // ‰Šú‰» /////////////////////////////////////
+	case 0: // åˆæœŸåŒ– /////////////////////////////////////
 		Sound::ChangeBgm(5);
 		dxg->MatchVirtualPosition();
 		srand(GetTickCount());
-		// ‚Æ‚è‚ ‚¦‚¸‰Šú‰»‚·‚é
+		// ã¨ã‚Šã‚ãˆãšåˆæœŸåŒ–ã™ã‚‹
 		speed=0;
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			Player[i].hCtrl.Initialize(dxg,image,input,&blockdata);
-			Player[i].Initialize(dxg,image,input,this);	// ’´‰ßŒƒ‚È–‚µ‚Ä‚Ü‚·‚¯‚Ç‚±‚¤‚µ‚È‚¢‚Æ‚ß‚ñ‚Ç‚­‚³‚¢‚Ì‚ÅB
+			Player[i].Initialize(dxg,image,input,this);	// è¶…éæ¿€ãªäº‹ã—ã¦ã¾ã™ã‘ã©ã“ã†ã—ãªã„ã¨ã‚ã‚“ã©ãã•ã„ã®ã§ã€‚
 			Player[i].hCtrl.ChangeLevel(&blockdata.difficultyData[DIFFICULTY][speed]);
 		}
 		BGImage.Change(image->i[BG_IMG[9]],255);
 		phase++; count=0;
 		break;
-	case 1: // ƒtƒF[ƒhƒCƒ“ ////////////////////////////////
+	case 1: // ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ ////////////////////////////////
 		BGImage.Draw(dxg);
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			dxg->ShiftDrawPosition(i*80,16);
@@ -48,7 +48,7 @@ void MultiPlay::Main()
 			phase++; count=0;
 		}
 		break;
-	case 2: // Q‰ÁˆÓv‘Ò‚¿ ////////////////////////////////
+	case 2: // å‚åŠ æ„æ€å¾…ã¡ ////////////////////////////////
 		BGImage.Draw(dxg);
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			dxg->ShiftDrawPosition(i*80,16);
@@ -84,7 +84,7 @@ void MultiPlay::Main()
 			DrawImageFont(152,8,dxg,image->i[BIGFONT_IMG],16,16,0,"%d",tmp);
 		}
 		break;
-	case 3: // ƒJƒEƒ“ƒgƒ_ƒEƒ“ ////////////////////////////////
+	case 3: // ã‚«ã‚¦ãƒ³ãƒˆãƒ€ã‚¦ãƒ³ ////////////////////////////////
 		BGImage.Draw(dxg);
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			dxg->ShiftDrawPosition(i*80,16);
@@ -137,7 +137,7 @@ void MultiPlay::Main()
 			phase++; count=0;
 		}
 		break;
-	case 4: // ƒƒCƒ“ƒQ[ƒ€’† ////////////////////////////////
+	case 4: // ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ä¸­ ////////////////////////////////
 		BGImage.Draw(dxg);
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			dxg->ShiftDrawPosition(i*80,16);
@@ -173,7 +173,7 @@ void MultiPlay::Main()
 			}
 		}
 		break;
-	case 5: // ƒQ[ƒ€ƒZƒbƒg //////////////////////////////////
+	case 5: // ã‚²ãƒ¼ãƒ ã‚»ãƒƒãƒˆ //////////////////////////////////
 		BGImage.Draw(dxg);
 		for(int i=0 ; i<PLAYER_MAX ; i++){
 			dxg->ShiftDrawPosition(i*80,16);
@@ -197,7 +197,7 @@ void MultiPlay::Main()
 			phase=2; count=0;
 		}
 		break;
-	case 16: // ‚¨‚í‚é //////////////////////////////////////
+	case 16: // ãŠã‚ã‚‹ //////////////////////////////////////
 		BGImage.Draw(dxg);
 		dxg->TexturePos();
 		dxg->Draw(image->i[BLANK_IMG],0,0,true,count*8);
@@ -205,7 +205,7 @@ void MultiPlay::Main()
 			phase++; count=0;
 		}
 		break;
-	case 17: // –{“–‚É‚¨‚í‚é ////////////////////////
+	case 17: // æœ¬å½“ã«ãŠã‚ã‚‹ ////////////////////////
 		*scene = TITLE_SCENE;
 		break;
 	}
@@ -216,7 +216,7 @@ void MultiPlay::PlayerOperation::Main(int player)
 {
 	HexFieldDrawData drawData={0,0};
 	switch(phase){
-	case 0: // Q‰ÁˆÓvŠm”F’†
+	case 0: // å‚åŠ æ„æ€ç¢ºèªä¸­
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.DrawField(&drawData,255,false);
 		dxg->ChangeEFXState();
@@ -226,13 +226,13 @@ void MultiPlay::PlayerOperation::Main(int player)
 			phase++;
 		}
 		break;
-	case 1: // Q‰Á•\–¾Ï‚İ
+	case 1: // å‚åŠ è¡¨æ˜æ¸ˆã¿
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.DrawField(&drawData,255,true);
 		dxg->ChangeEFXState();
 		DrawImageFont(22,96,dxg,image->i[FONT_IMG]," OK!");
 		break;
-	case 2: // •sQ‰Á
+	case 2: // ä¸å‚åŠ 
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.DrawField(&drawData,255,false);
 		dxg->ChangeEFXState();
@@ -246,7 +246,7 @@ void MultiPlay::PlayerOperation::Main(int player)
 			}
 		}
 		break;
-	case 3: // Q‰ÁˆÓvŠm”FƒtƒF[ƒY‘Ò‚¿
+	case 3: // å‚åŠ æ„æ€ç¢ºèªãƒ•ã‚§ãƒ¼ã‚ºå¾…ã¡
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.DrawField(&drawData,255,false);
 		dxg->ChangeEFXState();
@@ -255,7 +255,7 @@ void MultiPlay::PlayerOperation::Main(int player)
 			phase = 1;
 		}
 		break;
-	case 4: // ƒƒCƒ“ƒQ[ƒ€’†
+	case 4: // ãƒ¡ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ä¸­
 		dxg->ChangeEFXState(0.85f,0.85f);
 		if(hCtrl.Main(player)){
 			phase++;
@@ -291,7 +291,7 @@ void MultiPlay::PlayerOperation::Main(int player)
 		dxg->TexturePos(target*16,0,16,16);
 		dxg->Draw(image->i[MULTI_IMG],56,198);
 		break;
-	case 5: // €‚ñ‚¾
+	case 5: // æ­»ã‚“ã 
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.Draw(&drawData);
 		hCtrl.DrawField(&drawData,255);
@@ -299,7 +299,7 @@ void MultiPlay::PlayerOperation::Main(int player)
 		dxg->ChangeEFXState();
 		DrawImageFont(16,96,dxg,image->i[FONT_IMG],"YOU LOSE");
 		break;
-	case 6: // Ÿ‚Á‚½
+	case 6: // å‹ã£ãŸ
 		dxg->ChangeEFXState(0.85f,0.85f);
 		hCtrl.Draw(&drawData);
 		hCtrl.CountUp();

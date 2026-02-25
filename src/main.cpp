@@ -14,7 +14,7 @@ bool WINDOW_FULL;
 int WINDOW_ZOOM;
 
 int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow ){
-	char str[10];		// ini ‚©‚ç‚Ì Window İ’è“Ç‚İ‚İ
+	char str[10];		// ini ã‹ã‚‰ã® Window è¨­å®šèª­ã¿è¾¼ã¿
 	GetPrivateProfileString("Window","FullScreen",NULL,str,100,WINDOW_INIPATH);
 	if(atoi(str))
 		WINDOW_FULL = true;
@@ -34,7 +34,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 		gctrl.Main();
 	}
 
-	DxLib_End() ;				// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
+	DxLib_End() ;				// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä½¿ç”¨ã®çµ‚äº†å‡¦ç†
 
 	return 0;
 }

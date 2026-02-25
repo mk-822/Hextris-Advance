@@ -3,7 +3,7 @@
 #include <stdarg.h>
 #include <windows.h>
 
-// ‘®•t‚«‚Ì‹Lq‚É‘Î‰‚µ‚½ MBox
+// æ›¸å¼ä»˜ãã®è¨˜è¿°ã«å¯¾å¿œã—ãŸ MBox
 /*
 void MBox(const char* format, ...){
 	char buffer[256];

@@ -1,18 +1,18 @@
 #ifndef COMMONHEADER
 #define COMMONHEADER
 
-#define for if(0);else for	//for ‚Ì“äƒXƒR[ƒv‚ğ–³—–î—fix
+#define for if(0);else for	//for ã®è¬ã‚¹ã‚³ãƒ¼ãƒ—ã‚’ç„¡ç†çŸ¢ç†fix
 #pragma warning ( disable : 4996 )
 #include "sound.h"
 
-//‰æ–Êƒ‚[ƒh’è‹`
+//ç”»é¢ãƒ¢ãƒ¼ãƒ‰å®šç¾©
 static const char* WINDOW_INIPATH = "./setting.ini";
 static const int WINDOW_WIDE = 320;
 static const int WINDOW_HEIGHT = 240;
 extern bool WINDOW_FULL;
 extern int WINDOW_ZOOM;
 
-//‰æ‘œƒtƒ@ƒCƒ‹’è‹`
+//ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«å®šç¾©
 static const int RANK_IMG = 0;
 static const int BLANK_IMG = 1;
 static const int FONT_IMG = 2;
@@ -31,17 +31,17 @@ static const int OP_BG_IMG = 30;
 static const int GRAYFONT_IMG = 31;
 static const int MULTI_IMG = 32;
 
-//ƒV[ƒ“ŠÇ—’è‹`
-static const int LOGO_SCENE = 0;			// ƒƒS‰æ–Ê
-static const int TITLE_SCENE = 1;			// ƒ^ƒCƒgƒ‹‰æ–Ê
-static const int OPTION_SCENE = 2;			//ƒIƒvƒVƒ‡ƒ“
-static const int SCORE_SCENE = 3;			// ƒXƒRƒAƒ‰ƒ“ƒLƒ“ƒO
-static const int SINGLE_SCENE = 4;		// ƒVƒ“ƒOƒ‹ƒvƒŒƒC
-static const int MULTI_SCENE = 5;		// ƒ}ƒ‹ƒ`ƒvƒŒƒC
+//ã‚·ãƒ¼ãƒ³ç®¡ç†å®šç¾©
+static const int LOGO_SCENE = 0;			// ãƒ­ã‚´ç”»é¢
+static const int TITLE_SCENE = 1;			// ã‚¿ã‚¤ãƒˆãƒ«ç”»é¢
+static const int OPTION_SCENE = 2;			//ã‚ªãƒ—ã‚·ãƒ§ãƒ³
+static const int SCORE_SCENE = 3;			// ã‚¹ã‚³ã‚¢ãƒ©ãƒ³ã‚­ãƒ³ã‚°
+static const int SINGLE_SCENE = 4;		// ã‚·ãƒ³ã‚°ãƒ«ãƒ—ãƒ¬ã‚¤
+static const int MULTI_SCENE = 5;		// ãƒãƒ«ãƒãƒ—ãƒ¬ã‚¤
 
-//ƒuƒŒƒ“ƒh•û–@’è‹`
-static const int NORMAL_BLEND = 0;	// ’ÊíƒuƒŒƒ“ƒh
-static const int TRANS_BLEND = 1;	// “§‰ß•t‚«ƒuƒŒƒ“ƒh
-static const int ADD_BLEND = 2;		// ‰ÁZ‡¬
+//ãƒ–ãƒ¬ãƒ³ãƒ‰æ–¹æ³•å®šç¾©
+static const int NORMAL_BLEND = 0;	// é€šå¸¸ãƒ–ãƒ¬ãƒ³ãƒ‰
+static const int TRANS_BLEND = 1;	// é€éä»˜ããƒ–ãƒ¬ãƒ³ãƒ‰
+static const int ADD_BLEND = 2;		// åŠ ç®—åˆæˆ
 
 #endif

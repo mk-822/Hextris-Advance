@@ -1,5 +1,5 @@
-// ƒWƒ‡ƒCƒpƒbƒh‘€ì JoyPadCtrl ƒNƒ‰ƒX
-// ƒL[ƒ{[ƒhó‘Ô‚¾‚¯‚ÍƒvƒƒV[ƒWƒƒ‚©‚çæ‚Á‚Ä‚­‚é•K—v‚ª‚ ‚é‚Ì‚Å’ˆÓB
+// ã‚¸ãƒ§ã‚¤ãƒ‘ãƒƒãƒ‰æ“ä½œ JoyPadCtrl ã‚¯ãƒ©ã‚¹
+// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰çŠ¶æ…‹ã ã‘ã¯ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‹ã‚‰å–ã£ã¦ãã‚‹å¿…è¦ãŒã‚ã‚‹ã®ã§æ³¨æ„ã€‚
 
 #include "Joypad.h"
 #include "common.h"
@@ -16,12 +16,12 @@ JoyPadCtrl::JoyPadCtrl(){
 	}
 }
 
-INPUT JoyPadCtrl::keystate;	// Ã“Iƒƒ“ƒo‚Íg‚¢‚Ü‚·‚æ‚Á‚ÄŒ¾‚Á‚Ä‚â‚ç‚ñ‚Æg‚¦‚ñ‚æ
+INPUT JoyPadCtrl::keystate;	// é™çš„ãƒ¡ãƒ³ãƒã¯ä½¿ã„ã¾ã™ã‚ˆã£ã¦è¨€ã£ã¦ã‚„ã‚‰ã‚“ã¨ä½¿ãˆã‚“ã‚ˆ
 INPUT JoyPadCtrl::keystate_old[KEYDELAY];
 INPUT JoyPadCtrl::keystate_once;
 INPUT JoyPadCtrl::keystate_leg;
 
-// ƒvƒƒV[ƒWƒƒ‚©‚çŒÄ‚Ño‚·Ã“Iƒƒ\ƒbƒhBƒL[ó‘Ô‚ğ“ü‚ê‚éB
+// ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã‹ã‚‰å‘¼ã³å‡ºã™é™çš„ãƒ¡ã‚½ãƒƒãƒ‰ã€‚ã‚­ãƒ¼çŠ¶æ…‹ã‚’å…¥ã‚Œã‚‹ã€‚
 void JoyPadCtrl::SetKeyState(bool in, int key){
 	if(in){
 		keystate = keystate|key;
@@ -30,8 +30,8 @@ void JoyPadCtrl::SetKeyState(bool in, int key){
 	}
 }
 
-// ƒvƒŒƒCƒ„[‚²‚Æ‚Ì“ü—Íó‹µ‚ğ‚°‚”‚·‚éƒƒ\ƒbƒh
-INPUT JoyPadCtrl::GetKeyState(int player, int flag){	//0‚Í‰ÁH‚È‚µ,1‚ÍÄcÄÄÄ,2‚Íˆê“x‚¾‚¯,3‚Í‰Ÿ‚µ‚Á‚Ï‚È‚µ‚Ì‚İ
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã”ã¨ã®å…¥åŠ›çŠ¶æ³ã‚’ã’ï½”ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+INPUT JoyPadCtrl::GetKeyState(int player, int flag){	//0ã¯åŠ å·¥ãªã—,1ã¯ï¾„â€¦ï¾„ï¾„ï¾„,2ã¯ä¸€åº¦ã ã‘,3ã¯æŠ¼ã—ã£ã±ãªã—ã®ã¿
 	INPUT tmp=0;
 	for(int i=0 ; i<MAXPLAYERS ; i++){
 		if((joystate[i].player == player)&&(joystate[i].enable)){
@@ -68,7 +68,7 @@ INPUT JoyPadCtrl::GetKeyState(int player, int flag){	//0‚Í‰ÁH‚È‚µ,1‚ÍÄcÄÄÄ,2‚Í
 	return tmp;
 }
 
-// “ü—Íó‹µ‚ğXV‚·‚éƒƒ\ƒbƒh
+// å…¥åŠ›çŠ¶æ³ã‚’æ›´æ–°ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
 void JoyPadCtrl::RenewKeyState(){
 	char Buf[ 256 ] ;
 	GetHitKeyStateAll( Buf ) ;
@@ -156,15 +156,15 @@ void JoyPadCtrl::RenewKeyState(){
 	count++;
 }
 
-// -------‚±‚±‚©‚ç“à•”—p------
+// -------ã“ã“ã‹ã‚‰å†…éƒ¨ç”¨------
 
 void JoyPadCtrl::IniFileLoad(){
-	char str[16];	// •¶š—ñŠi”[—p
+	char str[16];	// æ–‡å­—åˆ—æ ¼ç´ç”¨
 	for(int i=0; i<MAXPLAYERS; i++){
-		if (GetPrivateProfileString(JOYNAME[i],KEYNAME[0],NULL,str,100,JOYINIPATH))		//‚Ü‚¸‚Í‚Ç‚ÌƒvƒŒƒCƒ„[‚©‚ğGET
-			joystate[i].player=atoi(str);	// æ“¾‚µ‚½•¶š—ñ‚ğ int ‚É•ÏŠ· (atoi = ASCII to INT)
+		if (GetPrivateProfileString(JOYNAME[i],KEYNAME[0],NULL,str,100,JOYINIPATH))		//ã¾ãšã¯ã©ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚’GET
+			joystate[i].player=atoi(str);	// å–å¾—ã—ãŸæ–‡å­—åˆ—ã‚’ int ã«å¤‰æ› (atoi = ASCII to INT)
 		for(int j=1; j<MAXBUTTONS+1; j++){
-			if (GetPrivateProfileString(JOYNAME[i],KEYNAME[j],NULL,str,100,JOYINIPATH))	//Ÿ‚Éƒ{ƒ^ƒ“‚ÌƒAƒTƒCƒ“‚ğGET
+			if (GetPrivateProfileString(JOYNAME[i],KEYNAME[j],NULL,str,100,JOYINIPATH))	//æ¬¡ã«ãƒœã‚¿ãƒ³ã®ã‚¢ã‚µã‚¤ãƒ³ã‚’GET
 				joystate[i].button[j-1]=atoi(str);
 		}
 	}

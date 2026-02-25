@@ -1,20 +1,20 @@
 #ifndef KEYDEFINEHEADER
 #define KEYDEFINEHEADER
 
-static const char* JOYINIPATH = "./setting.ini";	// İ’è“Ç‚İ‚İ ini ƒpƒX
-static const int MAXPLAYERS = 4;					// Å‚ƒvƒŒƒCƒ„[”
-static const int MAXBUTTONS = 4;					// Å‘åƒ{ƒ^ƒ“”
-static const int KEYDELAY = 15;						// ƒŠƒs[ƒg‚Ü‚Å‚ÌŠÔ
-static const int REPEATTIME = 2;					// ƒŠƒs[ƒgŠÔŠuin ƒtƒŒ[ƒ€‚É 1 ‰ñj
+static const char* JOYINIPATH = "./setting.ini";	// è¨­å®šèª­ã¿è¾¼ã¿ ini ãƒ‘ã‚¹
+static const int MAXPLAYERS = 4;					// æœ€é«˜ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼æ•°
+static const int MAXBUTTONS = 4;					// æœ€å¤§ãƒœã‚¿ãƒ³æ•°
+static const int KEYDELAY = 15;						// ãƒªãƒ”ãƒ¼ãƒˆã¾ã§ã®æ™‚é–“
+static const int REPEATTIME = 2;					// ãƒªãƒ”ãƒ¼ãƒˆé–“éš”ï¼ˆn ãƒ•ãƒ¬ãƒ¼ãƒ ã« 1 å›ï¼‰
 static const char* JOYNAME[MAXPLAYERS] = {"JoyPad1","JoyPad2","JoyPad3","JoyPad4"};
-													// ini ‚©‚ç“Ç‚İ‚Ş‚½‚ß‚Ì€–Ú–¼
+													// ini ã‹ã‚‰èª­ã¿è¾¼ã‚€ãŸã‚ã®é …ç›®å
 static const char* KEYNAME[MAXBUTTONS+1] = {"Player","Button1","Button2","Button3","Button4"};
-													// €–Ú–¼‚»‚Ì‚É
+													// é …ç›®åãã®ã«
 
-static const int UP = 1;							// ‚¤‚¦
-static const int DOWN = 2;							// ‚µ‚½
-static const int LEFT = 4;							// ‚Ğ‚¾‚è
-static const int RIGHT = 8;							// ‚İ‚¬
-static const int BUTTON[] = {16,32,64,128};			// ‚Ú‚½‚ñ
+static const int UP = 1;							// ã†ãˆ
+static const int DOWN = 2;							// ã—ãŸ
+static const int LEFT = 4;							// ã²ã ã‚Š
+static const int RIGHT = 8;							// ã¿ã
+static const int BUTTON[] = {16,32,64,128};			// ã¼ãŸã‚“
 
 #endif

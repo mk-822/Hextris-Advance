@@ -7,15 +7,15 @@
 #include "multiplay.h"
 
 GameCtrl::GameCtrl(){
-	// ƒQ[ƒ€ŠJn‚©‚ç‚ÌƒtƒŒ[ƒ€”
+	// ã‚²ãƒ¼ãƒ é–‹å§‹ã‹ã‚‰ã®ãƒ•ãƒ¬ãƒ¼ãƒ æ•°
 	count = 0;
 	scene = LOGO_SCENE;
 	mode = new Mode();
 	mode->Initialize(&scene,&dxg,&image,&input);
 
-	// Œvƒ‰ƒCƒuƒ‰ƒŠ‚Ì‰Šú‰»•‰æ‘œ“Ç‚İ‚İ
+	// æ™‚è¨ˆãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®åˆæœŸåŒ–ï¼†ç”»åƒèª­ã¿è¾¼ã¿
 	dxg.Initialize(WINDOW_FULL,WINDOW_ZOOM,WINDOW_WIDE,WINDOW_HEIGHT);
-	image.i[RANK_IMG] = dxg.LoadImage("./image/rank.bmp",1,0,0,0);//•`‰æƒ[ƒh(ƒtƒ@ƒCƒ‹ƒpƒXchar* , •`‰æƒ‚[ƒh , “§‰ßFR , “§‰ßFG , “§‰ßFB)
+	image.i[RANK_IMG] = dxg.LoadImage("./image/rank.bmp",1,0,0,0);//æç”»ãƒ­ãƒ¼ãƒ‰(ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹char* , æç”»ãƒ¢ãƒ¼ãƒ‰ , é€éè‰²R , é€éè‰²G , é€éè‰²B)
 	image.i[BLANK_IMG] = dxg.LoadImage("./image/blank.bmp",0,0,0,0);
 	image.i[FONT_IMG] = dxg.LoadImage("./image/font.bmp",1,0,0,0);
 	image.i[FONTEX_IMG] = dxg.LoadImage("./image/font_ex.bmp",1,0,0,0);
@@ -49,27 +49,27 @@ GameCtrl::GameCtrl(){
 	dxg.DrawEnd();
 }
 
-// ƒƒCƒ“‚¾‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨‚¨-----------------
+// ãƒ¡ã‚¤ãƒ³ã ãŠãŠãŠãŠãŠãŠãŠãŠãŠãŠãŠãŠãŠ-----------------
 void GameCtrl::Main(){
 	dxg.DrawBegin(true);
 	input.RenewKeyState();
 
-	// ƒV[ƒ“‚ÆƒV[ƒ“ƒoƒbƒNƒAƒbƒv‚ªˆÙ‚È‚Á‚Ä‚¢‚½‚çƒ‚[ƒhƒ`ƒFƒ“ƒW‚¾‚ë‚¤
+	// ã‚·ãƒ¼ãƒ³ã¨ã‚·ãƒ¼ãƒ³ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒç•°ãªã£ã¦ã„ãŸã‚‰ãƒ¢ãƒ¼ãƒ‰ãƒã‚§ãƒ³ã‚¸ã ã‚ã†
 	if(scene!=scene_bk){
 		ChangeScene();
 	}scene_bk = scene;
 
 	mode->Main();
 
-	//“ü—Íƒ`ƒFƒbƒN—p
+	//å…¥åŠ›ãƒã‚§ãƒƒã‚¯ç”¨
 	//::DrawImageFont(0,0,&dxg,image.i[FONT_IMG],"%d %d %d",input.GetKeyState(0,0),input.GetKeyState(0,1),input.GetKeyState(0,2));
 
 	dxg.DrawEnd();
 
-	// ‚ ‚Æ‚µ‚Ü‚Â
+	// ã‚ã¨ã—ã¾ã¤
 	count++;
 }
-// ƒƒCƒ“‚¨‚í‚è‚¢-------------------------------------
+// ãƒ¡ã‚¤ãƒ³ãŠã‚ã‚Šã„-------------------------------------
 
 void GameCtrl::ChangeScene(){
 	delete mode;
@@ -89,7 +89,7 @@ void GameCtrl::ChangeScene(){
 	case MULTI_SCENE:
 		mode = new MultiPlay();
 		break;
-	case OPTION_SCENE://Clock‚ª’Ç‰Á‚µ‚Ü‚·‚½
+	case OPTION_SCENE://ClockãŒè¿½åŠ ã—ã¾ã™ãŸ
 		mode = new Option();
 		break;
 	}

@@ -10,28 +10,28 @@ class JoyPadCtrl{
 private:	
 	struct GamePadState
 	{
-		INPUT input;		// ‚Ç‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é‚©(keydefine.h ‚Éˆê——‚ª‚ ‚è‚Ü‚·)
-		INPUT inputleg;		// ƒgEEEEƒgƒgƒgƒgƒgƒgƒgƒgƒgƒgƒg
-		INPUT inputonce;	// ƒgB
-		INPUT inputold[KEYDELAY];	// “ü—Íó‘Ô‚ÌƒoƒbƒNƒAƒbƒv
+		INPUT input;		// ã©ã®ãƒœã‚¿ãƒ³ãŒæŠ¼ã•ã‚Œã¦ã„ã‚‹ã‹(keydefine.h ã«ä¸€è¦§ãŒã‚ã‚Šã¾ã™)
+		INPUT inputleg;		// ãƒˆãƒ»ãƒ»ãƒ»ãƒ»ãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆãƒˆ
+		INPUT inputonce;	// ãƒˆã€‚
+		INPUT inputold[KEYDELAY];	// å…¥åŠ›çŠ¶æ…‹ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 
-		int player;					// ‚Ç‚ÌƒvƒŒƒCƒ„[‚ÉƒAƒTƒCƒ“‚·‚é‚©(ini ‚©‚ç“Ç‚İ‚İ)
-		int button[MAXBUTTONS];				// ‚Ç‚Ìƒ{ƒ^ƒ“‚ÉƒAƒTƒCƒ“‚·‚é‚©(ini ‚©‚ç“Ç‚İ‚İ)
-		bool enable;					// g—p‰Â”\‚©‚Ç‚¤‚©
+		int player;					// ã©ã®ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚¢ã‚µã‚¤ãƒ³ã™ã‚‹ã‹(ini ã‹ã‚‰èª­ã¿è¾¼ã¿)
+		int button[MAXBUTTONS];				// ã©ã®ãƒœã‚¿ãƒ³ã«ã‚¢ã‚µã‚¤ãƒ³ã™ã‚‹ã‹(ini ã‹ã‚‰èª­ã¿è¾¼ã¿)
+		bool enable;					// ä½¿ç”¨å¯èƒ½ã‹ã©ã†ã‹
 	}joystate[MAXPLAYERS];
 	static INPUT keystate;
 	static INPUT keystate_leg;
 	static INPUT keystate_once;
 	static INPUT keystate_old[KEYDELAY];
 
-	int count;							// ƒJƒEƒ“ƒ^[iƒL[ƒŠƒs[ƒg‚·‚é‚½‚ß‚¾‚¯‚Éj
-	void IniFileLoad();					// ini ƒtƒ@ƒCƒ‹‚ğƒ[ƒh‚·‚é‚½‚ß‚Ì“à•”ƒƒ\ƒbƒh
+	int count;							// ã‚«ã‚¦ãƒ³ã‚¿ãƒ¼ï¼ˆã‚­ãƒ¼ãƒªãƒ”ãƒ¼ãƒˆã™ã‚‹ãŸã‚ã ã‘ã«ï¼‰
+	void IniFileLoad();					// ini ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãŸã‚ã®å†…éƒ¨ãƒ¡ã‚½ãƒƒãƒ‰
 	void GetJoyStickDeviceState();
 public:
 	JoyPadCtrl();
-	static void SetKeyState(bool in, int key);	// WM_KEYDOWN WM_KEYUP ‚Ì‚ÉƒL[ƒ{[ƒhî•ñ‚ğXV‚·‚é—p
-	void RenewKeyState();				// “ü—Íó‹µ‚ğXV
-	INPUT GetKeyState(int player, int flag=0);		// ƒvƒŒƒCƒ„[‚²‚Æ‚Ì“ü—Íó‘Ô‚ğ‚°‚Æ
+	static void SetKeyState(bool in, int key);	// WM_KEYDOWN WM_KEYUP ã®æ™‚ã«ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æƒ…å ±ã‚’æ›´æ–°ã™ã‚‹ç”¨
+	void RenewKeyState();				// å…¥åŠ›çŠ¶æ³ã‚’æ›´æ–°
+	INPUT GetKeyState(int player, int flag=0);		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã”ã¨ã®å…¥åŠ›çŠ¶æ…‹ã‚’ã’ã¨
 };
 
 #endif

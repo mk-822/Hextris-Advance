@@ -1,12 +1,12 @@
 // ----------------------------------------------------------------------------
 //
-//		‚c‚wƒ‰ƒCƒuƒ‰ƒŠ		DirectX ŠÖ˜A’è‹`—pƒwƒbƒ_ƒtƒ@ƒCƒ‹
+//		ï¿½cï¿½wï¿½ï¿½ï¿½Cï¿½uï¿½ï¿½ï¿½ï¿½		DirectX ï¿½Ö˜Aï¿½ï¿½`ï¿½pï¿½wï¿½bï¿½_ï¿½tï¿½@ï¿½Cï¿½ï¿½
 //
 //				Ver2.22f
 //
 // ----------------------------------------------------------------------------
 
-// ‘½dƒCƒ“ƒNƒ‹[ƒh–hŽ~—pƒ}ƒNƒ
+// ï¿½ï¿½ï¿½dï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½hï¿½hï¿½~ï¿½pï¿½}ï¿½Nï¿½ï¿½
 #ifndef __DXDIRECTX_H__
 #define __DXDIRECTX_H__
 
@@ -24,7 +24,7 @@
 	
 	#define D_HMONITOR								HMONITOR
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚r‚‚•‚Ž‚„ -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DS_OK									DS_OK
 
@@ -68,7 +68,7 @@
 	#define D_IDirectSoundBuffer8					IDirectSoundBuffer8
 	#define D_IDirectSoundNotify					IDirectSoundNotify
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚l‚•‚“‚‰‚ƒ -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DMUS_APATH_SHARED_STEREOPLUSREVERB	DMUS_APATH_SHARED_STEREOPLUSREVERB
 	#define D_DMUS_AUDIOF_ALL						DMUS_AUDIOF_ALL
@@ -106,7 +106,7 @@
 	#define D_IDirectMusicPerformance				IDirectMusicPerformance
 	#define D_IDirectMusicPerformance8				IDirectMusicPerformance8
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚c‚’‚‚— -------------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -------------------------------------------------------
 
 	#define D_DD_OK									DD_OK
 
@@ -223,7 +223,7 @@
 	#define D_IDirectDrawClipper					IDirectDrawClipper
 	#define D_IDirectDrawPalette					IDirectDrawPalette
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚R‚c -----------------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½c -----------------------------------------------------------
 
 	#define D_D3D_OK								D3D_OK
 
@@ -539,7 +539,7 @@
 	#define D_IDirect3D7							IDirect3D7
 	#define D_IDirect3DDevice7						IDirect3DDevice7
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚h‚Ž‚‚•‚” -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DI_OK									DI_OK
 	#define D_DIDEVTYPE_KEYBOARD					DIDEVTYPE_KEYBOARD
@@ -808,7 +808,7 @@
 	
 	typedef void *D_HMONITOR ;
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚r‚‚•‚Ž‚„ -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DS_OK									(S_OK)
 
@@ -946,7 +946,7 @@
 		virtual HRESULT __stdcall SetNotificationPositions	( DWORD dwPositionNotifies, const D_DSBPOSITIONNOTIFY *pcPositionNotifies ) = 0 ;
 	} ;
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚l‚•‚“‚‰‚ƒ -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DMUS_APATH_SHARED_STEREOPLUSREVERB	(1)
 	#define D_DMUS_AUDIOF_ALL						(0x3F)
@@ -1172,7 +1172,7 @@
 		virtual HRESULT __stdcall NonUse39					( void ) = 0 ;				// GetParamEx( REFGUID rguidType, DWORD dwTrackID, DWORD dwGroupBits, DWORD dwIndex, MUSIC_TIME mtTime, MUSIC_TIME* pmtNext, void* pParam ) = 0 ;
 	} ;
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚c‚’‚‚— -------------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -------------------------------------------------------
 
 	#define D_DD_OK									S_OK
 
@@ -1841,7 +1841,7 @@
 		virtual HRESULT __stdcall SetEntries				( DWORD, DWORD, DWORD, LPPALETTEENTRY ) = 0 ;
 	} ;
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚R‚c -----------------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½c -----------------------------------------------------------
 
 	#define D_D3D_OK								(D_DD_OK)
 
@@ -2438,7 +2438,7 @@
 		virtual HRESULT __stdcall NonUse28					( void ) = 0 ;				// GetInfo( DWORD,LPVOID,DWORD ) = 0 ;
 	} ;
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚h‚Ž‚‚•‚” -----------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -----------------------------------------------------
 
 	#define D_DI_OK									(S_OK)
 	#define D_DIDEVTYPE_KEYBOARD					(3)
@@ -2982,7 +2982,7 @@
 
 #ifndef DX_NON_MOVIE
 
-	// ‚c‚‰‚’‚…‚ƒ‚”‚r‚ˆ‚‚— -------------------------------------------------------
+	// ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -------------------------------------------------------
 
 	#define D_AMMSF_NOGRAPHTHREAD					(0x1)
 	#define D_AMMSF_ADDDEFAULTRENDERER				(0x1)

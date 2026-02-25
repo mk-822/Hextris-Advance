@@ -1,11 +1,11 @@
-// HextrisCtrl.h: HextrisCtrl �N���X�̃C���^�[�t�F�C�X
+// HextrisCtrl.h: HextrisCtrl クラスのインターフェイス
 //
 //////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_)
 #define AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_
 
-#include "EraseData.h"	// ClassView �ɂ���Ēǉ�����܂����B
+#include "EraseData.h"	// ClassView によって追加されました。
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -17,7 +17,7 @@
 #include "DataFileLoader.h"
 #include "random.h"
 
-// �Q�[�����̂��̂� 96x216 �h�b�g��苒���܂�
+// ゲームそのものは 96x216 ドットを占拠します
 
 struct HexFieldDrawData{
 	int game_pos_x;
@@ -64,26 +64,26 @@ private:
 	int effectFlag;
 	int BlockFix();
 	int IsGrounded();
-	int BlockSpin(int spin);	// ��] spin = -1:����] 1:�E��]
-	int BlockMove(int x , int y);	// �ړ�
-	int groundedTime;	// �ڒn����
+	int BlockSpin(int spin);	// 回転 spin = -1:左回転 1:右回転
+	int BlockMove(int x , int y);	// 移動
+	int groundedTime;	// 接地時間
 	int fixcount;
 	enum DEFINE{
-		BLOCK_OFFSET_X = 6,	// �u���b�N���̂��̂̃t�B�[���h��ł̑傫��
+		BLOCK_OFFSET_X = 6,	// ブロックそのもののフィールド上での大きさ
 		BLOCK_OFFSET_Y = 4,
-		BLOCK_SIZE_X = 8,	// �u���b�N�摜�̃T�C�Y
+		BLOCK_SIZE_X = 8,	// ブロック画像のサイズ
 		BLOCK_SIZE_Y = 8,
 		GAME_POS_X = 112,
 		GAME_POS_Y = 8,
-		GAME_POS_OFFSET_X = 8,	// �u���b�N��z�u�J�n������W(�v����Ƀ��N�̑���)
+		GAME_POS_OFFSET_X = 8,	// ブロックを配置開始する座標(要するにワクの太さ)
 		GAME_POS_OFFSET_Y = 44,
-		BLOCK_IMAGE_OFFSET_Y = 24,	// �ǂ� Y ���W�̃u���b�N�摜���g����
-		NEXT_OFFSET_X = 28,	// �l�N�X�g�摜���ǂꂾ���E�ɂ��炷��
-		NEXT_OFFSET_Y = 8,	// ���ɂ��炷��
-		NEXT_SIZE_X = 40,	// �l�N�X�g�摜�̃T�C�Y
+		BLOCK_IMAGE_OFFSET_Y = 24,	// どの Y 座標のブロック画像を使うか
+		NEXT_OFFSET_X = 28,	// ネクスト画像をどれだけ右にずらすか
+		NEXT_OFFSET_Y = 8,	// 下にずらすか
+		NEXT_SIZE_X = 40,	// ネクスト画像のサイズ
 		NEXT_SIZE_Y = 24,
-		NEXT_IMAGE_OFFSET_Y = 0,	// �ǂ� Y ���W�̃l�N�X�g�摜���g����
-		FLOORUP_MAX = 8		// �ō��ŉ���܂Ŕ���オ�邩
+		NEXT_IMAGE_OFFSET_Y = 0,	// どの Y 座標のネクスト画像を使うか
+		FLOORUP_MAX = 8		// 最高で何列まで迫り上がるか
 	};
 
 	EraseData eraseData;

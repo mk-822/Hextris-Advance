@@ -11,7 +11,7 @@ void Sound::Initialize(){
 	bgm_no = -1;
 	bgm_mode = GetPrivateProfileInt("Sound","Streaming",1,WINDOW_INIPATH);
 
-	// Œø‰Ê‰¹“Ç‚İ‚İ
+	// åŠ¹æœéŸ³èª­ã¿è¾¼ã¿
 	se_no[0] = LoadSoundMem("./se/arrival.wav");
 	se_no[1] = LoadSoundMem("./se/cursor.wav");
 	se_no[2] = LoadSoundMem("./se/decide.wav");
@@ -29,8 +29,8 @@ void Sound::Initialize(){
 	}
 
 	if(bgm_mode)
-		SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMPRESS);	// ƒXƒgƒŠ[ƒ~ƒ“ƒOƒ‚[ƒh
-	// BGM “Ç‚İ‚İ
+		SetCreateSoundDataType(DX_SOUNDDATATYPE_MEMPRESS);	// ã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰
+	// BGM èª­ã¿è¾¼ã¿
 	bgm[0] = LoadSoundMem("./bgm/title.mp3");
 	bgm[1] = LoadSoundMem("./bgm/modeselect.mp3");
 	bgm[2] = LoadSoundMem("./bgm/soloplay.mp3");
@@ -61,10 +61,10 @@ void Sound::ChangeBgm(int no){
 			switch(bgm_no){
 				case 6:
 				case 8:
-					PlaySoundMem(bgm[bgm_no],DX_PLAYTYPE_BACK);	// ƒ‹[ƒv‚È‚µ
+					PlaySoundMem(bgm[bgm_no],DX_PLAYTYPE_BACK);	// ãƒ«ãƒ¼ãƒ—ãªã—
 					break;
 				default:
-					PlaySoundMem(bgm[bgm_no],DX_PLAYTYPE_LOOP);	// ƒ‹[ƒv‚ ‚è
+					PlaySoundMem(bgm[bgm_no],DX_PLAYTYPE_LOOP);	// ãƒ«ãƒ¼ãƒ—ã‚ã‚Š
 					break;
 			}
 		}

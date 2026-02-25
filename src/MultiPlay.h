@@ -1,4 +1,4 @@
-// MultiPlay.h: MultiPlay ƒNƒ‰ƒX‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX
+// MultiPlay.h: MultiPlay ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -12,8 +12,8 @@
 #include "common.h"
 #include "GameCtrl.h"
 #include "HextrisCtrl.h"
-#include "DataFileLoader.h"	// ClassView ‚É‚æ‚Á‚Ä’Ç‰Á‚³‚ê‚Ü‚µ‚½B
-#include "BackGroundImageCtrl.h"	// ClassView ‚É‚æ‚Á‚Ä’Ç‰Á‚³‚ê‚Ü‚µ‚½B
+#include "DataFileLoader.h"	// ClassView ã«ã‚ˆã£ã¦è¿½åŠ ã•ã‚Œã¾ã—ãŸã€‚
+#include "BackGroundImageCtrl.h"	// ClassView ã«ã‚ˆã£ã¦è¿½åŠ ã•ã‚Œã¾ã—ãŸã€‚
 
 class MultiPlay : public Mode  
 {

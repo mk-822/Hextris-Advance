@@ -1,4 +1,4 @@
-// HextrisCtrl.cpp: HextrisCtrl ƒNƒ‰ƒX‚ÌƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+// HextrisCtrl.cpp: HextrisCtrl ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒ†ãƒ¼ã‚·ãƒ§ãƒ³
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -18,7 +18,7 @@ enum SPECIALDRAW{
 };
 
 //////////////////////////////////////////////////////////////////////
-// \’z/Á–Å
+// æ§‹ç¯‰/æ¶ˆæ»…
 //////////////////////////////////////////////////////////////////////
 
 HextrisCtrl::HextrisCtrl(){
@@ -60,23 +60,23 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	}
 }
 
-// ¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡ƒƒCƒ“¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+// â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– ãƒ¡ã‚¤ãƒ³â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– 
 int HextrisCtrl::Main(int player){
 	if(wait){
 		wait--;
 	}else{
 		switch(phase){
-////// oŒ»ˆ— ////////////
+////// å‡ºç¾å‡¦ç† ////////////
 		case PHASE_APPEAR:
-			if(queFloorUp[0] != -1){	// ‚¹‚èã‚ª‚è
+			if(queFloorUp[0] != -1){	// ã›ã‚Šä¸ŠãŒã‚Š
 				FloorUp(DequeFloorUp());
 				break;
 			}
 
-			if(input->GetKeyState(player,0) & (BUTTON[0] | BUTTON[2])){	//¶‰ñ“]
+			if(input->GetKeyState(player,0) & (BUTTON[0] | BUTTON[2])){	//å·¦å›è»¢
 				NextToCurrent(-1);
 				Sound::PlaySe(8);
-			}else if(input->GetKeyState(player,0) & BUTTON[1]){	//‰E‰ñ“]
+			}else if(input->GetKeyState(player,0) & BUTTON[1]){	//å³å›è»¢
 				NextToCurrent(1);
 				Sound::PlaySe(8);
 			}else{
@@ -106,7 +106,7 @@ int HextrisCtrl::Main(int player){
 				fixcount = delayData.fix;
 			}
 			break;
-////// ƒuƒƒbƒNˆÚ“®’† ///////
+////// ãƒ–ãƒ­ãƒƒã‚¯ç§»å‹•ä¸­ ///////
 		case PHASE_MOVING:
 			if(IsGrounded()){
 				ShiftPhase(1);
@@ -120,30 +120,30 @@ int HextrisCtrl::Main(int player){
 				fixcount = delayData.fix;
 			}
 
-			//‘€ì‚É‚æ‚éˆÚ“®
-			if(input->GetKeyState(player,2) & UP){	//ˆê‹C‚É—‰º
+			//æ“ä½œã«ã‚ˆã‚‹ç§»å‹•
+			if(input->GetKeyState(player,2) & UP){	//ä¸€æ°—ã«è½ä¸‹
 				BlockMove(0,20);
 			}
-			if(input->GetKeyState(player,1) & LEFT){	//¶‚ÉˆÚ“®
+			if(input->GetKeyState(player,1) & LEFT){	//å·¦ã«ç§»å‹•
 				BlockMove(-1,0);
 			}
-			if(input->GetKeyState(player,1) & RIGHT){//‰E‚ÉˆÚ“®
+			if(input->GetKeyState(player,1) & RIGHT){//å³ã«ç§»å‹•
 				BlockMove(1,0);
 			}
-			if(input->GetKeyState(player,0) & DOWN){	//ˆê’i—‰º
+			if(input->GetKeyState(player,0) & DOWN){	//ä¸€æ®µè½ä¸‹
 				BlockMove(0,1);
 			}
-			//‰ñ“]
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//¶‰ñ“]
+			//å›è»¢
+			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//å·¦å›è»¢
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	//‰E‰ñ“]
+			if(input->GetKeyState(player,2) & BUTTON[1]){	//å³å›è»¢
 				BlockSpin(1);
 				Sound::PlaySe(8);
 			}
 			break;
-////// ˆÚ“®’†‚¾‚ªÚ’n‚µ‚Ä‚¢‚é /////
+////// ç§»å‹•ä¸­ã ãŒæ¥åœ°ã—ã¦ã„ã‚‹ /////
 		case PHASE_GROUNDED:
 			if(fixcount){
 				fixcount--;
@@ -153,35 +153,35 @@ int HextrisCtrl::Main(int player){
 				break;
 			}
 
-			// ‚¤‚ë‚¿‚å‚ë‚µ‚Ä‚é‚Æ‹­§ŒÅ’è
+			// ã†ã‚ã¡ã‚‡ã‚ã—ã¦ã‚‹ã¨å¼·åˆ¶å›ºå®š
 			if(forcefixcount >= 30){
 				BlockFix();
 				ShiftPhase(1);
 				break;
 			}
 
-			//Ú’n’†‚¾‚Á‚½‚çŒÅ’è
+			//æ¥åœ°ä¸­ã ã£ãŸã‚‰å›ºå®š
 			if(input->GetKeyState(player,0) & DOWN){
 				BlockFix();
 				ShiftPhase(1);
 				break;
 			}
-			if(input->GetKeyState(player,1) & LEFT){	//¶‚ÉˆÚ“®
+			if(input->GetKeyState(player,1) & LEFT){	//å·¦ã«ç§»å‹•
 				BlockMove(-1,0);
 				forcefixcount++;
 			}
-			if(input->GetKeyState(player,1) & RIGHT){//‰E‚ÉˆÚ“®
+			if(input->GetKeyState(player,1) & RIGHT){//å³ã«ç§»å‹•
 				BlockMove(1,0);
 				forcefixcount++;
 			}
 
-			//‰ñ“]
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//¶‰ñ“]
+			//å›è»¢
+			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//å·¦å›è»¢
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 				forcefixcount++;
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	//‰E‰ñ“]
+			if(input->GetKeyState(player,2) & BUTTON[1]){	//å³å›è»¢
 				BlockSpin(1);
 				Sound::PlaySe(8);
 				forcefixcount++;
@@ -198,7 +198,7 @@ int HextrisCtrl::Main(int player){
 				ShiftPhase(-1);
 			}
 			break;
-////// ŒÅ’èŒã‚Ìˆ— /////////
+////// å›ºå®šå¾Œã®å‡¦ç† /////////
 		case PHASE_FIXED:
 			Sound::PlaySe(5);
 			effectFlag |= BLOCK_FIX_EFFECT;
@@ -235,10 +235,10 @@ int HextrisCtrl::Main(int player){
 	count++;
 	return false;
 }
-//¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡ƒƒCƒ“I‚í‚è¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
+//â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– ãƒ¡ã‚¤ãƒ³çµ‚ã‚ã‚Šâ– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– â– 
 
 void HextrisCtrl::Draw(HexFieldDrawData* drawData){
-	// ”wŒi‚ğˆÃ‚­‚·‚é‚½‚ß
+	// èƒŒæ™¯ã‚’æš—ãã™ã‚‹ãŸã‚
 	dxg->TexturePos(0,0,80,160);
 	dxg->Draw(
 		image->i[BLANK_IMG],
@@ -248,7 +248,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		128
 	);
 
-	// ƒtƒB[ƒ‹ƒh”z—ñ‚Ì˜g‚Ì•`‰æ *’¼Úw’è
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰é…åˆ—ã®æ ã®æç”» *ç›´æ¥æŒ‡å®š
 	for(int i=0; i<40; i++){
 		for(int j=0; j<13; j++){
 			if(hField.Get(j,i)){
@@ -264,7 +264,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		}
 	}
 	
-	// ƒtƒB[ƒ‹ƒh”z—ñ‚Ì•`‰æ
+	// ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰é…åˆ—ã®æç”»
 	for(int i=0; i<40; i++){
 		for(int j=0; j<13; j++){
 			dxg->TexturePos(
@@ -296,12 +296,12 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		}
 	}
 
-	// ƒlƒNƒXƒg‚Ì•`‰æ
+	// ãƒã‚¯ã‚¹ãƒˆã®æç”»
 	dxg->TexturePos(NEXT_SIZE_X * (nextBlock + 1),NEXT_IMAGE_OFFSET_Y,NEXT_SIZE_X,NEXT_SIZE_Y);
 	dxg->Draw(image->i[BLOCK_IMG],(float)(drawData->game_pos_x + NEXT_OFFSET_X),(float)(drawData->game_pos_y + NEXT_OFFSET_Y));
 
 	if(phase & (PHASE_MOVING | PHASE_GROUNDED)){
-		// ƒJƒŒƒ“ƒg“_–Å‚Ì•`‰æ *’¼Úw’è
+		// ã‚«ãƒ¬ãƒ³ãƒˆç‚¹æ»…ã®æç”» *ç›´æ¥æŒ‡å®š
 		for(int i=0 ; i<4 ; i++){
 			if(count % 2){
 				dxg->ColorChange(ADD_BLEND);
@@ -315,7 +315,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 			}
 		}
 	
-		// ƒJƒŒƒ“ƒg‚Ì•`‰æ
+		// ã‚«ãƒ¬ãƒ³ãƒˆã®æç”»
 		for(int i=0 ; i<4 ; i++){
 			dxg->TexturePos(
 				curBlock.color * BLOCK_SIZE_X,
@@ -331,7 +331,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		}
 	}
 
-	// ƒtƒ‰ƒbƒVƒ…‚Ì•`‰æ
+	// ãƒ•ãƒ©ãƒƒã‚·ãƒ¥ã®æç”»
 	if(effectFlag & BLOCK_FIX_EFFECT){
 		for(int i=0 ; i<4 ; i++){
 			dxg->TexturePos(
@@ -349,7 +349,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		effectFlag &= ~BLOCK_FIX_EFFECT;
 	}
 
-	// ƒKƒCƒh‚Ì•\¦
+	// ã‚¬ã‚¤ãƒ‰ã®è¡¨ç¤º
 	if(phase & PHASE_MOVING){
 		int center_x_bak = curBlock.center_x;
 		int center_y_bak = curBlock.center_y;
@@ -375,11 +375,11 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData){
 		curBlock.center_y = center_y_bak;
 	}
 
-	// •Ç‚Ì•`‰æ
+	// å£ã®æç”»
 	dxg->TexturePos(0,0,96,176);
 	dxg->Draw(image->i[FRAME_IMG],(float)(drawData->game_pos_x),(float)(drawData->game_pos_y + GAME_POS_OFFSET_Y - BLOCK_OFFSET_Y));
 
-	// Á‹ƒGƒtƒFƒNƒg
+	// æ¶ˆå»ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ
 	for(int i=0 ; i<4 ; i++){
 		if(eraseEffectData[i].effecttime%2){
 			for(int j=0 ; j<13 ; j++){
@@ -436,7 +436,7 @@ int HextrisCtrl::NextToCurrent(int rotation)
 	GenerateNext(10);
 
 	return 0;
-}// •Ô‚è’l‚ª 1 ‚¾‚Á‚½‚çè‹l‚Ü‚è
+}// è¿”ã‚Šå€¤ãŒ 1 ã ã£ãŸã‚‰æ‰‹è©°ã¾ã‚Š
 
 int HextrisCtrl::GenerateNext(int max)
 {
@@ -445,7 +445,7 @@ int HextrisCtrl::GenerateNext(int max)
 
 int HextrisCtrl::BlockMove(int x, int y)
 {
-	// ‚Ü‚¸‚Íâ‘Î’l‚ğZo
+	// ã¾ãšã¯çµ¶å¯¾å€¤ã‚’ç®—å‡º
 	int abs_x = x; int abs_y = y;
 	if(abs_x<0)
 		abs_x *= -1;
@@ -456,12 +456,12 @@ int HextrisCtrl::BlockMove(int x, int y)
 	if(curBlock.center_x % 2)
 		adjust_y = -1;
 
-	// “®‚¯‚½‰ñ”
+	// å‹•ã‘ãŸå›æ•°
 	int movecount = 0;
-	// “®‚¯‚È‚©‚Á‚½‚çƒIƒ“‚É‚È‚éƒtƒ‰ƒOiƒYƒŒ‚Ä“®‚¯‚é‚©‚·j
+	// å‹•ã‘ãªã‹ã£ãŸã‚‰ã‚ªãƒ³ã«ãªã‚‹ãƒ•ãƒ©ã‚°ï¼ˆã‚ºãƒ¬ã¦å‹•ã‘ã‚‹ã‹è©¦ã™ï¼‰
 	bool movefailed = false;
 
-	// ˆ—‚ğ‹­§•ªŠò(x ² y ²‚ğ“¯‚É“®‚©‚·‚±‚Æ‚Í‚Å‚«‚È‚¢)
+	// å‡¦ç†ã‚’å¼·åˆ¶åˆ†å²(x è»¸ y è»¸ã‚’åŒæ™‚ã«å‹•ã‹ã™ã“ã¨ã¯ã§ããªã„)
 	if(abs_x){
 		for(int i=0 ; i<abs_x ; i++){
 			for(int j=0 ; j<=4 ; j++){
@@ -515,35 +515,35 @@ int HextrisCtrl::BlockMove(int x, int y)
 
 int HextrisCtrl::BlockSpin(int spin)
 {
-	// ‰ñ“]‚ª¬Œ÷‚µ‚½‚©‚Ç‚¤‚©
+	// å›è»¢ãŒæˆåŠŸã—ãŸã‹ã©ã†ã‹
 	int spincount=0;
 	int adjust_x , adjust_y;
 
 	if(spin){
 		for(int k=0 ; k<=7 ; k++){
 			switch(k){
-			case 0:	//‚Ü‚¸‚Í•’Ê‚É
+			case 0:	//ã¾ãšã¯æ™®é€šã«
 				adjust_x = 0; adjust_y = 0;
 				break;
-			case 1: //‰º‚¾
+			case 1: //ä¸‹ã 
 				adjust_x = 0; adjust_y = 2;
 				break;
-			case 2:	//‚»‚ê‚Å‘Ê–Ú‚È‚çc¶I
+			case 2:	//ãã‚Œã§é§„ç›®ãªã‚‰â€¦å·¦ï¼
 				adjust_x = -1; adjust_y = AdjustX();
 				break;
-			case 3: //‚­‚Ác‰EI
+			case 3: //ãã£â€¦å³ï¼
 				adjust_x = 1; adjust_y = AdjustX();
 				break;
-			case 4: //¶‰º
+			case 4: //å·¦ä¸‹
 				adjust_x = -1; adjust_y = 2 + AdjustX();
 				break;
-			case 5: //‰E‰º
+			case 5: //å³ä¸‹
 				adjust_x = 1; adjust_y = 2 + AdjustX();
 				break;
-			case 6:	//‰º‰º
+			case 6:	//ä¸‹ä¸‹
 				adjust_x = 0; adjust_y = 4;
 				break;
-			case 7: //‚¤‚¨‚¨I‚ ‚Æ‚Íã‚µ‚©‚Ë‚¦I
+			case 7: //ã†ãŠãŠï¼ã‚ã¨ã¯ä¸Šã—ã‹ã­ãˆï¼
 				adjust_x = 0; adjust_y = -2;
 				break;
 			}
@@ -628,7 +628,7 @@ int HextrisCtrl::BlockErase()
 		for(int j=0 ; j<=13 ; j++){
 			if(j == 13){
 				for(int k=0 ; k<13 ; k++){
-			// ƒGƒtƒFƒNƒg‚Ö‚Ìƒf[ƒ^“n‚µ ///////////////
+			// ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã¸ã®ãƒ‡ãƒ¼ã‚¿æ¸¡ã— ///////////////
 					eraseEffectData[erasecount].GenerateMove();
 					eraseEffectData[erasecount].color[k] = hField.GetField(k,i);
 					eraseEffectData[erasecount].x[k] = (float)(GAME_POS_OFFSET_X + k*BLOCK_OFFSET_X);
@@ -683,7 +683,7 @@ int HextrisCtrl::AdjustX(int x)
 
 void HextrisCtrl::DrawField(HexFieldDrawData* drawData, int trans, bool shadow)
 {
-	// ”wŒi‚ğˆÃ‚­‚·‚é‚½‚ß
+	// èƒŒæ™¯ã‚’æš—ãã™ã‚‹ãŸã‚
 	if(shadow){
 		dxg->TexturePos(0,0,80,160);
 		dxg->Draw(
@@ -693,7 +693,7 @@ void HextrisCtrl::DrawField(HexFieldDrawData* drawData, int trans, bool shadow)
 			true,
 			trans/2
 		);
-		// ƒlƒNƒXƒg‚Ì•`‰æ
+		// ãƒã‚¯ã‚¹ãƒˆã®æç”»
 		dxg->TexturePos(NEXT_SIZE_X * (nextBlock + 1),NEXT_IMAGE_OFFSET_Y,NEXT_SIZE_X,NEXT_SIZE_Y);
 		dxg->Draw(
 			image->i[BLOCK_IMG],
@@ -703,7 +703,7 @@ void HextrisCtrl::DrawField(HexFieldDrawData* drawData, int trans, bool shadow)
 			trans
 		);
 	}
-	// •Ç‚Ì•`‰æ
+	// å£ã®æç”»
 	dxg->TexturePos(0,0,96,176);
 	dxg->Draw(image->i[FRAME_IMG],(float)(drawData->game_pos_x),(float)(drawData->game_pos_y + GAME_POS_OFFSET_Y - BLOCK_OFFSET_Y),true,trans);
 }
@@ -727,7 +727,7 @@ int HextrisCtrl::IsDead()
 	return 1;
 }
 
-void HextrisCtrl::CountUp()	// —Í‹Æ‚ÅƒSƒƒ“
+void HextrisCtrl::CountUp()	// åŠ›æ¥­ã§ã‚´ãƒ¡ãƒ³
 {
 	count++;
 }

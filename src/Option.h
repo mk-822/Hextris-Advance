@@ -1,4 +1,4 @@
-// Option.h: Option ƒNƒ‰ƒX‚ÌƒCƒ“ƒ^[ƒtƒFƒCƒX
+// Option.h: Option ã‚¯ãƒ©ã‚¹ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -13,26 +13,26 @@
 #pragma once
 #endif // _MSC_VER > 1000
 typedef unsigned int UINT;
-static const int Option_Menu = 3;		//ƒIƒvƒVƒ‡ƒ“‚Å‘I‘ğ‚Å‚«‚é‘”
-static const int ChangeWindowSize = 0;	//ƒEƒBƒ“ƒhƒE‚ÌƒTƒCƒY‚ğ•Ï‚¦‚ê‚éƒ‚[ƒh
+static const int Option_Menu = 3;		//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã§é¸æŠã§ãã‚‹ç·æ•°
+static const int ChangeWindowSize = 0;	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ã‚µã‚¤ã‚ºã‚’å¤‰ãˆã‚Œã‚‹ãƒ¢ãƒ¼ãƒ‰
 static const int Appry = 1;				//Appry
 static const int Cancel = 2;				//Exit
-static const int Size320x240 = 0;		//ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³‚ª320*240
-static const int Size640x480 = 1;		//ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³‚ª640*480
-static const int SizeFull = 2;			//ƒEƒBƒ“ƒhƒE‚Ì‘å‚«‚³‚ªƒtƒ‹ƒXƒNƒŠ[ƒ“
+static const int Size320x240 = 0;		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ãŒ320*240
+static const int Size640x480 = 1;		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ãŒ640*480
+static const int SizeFull = 2;			//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®å¤§ãã•ãŒãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³
 //static const int InterlinearSpace = 30;
 class Option : public Mode  
 {
 private :
-	int mode[Option_Menu];//‚¨‚Ì‚¨‚Ì‚É‚ ‚Á‚½s‚Ìƒ‚[ƒh‚ğ‚ğ•Û
-	int Height;//s
-	int SRAM[Option_Menu];//ˆê“I‚ÉAinitƒf[ƒ^‚ğ•Û‚µ‚Ä‚¨‚­
-	int WindowSize;//‘‹‚È‘å‚«‚³
-	void WriteInitFile();//’©‹N‚«‚Ä`ô‘‚«‚Şiniƒtƒ@ƒCƒ‹..........iAppry‚Ì‚Æ‚«”­“®
-	void OptionEnd(bool flag = true);//ƒIƒvƒVƒ‡ƒ“‚ğI—¹‚µ‚½‚çŒÄ‚Ño‚³‚ê‚é(Appry‚©Cancel)
+	int mode[Option_Menu];//ãŠã®ãŠã®ã«ã‚ã£ãŸè¡Œã®ãƒ¢ãƒ¼ãƒ‰ã‚’ã‚’ä¿æŒ
+	int Height;//è¡Œ
+	int SRAM[Option_Menu];//ä¸€æ™‚çš„ã«ã€initãƒ‡ãƒ¼ã‚¿ã‚’ä¿æŒã—ã¦ãŠã
+	int WindowSize;//çª“ãªå¤§ãã•
+	void WriteInitFile();//æœèµ·ãã¦ï½â™ªæ›¸ãè¾¼ã‚€iniãƒ•ã‚¡ã‚¤ãƒ«..........ï¼ˆAppryã®ã¨ãç™ºå‹•
+	void OptionEnd(bool flag = true);//ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚’çµ‚äº†ã—ãŸã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹(Appryã‹Cancel)
 public:
-	Option();//ƒRƒ“ƒXƒgƒ‰ƒNƒ^B‚±‚±‚Åƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ‚ğ‚È‚³‚¢‚Ü‚·‚íII‰œ‚³‚ñ
-	void Main();//“÷‘Ì(¸_‚Ímode‚É‚ ‚é)
+	Option();//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚ã“ã“ã§ãƒ•ã‚¡ã‚¤ãƒ«ã®èª­ã¿è¾¼ã¿ã‚’ãªã•ã„ã¾ã™ã‚ï¼ï¼å¥¥ã•ã‚“
+	void Main();//è‚‰ä½“(ç²¾ç¥ã¯modeã«ã‚ã‚‹)
 };
 
 #endif // !defined(AFX_OPTION_H__16F7011C_D5AF_4EE4_A878_75073E9E66F3__INCLUDED_)

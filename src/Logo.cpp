@@ -2,7 +2,7 @@
 
 void Logo::Main(){
 	switch(phase){
-	case 0:	//o‚é‚Æ‚«
+	case 0:	//å‡ºã‚‹ã¨ã
 		if(!count)
 			logo_pos = 64;
 
@@ -10,7 +10,7 @@ void Logo::Main(){
 		dxg->ColorChange(2);
 		dxg->Draw(image->i[LOGO_IMG], LOGOX, logo_pos, false, count*(256/FADETIME));
 
-		// ƒƒSˆÊ’u‚ðˆÚ“®
+		// ãƒ­ã‚´ä½ç½®ã‚’ç§»å‹•
 		logo_pos = (LOGOY + logo_pos*(MOVESPEED-1)) / MOVESPEED;
 		
 		if(count>=FADETIME){
@@ -18,7 +18,7 @@ void Logo::Main(){
 			count = 0;
 		}
 		break;
-	case 1:	//ÃŽ~‚µ‚Ä‚é‚Æ‚«
+	case 1:	//é™æ­¢ã—ã¦ã‚‹ã¨ã
 		dxg->TexturePos(0,0,64,32);
 		dxg->Draw(image->i[LOGO_IMG], LOGOX,LOGOY, false, 255);
 		if((count>=FADETIME)||(input->GetKeyState(0))){
@@ -26,7 +26,7 @@ void Logo::Main(){
 			count = 0;
 		}
 		break;
-	case 2:	//Á‚¦‚é‚Æ‚«
+	case 2:	//æ¶ˆãˆã‚‹ã¨ã
 		dxg->TexturePos(0,0,64,32);
 		dxg->ColorChange(2);
 		dxg->Draw(image->i[LOGO_IMG], LOGOX,LOGOY, false, 255-count*(256/FADETIME));

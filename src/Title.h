@@ -16,11 +16,11 @@ private:
 		ANIMSPEED = 3,
 		MOVESPEED = 4,
 	};
-	float cur_pos;	// ƒJƒŒƒ“ƒgƒAƒjƒ‚ª‚¿‚å‚Á‚Æ‚Ã‚Â“®‚­—p
-	float menu_pos;	// ƒƒjƒ…[‚ª‚¿‚å‚Á‚Æ‚Ã‚Â“ü‚Á‚Ä‚­‚é—p
-	float cur_move;	// ƒJƒŒƒ“ƒgƒAƒjƒ‚ªo‚Ä‚­‚ÌˆÚ“®—Ê
-	float cur_movemove;	// ˆÚ“®—Ê‚Ì•Ï‰»—Ê
-	int cur_count;	// ƒJƒŒƒ“ƒgƒAƒjƒ—p‚Ìê—pƒJƒEƒ“ƒ^
+	float cur_pos;	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡ãŒã¡ã‚‡ã£ã¨ã¥ã¤å‹•ãç”¨
+	float menu_pos;	// ãƒ¡ãƒ‹ãƒ¥ãƒ¼ãŒã¡ã‚‡ã£ã¨ã¥ã¤å…¥ã£ã¦ãã‚‹ç”¨
+	float cur_move;	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡ãŒå‡ºã¦ãæ™‚ã®ç§»å‹•é‡
+	float cur_movemove;	// ç§»å‹•é‡ã®å¤‰åŒ–é‡
+	int cur_count;	// ã‚«ãƒ¬ãƒ³ãƒˆã‚¢ãƒ‹ãƒ¡ç”¨ã®å°‚ç”¨ã‚«ã‚¦ãƒ³ã‚¿
 	int current;
 	int scene_tmp;
 

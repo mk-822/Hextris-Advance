@@ -1,12 +1,12 @@
 #ifndef SOLOPLAYHEADER
 #define SOLOPLAYHEADER
 
-#include "ScoreManager.h"	// ClassView ‚É‚æ‚Á‚Ä’Ç‰Á‚³‚ê‚Ü‚µ‚½B
+#include "ScoreManager.h"	// ClassView ã«ã‚ˆã£ã¦è¿½åŠ ã•ã‚Œã¾ã—ãŸã€‚
 #include "common.h"
 #include "GameCtrl.h"
 #include "HextrisCtrl.h"
 #include "DataFileLoader.h"
-#include "BackGroundImageCtrl.h"	// ClassView ‚É‚æ‚Á‚Ä’Ç‰Á‚³‚ê‚Ü‚µ‚½B
+#include "BackGroundImageCtrl.h"	// ClassView ã«ã‚ˆã£ã¦è¿½åŠ ã•ã‚Œã¾ã—ãŸã€‚
 
 class SoloPlay : public Mode{
 private:

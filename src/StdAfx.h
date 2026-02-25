@@ -1,25 +1,8 @@
-// stdafx.h : •W€‚ÌƒVƒXƒeƒ€ ƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹A
-//            ‚Ü‚½‚ÍQÆ‰ñ”‚ª‘½‚­A‚©‚Â‚ ‚Ü‚è•ÏX‚³‚ê‚È‚¢
-//            ƒvƒƒWƒFƒNƒgê—p‚ÌƒCƒ“ƒNƒ‹[ƒh ƒtƒ@ƒCƒ‹‚ğ‹Lq‚µ‚Ü‚·B
+// stdafx.h : æ¨™æº–ã®ã‚·ã‚¹ãƒ†ãƒ  ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ ãƒ•ã‚¡ã‚¤ãƒ«ã€
+//            ã¾ãŸã¯å‚ç…§å›æ•°ãŒå¤šãã€ã‹ã¤ã‚ã¾ã‚Šå¤‰æ›´ã•ã‚Œãªã„
+//            ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆå°‚ç”¨ã®ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¨˜è¿°ã—ã¾ã™ã€‚
 //
-
-#if !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
-#define AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-
-#define WIN32_LEAN_AND_MEAN		// Windows ƒwƒbƒ_[‚©‚ç–w‚Çg—p‚³‚ê‚È‚¢ƒXƒ^ƒbƒt‚ğœŠO‚µ‚Ü‚·
-
-#include <windows.h>
 #include "DxGraph.h"
 #include "JoyPad.h"
 #include "debug.h"
-
-// TODO: ƒvƒƒOƒ‰ƒ€‚Å•K—v‚Èƒwƒbƒ_[QÆ‚ğ’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢B
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ ‚Í‘Os‚Ì’¼‘O‚É’Ç‰Á‚ÌéŒ¾‚ğ‘}“ü‚µ‚Ü‚·B
-
-#endif // !defined(AFX_STDAFX_H__A9DB83DB_A9FD_11D0_BFD1_444553540000__INCLUDED_)
