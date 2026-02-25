@@ -35,10 +35,13 @@
 
 docs/
 docs_tools/
-example/
+examples/
 games/
 issues/
 template/
+credits/
+licenses/
+tests/
 
 # Butano Gitignore
 
