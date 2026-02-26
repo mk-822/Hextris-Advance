@@ -39,10 +39,10 @@ private:
 			effecttime = EFFECTTIME;
 			enable = true;
 			for(int i=0 ; i<13 ; i++){
-				movex[i] = (float)((::rand()%5)*100) / 100 -2;
-				movey[i] = (float)((::rand()%3)*100) / 100 -1;
-				moveymove[i] = (float)((::rand()%3)*100) / 10000 + (float)0.0125;
-				animespeed[i] = ::rand() % 8 +1;
+				movex[i] = (float)(GameRandomInt(5)*100) / 100 -2;
+				movey[i] = (float)(GameRandomInt(3)*100) / 100 -1;
+				moveymove[i] = (float)(GameRandomInt(3)*100) / 10000 + (float)0.0125;
+				animespeed[i] = GameRandomInt(8) +1;
 			}
 			gravity = (float)1.05;
 		}

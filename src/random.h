@@ -1,7 +1,9 @@
 #ifndef H__RANDOM__H
 #define H__RANDOM__H
 #include "stdafx.h"
-#include  <stdlib.h>
+
+void SeedGameRandom(unsigned seed);
+int GameRandomInt(int limit);
 
 class random
 {
