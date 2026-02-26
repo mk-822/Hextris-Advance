@@ -3,6 +3,8 @@
 #include "soloplay.h"
 #include "title.h"
 #include "ScoreDisplay.h"
+#include <stdarg.h>
+#include <string.h>
 
 GameCtrl::GameCtrl(){
 	// ゲーム開始からのフレーム数
