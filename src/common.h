@@ -3,7 +3,19 @@
 
 #define for if(0);else for	//for の謎スコープを無理矢理fix
 #pragma warning ( disable : 4996 )
+#include "bn_timer.h"
+#include "bn_timers.h"
 #include "sound.h"
+
+inline unsigned long GetTickCount(){
+	static bn::timer timer;
+	const int elapsed_ticks = timer.elapsed_ticks();
+	const int ticks_per_second = bn::timers::ticks_per_second();
+
+	return static_cast<unsigned long>(
+		(static_cast<long long>(elapsed_ticks) * 1000) / ticks_per_second
+	);
+}
 
 //画面モード定義
 static const char* WINDOW_INIPATH = "./setting.ini";
