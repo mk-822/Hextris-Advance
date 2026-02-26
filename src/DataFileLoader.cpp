@@ -17,7 +17,7 @@ DataFileLoader::DataFileLoader()
 {
 	//ブロック・ブロック補正情報を定義ファイルから読み込み
 	static FILE *fp;
-	fp = fopen("./Data/rotation.dat","r");
+	fp = fopen("./Data/rotation.bin","r");
 	for(int i=0 ; i<19 ; i++){
 		fscanf(fp , "%d %d %d %d",
 			&posData[i].x,
@@ -28,7 +28,7 @@ DataFileLoader::DataFileLoader()
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/blockdef.dat","r");
+	fp = fopen("./Data/blockdef.bin","r");
 	for(int i=0 ; i<10 ; i++){
 		fscanf(fp , "%d %d %d %d",
 			&blockData[i].pos[0],
@@ -42,7 +42,7 @@ DataFileLoader::DataFileLoader()
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/grade.dat","r");
+	fp = fopen("./Data/grade.bin","r");
 	for(int i=0 ; i<8 ; i++){
 		fscanf(fp,"%d",&borderScore[i]);
 	}
@@ -51,16 +51,16 @@ DataFileLoader::DataFileLoader()
 	for(int i=0 ; i<4 ; i++){
 		switch(i){
 		case 0:
-			fp = fopen("./Data/easy.dat","r");
+			fp = fopen("./Data/easy.bin","r");
 			break;
 		case 1:
-			fp = fopen("./Data/normal.dat","r");
+			fp = fopen("./Data/normal.bin","r");
 			break;
 		case 2:
-			fp = fopen("./Data/master.dat","r");
+			fp = fopen("./Data/master.bin","r");
 			break;
 		case 3:
-			fp = fopen("./Data/death.dat","r");
+			fp = fopen("./Data/death.bin","r");
 			break;
 		}
 		for(int j=0 ; j<10 ; j++){
