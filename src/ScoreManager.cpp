@@ -5,7 +5,10 @@
 #include "stdafx.h"
 #include "ScoreManager.h"
 #include <string.h>
-#include "generic_data_bin.h"
+#include "easyscore_bin.h"
+#include "normalscore_bin.h"
+#include "masterscore_bin.h"
+#include "deathscore_bin.h"
 #include <cstdlib>
 
 namespace
@@ -103,6 +106,19 @@ private:
     const char* _end;
 };
 
+void _load_score_list(const unsigned char* data, const int size, ScoreManager::Scorelist& score_list)
+{
+    data_parser parser(data, size);
+
+    for(int i=0 ; i<10 ; i++)
+    {
+        parser.read_int(score_list.record[i].score);
+        parser.read_int(score_list.record[i].time);
+        parser.read_int(score_list.record[i].level);
+        parser.read_name(score_list.record[i].name, sizeof(score_list.record[i].name));
+    }
+}
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -111,36 +127,10 @@ private:
 
 ScoreManager::ScoreManager()
 {
-	// Butano が自動生成する generic_data_bin から読み込み
-	data_parser parser(generic_data_bin, generic_data_bin_size);
-
-	for(int i=0 ; i<10 ; i++){
-		parser.read_int(scoreList[0].record[i].score);
-		parser.read_int(scoreList[0].record[i].time);
-		parser.read_int(scoreList[0].record[i].level);
-		parser.read_name(scoreList[0].record[i].name, sizeof(scoreList[0].record[i].name));
-	}
-
-	for(int i=0 ; i<10 ; i++){
-		parser.read_int(scoreList[1].record[i].score);
-		parser.read_int(scoreList[1].record[i].time);
-		parser.read_int(scoreList[1].record[i].level);
-		parser.read_name(scoreList[1].record[i].name, sizeof(scoreList[1].record[i].name));
-	}
-
-	for(int i=0 ; i<10 ; i++){
-		parser.read_int(scoreList[2].record[i].score);
-		parser.read_int(scoreList[2].record[i].time);
-		parser.read_int(scoreList[2].record[i].level);
-		parser.read_name(scoreList[2].record[i].name, sizeof(scoreList[2].record[i].name));
-	}
-
-	for(int i=0 ; i<10 ; i++){
-		parser.read_int(scoreList[3].record[i].score);
-		parser.read_int(scoreList[3].record[i].time);
-		parser.read_int(scoreList[3].record[i].level);
-		parser.read_name(scoreList[3].record[i].name, sizeof(scoreList[3].record[i].name));
-	}
+    _load_score_list(easyscore_bin, easyscore_bin_size, scoreList[0]);
+    _load_score_list(normalscore_bin, normalscore_bin_size, scoreList[1]);
+    _load_score_list(masterscore_bin, masterscore_bin_size, scoreList[2]);
+    _load_score_list(deathscore_bin, deathscore_bin_size, scoreList[3]);
 }
 
 ScoreManager::~ScoreManager()
@@ -165,7 +155,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	scoreList[difficulty].record[order].score = score;
 	scoreList[difficulty].record[order].level = level;
 	scoreList[difficulty].record[order].time = time;
-	compat_strcpy(scoreList[difficulty].record[order].name,name);
+	strcpy(scoreList[difficulty].record[order].name,name);
 
-	// ROM 上の generic_data_bin は書き換えできないため、保存は実施しない。
+	// ROM 上の bin データは書き換えできないため、保存は実施しない。
 }

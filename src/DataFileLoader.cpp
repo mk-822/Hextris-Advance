@@ -5,7 +5,13 @@
 #include "stdafx.h"
 #include "DataFileLoader.h"
 #include "common.h"
-#include "generic_data_bin.h"
+#include "rotation_bin.h"
+#include "blockdef_bin.h"
+#include "grade_bin.h"
+#include "easy_bin.h"
+#include "normal_bin.h"
+#include "master_bin.h"
+#include "death_bin.h"
 #include <cstdlib>
 
 namespace
@@ -76,37 +82,91 @@ static const int CENTER_Y = 2;
 
 DataFileLoader::DataFileLoader()
 {
-	// Butano が自動生成する generic_data_bin から読み込み
-	data_parser parser(generic_data_bin, generic_data_bin_size);
+    {
+        data_parser parser(rotation_bin, rotation_bin_size);
 
-	for(int i=0 ; i<19 ; i++){
-		parser.read_int(posData[i].x);
-		parser.read_int(posData[i].y);
-		parser.read_int(posData[i].next);
-		parser.read_int(posData[i].previous);
-	}
+        for(int i=0 ; i<19 ; i++)
+        {
+            parser.read_int(posData[i].x);
+            parser.read_int(posData[i].y);
+            parser.read_int(posData[i].next);
+            parser.read_int(posData[i].previous);
+        }
+    }
 
-	for(int i=0 ; i<10 ; i++){
-		parser.read_int(blockData[i].pos[0]);
-		parser.read_int(blockData[i].pos[1]);
-		parser.read_int(blockData[i].pos[2]);
-		parser.read_int(blockData[i].pos[3]);
-		blockData[i].center_x = CENTER_X;
-		blockData[i].center_y = CENTER_Y;
-		blockData[i].color = i;
-	}
+    {
+        data_parser parser(blockdef_bin, blockdef_bin_size);
 
-	for(int i=0 ; i<8 ; i++){
-		parser.read_int(borderScore[i]);
-	}
+        for(int i=0 ; i<10 ; i++)
+        {
+            parser.read_int(blockData[i].pos[0]);
+            parser.read_int(blockData[i].pos[1]);
+            parser.read_int(blockData[i].pos[2]);
+            parser.read_int(blockData[i].pos[3]);
+            blockData[i].center_x = CENTER_X;
+            blockData[i].center_y = CENTER_Y;
+            blockData[i].color = i;
+        }
+    }
 
-	for(int i=0 ; i<4 ; i++){
-		for(int j=0 ; j<10 ; j++){
-			parser.read_int(difficultyData[i][j].fix);
-			parser.read_int(difficultyData[i][j].erase);
-			parser.read_int(difficultyData[i][j].appear);
-			parser.read_int(difficultyData[i][j].fall);
-			parser.read_int(difficultyData[i][j].g);
-		}
-	}
+    {
+        data_parser parser(grade_bin, grade_bin_size);
+
+        for(int i=0 ; i<8 ; i++)
+        {
+            parser.read_int(borderScore[i]);
+        }
+    }
+
+    {
+        data_parser parser(easy_bin, easy_bin_size);
+
+        for(int j=0 ; j<10 ; j++)
+        {
+            parser.read_int(difficultyData[EASY][j].fix);
+            parser.read_int(difficultyData[EASY][j].erase);
+            parser.read_int(difficultyData[EASY][j].appear);
+            parser.read_int(difficultyData[EASY][j].fall);
+            parser.read_int(difficultyData[EASY][j].g);
+        }
+    }
+
+    {
+        data_parser parser(normal_bin, normal_bin_size);
+
+        for(int j=0 ; j<10 ; j++)
+        {
+            parser.read_int(difficultyData[NORMAL][j].fix);
+            parser.read_int(difficultyData[NORMAL][j].erase);
+            parser.read_int(difficultyData[NORMAL][j].appear);
+            parser.read_int(difficultyData[NORMAL][j].fall);
+            parser.read_int(difficultyData[NORMAL][j].g);
+        }
+    }
+
+    {
+        data_parser parser(master_bin, master_bin_size);
+
+        for(int j=0 ; j<10 ; j++)
+        {
+            parser.read_int(difficultyData[MASTER][j].fix);
+            parser.read_int(difficultyData[MASTER][j].erase);
+            parser.read_int(difficultyData[MASTER][j].appear);
+            parser.read_int(difficultyData[MASTER][j].fall);
+            parser.read_int(difficultyData[MASTER][j].g);
+        }
+    }
+
+    {
+        data_parser parser(death_bin, death_bin_size);
+
+        for(int j=0 ; j<10 ; j++)
+        {
+            parser.read_int(difficultyData[DEATH][j].fix);
+            parser.read_int(difficultyData[DEATH][j].erase);
+            parser.read_int(difficultyData[DEATH][j].appear);
+            parser.read_int(difficultyData[DEATH][j].fall);
+            parser.read_int(difficultyData[DEATH][j].g);
+        }
+    }
 }
