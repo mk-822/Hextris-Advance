@@ -5,7 +5,7 @@
 #pragma warning ( disable : 4996 )
 #include "bn_timer.h"
 #include "bn_timers.h"
-#include "sound.h"
+#include "Sound.h"
 
 inline unsigned long GetTickCount(){
 	static bn::timer timer;

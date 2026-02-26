@@ -1,7 +1,7 @@
 #pragma once
 
-#define SE_MAX 64
-#define BGM_MAX 8
+#define SE_MAX 11
+#define BGM_MAX 14
 
 class Sound{
 public:
