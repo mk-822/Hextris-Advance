@@ -22,7 +22,7 @@ private:
 	Image image;
 	int count;
 	int scene;
-	int scene_bk;
+	int scene_bk = -1;
 
 public:
 	GameCtrl();

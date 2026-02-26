@@ -44,8 +44,6 @@ draw::~draw()//デストラクタで開放
 bool draw :: Initialize(bool full , int zoom , int X , int Y)
 {
 	BN_LOG("draw::Initialize full:", full, " zoom:", zoom, " size:", X, "x", Y);
-	bn::core::init();
-
 	return true;
 }
 
@@ -95,7 +93,6 @@ void draw::DrawBegin(bool Clear)
 ////////////////////////////////////////描画を終了させる//////////////////////////////////////////////////////////////
 void draw :: DrawEnd()
 {
-	bn::core::update();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

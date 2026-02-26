@@ -6,7 +6,7 @@
 #include "bn_timers.h"
 #include "Sound.h"
 
-inline int compat_strlen(const char* text){
+inline int __attribute__((optimize("O0"))) compat_strlen(const char* text){
 	if(! text){
 		return 0;
 	}
