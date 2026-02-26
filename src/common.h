@@ -7,6 +7,19 @@
 #include "bn_timers.h"
 #include "Sound.h"
 
+inline int compat_strlen(const char* text){
+	if(! text){
+		return 0;
+	}
+
+	int len = 0;
+	while(text[len] != '\0'){
+		len++;
+	}
+
+	return len;
+}
+
 inline unsigned long GetTickCount(){
 	static bn::timer timer;
 	const int elapsed_ticks = timer.elapsed_ticks();

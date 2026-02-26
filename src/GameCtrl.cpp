@@ -4,7 +4,6 @@
 #include "title.h"
 #include "ScoreDisplay.h"
 #include <stdarg.h>
-#include <string.h>
 
 GameCtrl::GameCtrl(){
 	// ゲーム開始からのフレーム数
@@ -108,7 +107,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, const char* format, ...){
 	int sizey = 8;
 	int wide = -2;
 
-	int len = strlen(buffer);
+	int len = compat_strlen(buffer);
 	for(int i=0 ; i<len ; i++){
 		dxg->TexturePos((buffer[i]-32)*sizex, 0, sizex, sizey);
 		dxg->Draw(font, (float)(x + i*(sizex + wide)), (float)y, true);
@@ -127,7 +126,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* for
 	int sizey = 8;
 	int wide = -2;
 
-	int len = strlen(buffer);
+	int len = compat_strlen(buffer);
 	for(int i=0 ; i<len ; i++){
 		dxg->TexturePos((buffer[i]-32)*sizex, 0, sizex, sizey);
 		dxg->Draw(font, (float)(x + i*(sizex + wide)), (float)y, true, trans);
@@ -142,7 +141,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int 
 	vsprintf(buffer, format, ap);
 	va_end(ap);
 
-	int len = strlen(buffer);
+	int len = compat_strlen(buffer);
 	for(int i=0 ; i<len ; i++){
 		dxg->TexturePos((buffer[i]-32)*sizex, 0, sizex, sizey);
 		dxg->Draw(font, (float)(x + i*(sizex + offsetx)), (float)y, true);
