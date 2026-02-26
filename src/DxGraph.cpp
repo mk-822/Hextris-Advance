@@ -1,5 +1,4 @@
 #include "DxGraph.h"
-#include "resource.h"
 #include "common.h"
 
 #include "bn_blending.h"

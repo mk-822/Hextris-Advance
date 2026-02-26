@@ -5,4 +5,3 @@
 #pragma once
 #include "DxGraph.h"
 #include "JoyPad.h"
-#include "debug.h"
