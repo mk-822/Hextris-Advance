@@ -1,6 +1,31 @@
 #include "DxGraph.h"
 #include "resource.h"
 #include "common.h"
+
+#include "bn_blending.h"
+#include "bn_core.h"
+#include "bn_fixed.h"
+#include "bn_log.h"
+
+namespace
+{
+    int next_image_handle = 1;
+
+    [[nodiscard]] bn::fixed _to_alpha(const int tr_all)
+    {
+        if(tr_all <= 0)
+        {
+            return 0;
+        }
+
+        if(tr_all >= 255)
+        {
+            return 1;
+        }
+
+        return bn::fixed(tr_all) / 255;
+    }
+}
 ////////////////////////////コンストラクタ//////////////////////////////////
 draw :: draw()//初期化が必要な変数
 {
@@ -19,27 +44,8 @@ draw::~draw()//デストラクタで開放
 ////////解像度指定//////////////////////////////////////////////////////////
 bool draw :: Initialize(bool full , int zoom , int X , int Y)
 {
-	// 起動方法の指定
-	if(GetPrivateProfileInt("Window","Vram",1,WINDOW_INIPATH)){
-	}else{
-		SetUse3DFlag(FALSE);
-		SetUseVramFlag(FALSE);
-		SetScreenMemToVramFlag(FALSE);
-	}
-
-	// 画面モードの変更
-	SetGraphMode( X , Y , GetPrivateProfileInt("Window","ColorBit",32,WINDOW_INIPATH));
-	SetWindowSizeExtendRate( (double)zoom );
-	SetOutApplicationLogValidFlag(GetPrivateProfileInt("Main","Log",0,WINDOW_INIPATH));
-	SetMainWindowText("HEXARIS 2007 SUMMER EDITION");
-
-	ChangeWindowMode( !full );
-	if( DxLib_Init() == -1 ){
-		return false;
-	}
-
-	// 描画先画面を裏にする
-	SetDrawScreen( DX_SCREEN_BACK ) ;
+	BN_LOG("draw::Initialize full:", full, " zoom:", zoom, " size:", X, "x", Y);
+	bn::core::init();
 
 	return true;
 }
@@ -49,7 +55,8 @@ bool draw :: Initialize(bool full , int zoom , int X , int Y)
 /////////////////////////////////読み込み//////////////////////////////////////////////////////////////////////////
 int draw :: LoadImage(char* FileName,int mode , int r , int g , int b)
 {
-	return LoadGraph(FileName);
+	BN_LOG("draw::LoadImage path:", FileName, " mode:", mode, " trans:", r, ",", g, ",", b);
+	return next_image_handle++;
 }
 
 //////////////////////////////背景と前景の合成////////////////////////////////////////
@@ -57,19 +64,19 @@ void draw::ColorChange(int num,bool flag)
 {
 	switch(num){
 	case 0:
-		mode = DX_BLENDMODE_NOBLEND;
+		mode = 0;
 		break;
 	case 1:
-		mode = DX_BLENDMODE_ALPHA;
+		mode = 1;
 		break;
 	case 2:
-		mode = DX_BLENDMODE_ADD;
+		mode = 2;
 		break;
 	case 3:
-		mode = DX_BLENDMODE_SUB;
+		mode = 3;
 		break;
 	default:
-		mode = DX_BLENDMODE_MUL;
+		mode = 4;
 		break;
 	}
 }
@@ -89,10 +96,7 @@ void draw::DrawBegin(bool Clear)
 ////////////////////////////////////////描画を終了させる//////////////////////////////////////////////////////////////
 void draw :: DrawEnd()
 {
-	// 裏画面の内容を表画面に反映します
-	ScreenFlip() ;
-	// 画面を初期化
-	ClearDrawScreen() ;
+	bn::core::update();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -117,32 +121,41 @@ void draw :: TexturePos(int x, int y, int w, int h)
 
 void draw :: Draw(int num , float transX , float transY , bool flag, int tr_all, int r , int g , int b)
 {
-	SetTransColor(r, g, b);
+	BN_LOG("draw::Draw image:", num, " src:", X, ",", Y, " size:", W, "x", H, " color:", r, ",", g, ",", b);
+
 	if(flag){
-		if(tr_all>=255){
-			tr_all = 255;
-			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, tr_all);
-		}else{
-			if(tr_all<0)
-				tr_all = 0;
-			SetDrawBlendMode(DX_BLENDMODE_ALPHA, tr_all);
-		}
+		bn::blending::set_transparency_alpha(_to_alpha(tr_all));
 	}else{
-		SetDrawBlendMode(mode, tr_all);
+		switch(mode)
+		{
+		case NORMAL_BLEND:
+			bn::blending::set_transparency_alpha(1);
+			break;
+		case TRANS_BLEND:
+			bn::blending::set_transparency_alpha(_to_alpha(tr_all));
+			break;
+		case ADD_BLEND:
+			bn::blending::set_intensity_alpha(_to_alpha(tr_all));
+			break;
+		default:
+			bn::blending::set_transparency_alpha(_to_alpha(tr_all));
+			break;
+		}
 	}
-	int tmp = DerivationGraph( X, Y, W, H, num);
+
 	if(match_vpos){
 		transX = transX * scale_x;
 		transY = transY * scale_y;
 	}
 	int pos_x = (int)transX + shift_x;
 	int pos_y = (int)transY + shift_y;
-	if((scale_x==1)&&(scale_y==1)){
-		DrawGraph( pos_x, pos_y, tmp, TRUE);
-	}else{
-		DrawExtendGraph( pos_x, pos_y, pos_x+(int)(W*scale_x), pos_y+(int)(H*scale_y), tmp, TRUE);
-	}
-	DeleteGraph(tmp);
+
+	// NOTE:
+	// Butano doesn't support loading BMP files or cropping/scaling them dynamically at runtime
+	// in the same way as DxLib's DerivationGraph + DrawGraph APIs.
+	// The game needs to be migrated to bn::sprite_item / bn::regular_bg_item generated assets,
+	// and then this method can instantiate and update sprite/bg pointers from those items.
+	BN_LOG("draw::Draw dst:", pos_x, ",", pos_y, " scale:", scale_x, ",", scale_y);
 }
 
 
