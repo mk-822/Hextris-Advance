@@ -100,7 +100,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, const char* format, ...){
 
 	va_list ap;
 	va_start(ap, format);
-	vsprintf(buffer, format, ap);
+	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
 	int sizex = 8;
@@ -119,7 +119,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* for
 
 	va_list ap;
 	va_start(ap, format);
-	vsprintf(buffer, format, ap);
+	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
 	int sizex = 8;
@@ -138,7 +138,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int 
 
 	va_list ap;
 	va_start(ap, format);
-	vsprintf(buffer, format, ap);
+	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
 	int len = compat_strlen(buffer);
