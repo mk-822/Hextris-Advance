@@ -6,9 +6,95 @@
 #include "bn_fixed.h"
 #include "bn_log.h"
 
+#include "bn_regular_bg_items_bg00.h"
+#include "bn_regular_bg_items_bg01.h"
+#include "bn_regular_bg_items_bg02.h"
+#include "bn_regular_bg_items_bg03.h"
+#include "bn_regular_bg_items_bg04.h"
+#include "bn_regular_bg_items_bg05.h"
+#include "bn_regular_bg_items_bg06.h"
+#include "bn_regular_bg_items_bg07.h"
+#include "bn_regular_bg_items_bg08.h"
+#include "bn_regular_bg_items_bg09.h"
+#include "bn_regular_bg_items_bg10.h"
+#include "bn_regular_bg_items_bg11.h"
+#include "bn_regular_bg_items_blank.h"
+#include "bn_regular_bg_items_blocks.h"
+#include "bn_regular_bg_items_font.h"
+#include "bn_regular_bg_items_font16.h"
+#include "bn_regular_bg_items_font_big.h"
+#include "bn_regular_bg_items_font_ex.h"
+#include "bn_regular_bg_items_font_gray.h"
+#include "bn_regular_bg_items_frame.h"
+#include "bn_regular_bg_items_logo.h"
+#include "bn_regular_bg_items_logobg.h"
+#include "bn_regular_bg_items_multi.h"
+#include "bn_regular_bg_items_rank.h"
+#include "bn_regular_bg_items_scorebg.h"
+#include "bn_regular_bg_items_title.h"
+#include "bn_regular_bg_items_whitefont.h"
+#include "bn_regular_bg_items_words.h"
+
+#include "bn_string_view.h"
+
 namespace
 {
     int next_image_handle = 1;
+
+    struct image_entry
+    {
+        int handle = -1;
+        int width = 0;
+        int height = 0;
+    };
+
+    image_entry loaded_images[IMG_MAX];
+
+    [[nodiscard]] const image_entry* _find_loaded_image(const int handle)
+    {
+        for(const image_entry& entry : loaded_images)
+        {
+            if(entry.handle == handle)
+            {
+                return &entry;
+            }
+        }
+
+        return nullptr;
+    }
+
+    bool _register_image(const int handle, const int width, const int height)
+    {
+        for(image_entry& entry : loaded_images)
+        {
+            if(entry.handle < 0)
+            {
+                entry.handle = handle;
+                entry.width = width;
+                entry.height = height;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    [[nodiscard]] bool _match_name(const char* file_name, const bn::string_view expected_name)
+    {
+        if(! file_name)
+        {
+            return false;
+        }
+
+        const bn::string_view path(file_name);
+        const int slash_index = path.rfind('/');
+        const int name_index = slash_index >= 0 ? slash_index + 1 : 0;
+        const bn::string_view name_with_extension = path.substr(name_index);
+        const int extension_index = name_with_extension.rfind('.');
+        const bn::string_view name = extension_index > 0 ?
+                name_with_extension.substr(0, extension_index) : name_with_extension;
+        return name == expected_name;
+    }
 
     [[nodiscard]] bn::fixed _to_alpha(const int tr_all)
     {
@@ -55,7 +141,35 @@ bool draw :: Initialize(bool full , int zoom , int X , int Y)
 int draw :: LoadImage(char* FileName,int mode , int r , int g , int b)
 {
 	BN_LOG("draw::LoadImage path:", FileName, " mode:", mode, " trans:", r, ",", g, ",", b);
-	return next_image_handle++;
+
+	const int handle = next_image_handle++;
+
+	if(_match_name(FileName, "rank")) _register_image(handle, 512, 32);
+	else if(_match_name(FileName, "blank")) _register_image(handle, 512, 256);
+	else if(_match_name(FileName, "font")) _register_image(handle, 1024, 8);
+	else if(_match_name(FileName, "font_ex")) _register_image(handle, 1024, 8);
+	else if(_match_name(FileName, "blocks")) _register_image(handle, 512, 256);
+	else if(_match_name(FileName, "logo")) _register_image(handle, 64, 32);
+	else if(_match_name(FileName, "title")) _register_image(handle, 256, 256);
+	else if(_match_name(FileName, "words")) _register_image(handle, 256, 256);
+	else if(_match_name(FileName, "frame")) _register_image(handle, 256, 256);
+	else if(_match_name(FileName, "font_big")) _register_image(handle, 512, 16);
+	else if(_match_name(FileName, "whitefont")) _register_image(handle, 1024, 8);
+	else if(_match_name(FileName, "font_gray")) _register_image(handle, 1024, 8);
+	else if(_match_name(FileName, "logobg")) _register_image(handle, 320, 240);
+	else if(_match_name(FileName, "scorebg")) _register_image(handle, 320, 240);
+	else if(_match_name(FileName, "font16")) _register_image(handle, 2048, 16);
+	else if(_match_name(FileName, "multi")) _register_image(handle, 128, 64);
+	else if(_match_name(FileName, "bg00") || _match_name(FileName, "bg01") || _match_name(FileName, "bg02") ||
+			_match_name(FileName, "bg03") || _match_name(FileName, "bg04") || _match_name(FileName, "bg05") ||
+			_match_name(FileName, "bg06") || _match_name(FileName, "bg07") || _match_name(FileName, "bg08") ||
+			_match_name(FileName, "bg09") || _match_name(FileName, "bg10") || _match_name(FileName, "bg11")){
+		_register_image(handle, 256, 256);
+	}else{
+		BN_LOG("draw::LoadImage unknown asset:", FileName);
+	}
+
+	return handle;
 }
 
 //////////////////////////////背景と前景の合成////////////////////////////////////////
@@ -148,13 +262,51 @@ void draw :: Draw(int num , float transX , float transY , bool flag, int tr_all,
 	}
 	int pos_x = (int)transX + shift_x;
 	int pos_y = (int)transY + shift_y;
+	const image_entry* image = _find_loaded_image(num);
 
-	// NOTE:
-	// Butano doesn't support loading BMP files or cropping/scaling them dynamically at runtime
-	// in the same way as DxLib's DerivationGraph + DrawGraph APIs.
-	// The game needs to be migrated to bn::sprite_item / bn::regular_bg_item generated assets,
-	// and then this method can instantiate and update sprite/bg pointers from those items.
-	//BN_LOG("draw::Draw dst:", pos_x, ",", pos_y, " scale:", scale_x, ",", scale_y);
+	if(! image)
+	{
+		BN_LOG("draw::Draw unknown handle:", num);
+		return;
+	}
+
+	if(X != 0 || Y != 0 || W != image->width || H != image->height || scale_x != 1 || scale_y != 1)
+	{
+		BN_LOG("draw::Draw partial/scale draw not supported yet. handle:", num,
+				" src:", X, ",", Y, " size:", W, "x", H, " image:", image->width, "x", image->height,
+				" scale:", scale_x, ",", scale_y);
+		return;
+	}
+
+	if(num == RANK_IMG) bn::regular_bg_items::rank.create_bg(pos_x, pos_y);
+	else if(num == BLANK_IMG) bn::regular_bg_items::blank.create_bg(pos_x, pos_y);
+	else if(num == FONT_IMG) bn::regular_bg_items::font.create_bg(pos_x, pos_y);
+	else if(num == FONTEX_IMG) bn::regular_bg_items::font_ex.create_bg(pos_x, pos_y);
+	else if(num == BLOCK_IMG) bn::regular_bg_items::blocks.create_bg(pos_x, pos_y);
+	else if(num == LOGO_IMG) bn::regular_bg_items::logo.create_bg(pos_x, pos_y);
+	else if(num == TITLE_IMG) bn::regular_bg_items::title.create_bg(pos_x, pos_y);
+	else if(num == WORDS_IMG) bn::regular_bg_items::words.create_bg(pos_x, pos_y);
+	else if(num == FRAME_IMG) bn::regular_bg_items::frame.create_bg(pos_x, pos_y);
+	else if(num == BIGINT_IMG) bn::regular_bg_items::font_big.create_bg(pos_x, pos_y);
+	else if(num == WHITEFONT_IMG) bn::regular_bg_items::whitefont.create_bg(pos_x, pos_y);
+	else if(num == GRAYFONT_IMG) bn::regular_bg_items::font_gray.create_bg(pos_x, pos_y);
+	else if(num == OP_BG_IMG) bn::regular_bg_items::logobg.create_bg(pos_x, pos_y);
+	else if(num == SCOREBG_IMG) bn::regular_bg_items::scorebg.create_bg(pos_x, pos_y);
+	else if(num == BIGFONT_IMG) bn::regular_bg_items::font16.create_bg(pos_x, pos_y);
+	else if(num == MULTI_IMG) bn::regular_bg_items::multi.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[0]) bn::regular_bg_items::bg00.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[1]) bn::regular_bg_items::bg01.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[2]) bn::regular_bg_items::bg02.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[3]) bn::regular_bg_items::bg03.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[4]) bn::regular_bg_items::bg04.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[5]) bn::regular_bg_items::bg05.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[6]) bn::regular_bg_items::bg06.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[7]) bn::regular_bg_items::bg07.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[8]) bn::regular_bg_items::bg08.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[9]) bn::regular_bg_items::bg09.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[10]) bn::regular_bg_items::bg10.create_bg(pos_x, pos_y);
+	else if(num == BG_IMG[11]) bn::regular_bg_items::bg11.create_bg(pos_x, pos_y);
+	else BN_LOG("draw::Draw no asset mapping for handle:", num);
 }
 
 
