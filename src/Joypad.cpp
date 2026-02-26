@@ -1,183 +1,162 @@
 // ジョイパッド操作 JoyPadCtrl クラス
-// キーボード状態だけはプロシージャから取ってくる必要があるので注意。
 
 #include "Joypad.h"
-#include "common.h"
-#include <math.h>
+#include "bn_keypad.h"
 
-JoyPadCtrl::JoyPadCtrl(){
-	IniFileLoad();
-	GetJoyStickDeviceState();
-	keystate = 0;
-	for(int i=0 ; i<MAXPLAYERS ; i++){
-		joystate[i].input = 0;
-	}
+namespace
+{
+    INPUT _read_butano_input()
+    {
+        INPUT input = 0;
+
+        if(bn::keypad::up_held())
+        {
+            input |= UP;
+        }
+
+        if(bn::keypad::down_held())
+        {
+            input |= DOWN;
+        }
+
+        if(bn::keypad::left_held())
+        {
+            input |= LEFT;
+        }
+
+        if(bn::keypad::right_held())
+        {
+            input |= RIGHT;
+        }
+
+        // 固定アサイン (ini カスタム機能は省略)
+        if(bn::keypad::a_held())
+        {
+            input |= BUTTON[0];
+        }
+
+        if(bn::keypad::b_held())
+        {
+            input |= BUTTON[1];
+        }
+
+        if(bn::keypad::l_held())
+        {
+            input |= BUTTON[2];
+        }
+
+        if(bn::keypad::r_held())
+        {
+            input |= BUTTON[3];
+        }
+
+        return input;
+    }
 }
 
-INPUT JoyPadCtrl::keystate;	// 静的メンバは使いますよって言ってやらんと使えんよ
+INPUT JoyPadCtrl::keystate;
 INPUT JoyPadCtrl::keystate_old[KEYDELAY];
 INPUT JoyPadCtrl::keystate_once;
 INPUT JoyPadCtrl::keystate_leg;
 
-// プロシージャから呼び出す静的メソッド。キー状態を入れる。
-void JoyPadCtrl::SetKeyState(bool in, int key){
-	if(in){
-		keystate = keystate|key;
-	}else{
-		keystate = keystate&~key;
-	}
-}
-
-// プレイヤーごとの入力状況をげｔするメソッド
-INPUT JoyPadCtrl::GetKeyState(int player, int flag){	//0は加工なし,1はﾄ…ﾄﾄﾄ,2は一度だけ,3は押しっぱなしのみ
-	INPUT tmp=0;
-	for(int i=0 ; i<MAXPLAYERS ; i++){
-		if((joystate[i].player == player)&&(joystate[i].enable)){
-			switch(flag){
-			case 0:
-				tmp = tmp|joystate[i].input;
-				break;
-			case 1:
-				tmp = tmp|joystate[i].inputleg;
-				break;
-			case 2:
-				tmp = tmp|joystate[i].inputonce;
-				break;
-			case 3:
-				tmp = tmp|joystate[i].inputold[KEYDELAY-1];
-			}
-		}
-	}
-	if(!player){
-		switch(flag){
-		case 0:
-			tmp = tmp|keystate;
-			break;
-		case 1:
-			tmp = tmp|keystate_leg;
-			break;
-		case 2:
-			tmp = tmp|keystate_once;
-			break;
-		case 3:
-			tmp = tmp|keystate_old[KEYDELAY-1];
-		}
-	}
-	return tmp;
-}
-
-// 入力状況を更新するメソッド
-void JoyPadCtrl::RenewKeyState(){
-	char Buf[ 256 ] ;
-	GetHitKeyStateAll( Buf ) ;
-	if(Buf[KEY_INPUT_UP]){
-		keystate|=UP;
-	}else{
-		keystate&=~UP;
-	}
-	if(Buf[KEY_INPUT_LEFT]){
-		keystate|=LEFT;
-	}else{
-		keystate&=~LEFT;
-	}
-	if(Buf[KEY_INPUT_RIGHT]){
-		keystate|=RIGHT;
-	}else{
-		keystate&=~RIGHT;
-	}
-	if(Buf[KEY_INPUT_DOWN]){
-		keystate|=DOWN;
-	}else{
-		keystate&=~DOWN;
-	}
-	if(Buf[KEY_INPUT_Z]){
-		keystate|=BUTTON[0];
-	}else{
-		keystate&=~BUTTON[0];
-	}
-	if(Buf[KEY_INPUT_X]){
-		keystate|=BUTTON[1];
-	}else{
-		keystate&=~BUTTON[1];
-	}
-	if(Buf[KEY_INPUT_C]){
-		keystate|=BUTTON[2];
-	}else{
-		keystate&=~BUTTON[2];
-	}
-	if(Buf[KEY_INPUT_V]){
-		keystate|=BUTTON[3];
-	}else{
-		keystate&=~BUTTON[3];
-	}
-	keystate_once = keystate &~ keystate_old[0];
-	keystate_leg = keystate_once;
-	if(count % REPEATTIME == 0)
-		keystate_leg = keystate_leg | keystate_old[KEYDELAY-1];
-
-	for(int i=0 ; i<MAXPLAYERS ; i++){
-		if(joystate[i].enable){
-			joystate[i].inputold[0] = joystate[i].input;
-			for(int j=KEYDELAY-1 ; 0<j ; j--){
-				joystate[i].inputold[j] = joystate[i].inputold[j-1] & joystate[i].input;
-			}
-			
-			JOYINFOEX ji; ZeroMemory( &ji, sizeof( JOYINFOEX ) );
-			ji.dwSize = sizeof( JOYINFOEX );
-			ji.dwFlags = JOY_RETURNBUTTONS | JOY_RETURNX | JOY_RETURNY;
-			if( joyGetPosEx( i, &ji ) != JOYERR_NOERROR ) continue;
-			if( GetJoypadInputState(i+1) & PAD_INPUT_UP ) joystate[i].input = joystate[i].input|UP;
-			else joystate[i].input = joystate[i].input&~UP;
-			if( GetJoypadInputState(i+1) & PAD_INPUT_DOWN ) joystate[i].input = joystate[i].input|DOWN;
-			else joystate[i].input = joystate[i].input&~DOWN;
-			if( GetJoypadInputState(i+1) & PAD_INPUT_LEFT ) joystate[i].input = joystate[i].input|LEFT;
-			else joystate[i].input = joystate[i].input&~LEFT;
-			if( GetJoypadInputState(i+1) & PAD_INPUT_RIGHT ) joystate[i].input = joystate[i].input|RIGHT;
-			else joystate[i].input = joystate[i].input&~RIGHT;
-
-			for( UINT j = 0; j < MAXBUTTONS; j++ ){
-				if( GetJoypadInputState(i+1) >> 4 & (DWORD)pow( 2.0, joystate[i].button[j] )) joystate[i].input = joystate[i].input|BUTTON[j];
-				else joystate[i].input = joystate[i].input&~BUTTON[j];
-			}
-
-			joystate[i].inputonce = joystate[i].input &~ joystate[i].inputold[0];
-			joystate[i].inputleg = joystate[i].inputonce;
-			if(count % REPEATTIME == 0)
-				joystate[i].inputleg = joystate[i].inputleg | joystate[i].inputold[KEYDELAY-1];
-		}
-	}
-
-	keystate_old[0] = keystate;
-	for(int i=KEYDELAY-1 ; 0<i ; i--){
-		keystate_old[i] = keystate_old[i-1] & keystate;
-	}
-	count++;
-}
-
-// -------ここから内部用------
-
-void JoyPadCtrl::IniFileLoad(){
-	char str[16];	// 文字列格納用
-	for(int i=0; i<MAXPLAYERS; i++){
-		if (GetPrivateProfileString(JOYNAME[i],KEYNAME[0],NULL,str,100,JOYINIPATH))		//まずはどのプレイヤーかをGET
-			joystate[i].player=atoi(str);	// 取得した文字列を int に変換 (atoi = ASCII to INT)
-		for(int j=1; j<MAXBUTTONS+1; j++){
-			if (GetPrivateProfileString(JOYNAME[i],KEYNAME[j],NULL,str,100,JOYINIPATH))	//次にボタンのアサインをGET
-				joystate[i].button[j-1]=atoi(str);
-		}
-	}
-}
-
-bool GamePadOK( int nGamePadID )
+JoyPadCtrl::JoyPadCtrl() :
+    count(0)
 {
-	JOYINFO ji;
-	if( ( unsigned )nGamePadID >= joyGetNumDevs() ) return FALSE;
-	if( joyGetPos( ( unsigned )nGamePadID, &ji ) == JOYERR_NOERROR ) return TRUE;
-	return FALSE;
+    IniFileLoad();
+    GetJoyStickDeviceState();
+
+    keystate = 0;
+    keystate_once = 0;
+    keystate_leg = 0;
+
+    for(int i = 0; i < KEYDELAY; ++i)
+    {
+        keystate_old[i] = 0;
+    }
+
+    for(int i = 0; i < MAXPLAYERS; ++i)
+    {
+        joystate[i].input = 0;
+        joystate[i].inputleg = 0;
+        joystate[i].inputonce = 0;
+        joystate[i].enable = (i == 0);
+
+        for(int j = 0; j < KEYDELAY; ++j)
+        {
+            joystate[i].inputold[j] = 0;
+        }
+    }
 }
 
-void JoyPadCtrl::GetJoyStickDeviceState(){
-	for(int i=0; i<MAXPLAYERS; i++){
-		joystate[i].enable = GamePadOK(i);
-	}
+void JoyPadCtrl::SetKeyState(bool in, int key)
+{
+    // Butano では bn::keypad から毎フレーム入力を取得する。
+    // 既存インターフェース互換のため、明示呼び出し時は keystate を更新しておく。
+    if(in)
+    {
+        keystate |= key;
+    }
+    else
+    {
+        keystate &= ~key;
+    }
+}
+
+INPUT JoyPadCtrl::GetKeyState(int player, int flag)
+{
+    if(player != 0)
+    {
+        return 0;
+    }
+
+    switch(flag)
+    {
+    case 0:
+        return keystate;
+    case 1:
+        return keystate_leg;
+    case 2:
+        return keystate_once;
+    case 3:
+        return keystate_old[KEYDELAY - 1];
+    default:
+        return 0;
+    }
+}
+
+void JoyPadCtrl::RenewKeyState()
+{
+    const INPUT current_input = _read_butano_input();
+
+    keystate_once = current_input & ~keystate_old[0];
+    keystate_leg = keystate_once;
+
+    if(count % REPEATTIME == 0)
+    {
+        keystate_leg |= keystate_old[KEYDELAY - 1];
+    }
+
+    keystate = current_input;
+    keystate_old[0] = current_input;
+
+    for(int i = KEYDELAY - 1; i > 0; --i)
+    {
+        keystate_old[i] = keystate_old[i - 1] & current_input;
+    }
+
+    ++count;
+}
+
+void JoyPadCtrl::IniFileLoad()
+{
+    // GBA/Butano 版では ini によるカスタムアサインは使用しない。
+}
+
+void JoyPadCtrl::GetJoyStickDeviceState()
+{
+    // GBA 実機の入力は 1P 固定。
+    for(int i = 0; i < MAXPLAYERS; ++i)
+    {
+        joystate[i].enable = (i == 0);
+    }
 }
