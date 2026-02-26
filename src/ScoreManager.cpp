@@ -5,6 +5,121 @@
 #include "stdafx.h"
 #include "ScoreManager.h"
 #include <string.h>
+#include "easyscore_bin.h"
+#include "normalscore_bin.h"
+#include "masterscore_bin.h"
+#include "deathscore_bin.h"
+#include <cstdlib>
+
+namespace
+{
+
+class data_parser
+{
+public:
+    data_parser(const unsigned char* data, const int size) :
+        _current(reinterpret_cast<const char*>(data)),
+        _end(reinterpret_cast<const char*>(data) + size)
+    {
+    }
+
+    bool read_int(int& value)
+    {
+        _skip_white_space();
+
+        if(_current >= _end)
+        {
+            value = 0;
+            return false;
+        }
+
+        char* parse_end = nullptr;
+        value = static_cast<int>(strtol(_current, &parse_end, 10));
+
+        if(parse_end == _current)
+        {
+            value = 0;
+            return false;
+        }
+
+        _current = parse_end;
+        return true;
+    }
+
+    bool read_name(char* name, const int max_size)
+    {
+        _skip_white_space();
+
+        if(_current >= _end || max_size <= 0)
+        {
+            if(max_size > 0)
+            {
+                name[0] = '\0';
+            }
+
+            return false;
+        }
+
+        int index = 0;
+
+        while(_current < _end)
+        {
+            const char chr = *_current;
+
+            if(chr == ' ' || chr == '\n' || chr == '\r' || chr == '\t')
+            {
+                break;
+            }
+
+            if(index < max_size - 1)
+            {
+                name[index] = chr;
+                ++index;
+            }
+
+            ++_current;
+        }
+
+        name[index] = '\0';
+        return index > 0;
+    }
+
+private:
+    void _skip_white_space()
+    {
+        while(_current < _end)
+        {
+            const char chr = *_current;
+
+            if(chr == ' ' || chr == '\n' || chr == '\r' || chr == '\t')
+            {
+                ++_current;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    const char* _current;
+    const char* _end;
+};
+
+void _load_score_list(const unsigned char* data, const int size, ScoreManager::Scorelist& score_list)
+{
+    data_parser parser(data, size);
+
+    for(int i=0 ; i<10 ; i++)
+    {
+        parser.read_int(score_list.record[i].score);
+        parser.read_int(score_list.record[i].time);
+        parser.read_int(score_list.record[i].level);
+        parser.read_name(score_list.record[i].name, sizeof(score_list.record[i].name));
+    }
+}
+
+}
 
 //////////////////////////////////////////////////////////////////////
 // 構築/消滅
@@ -12,51 +127,10 @@
 
 ScoreManager::ScoreManager()
 {
-	//スコア情報をファイルから読み込み
-	static FILE *fp;
-	fp = fopen("./Data/easyscore.bin","r");
-	for(int i=0 ; i<10 ; i++){
-		fscanf(fp , "%d %d %d %s",
-			&scoreList[0].record[i].score,
-			&scoreList[0].record[i].time,
-			&scoreList[0].record[i].level,
-			scoreList[0].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/normalscore.bin","r");
-	for(int i=0 ; i<10 ; i++){
-		fscanf(fp , "%d %d %d %s",
-			&scoreList[1].record[i].score,
-			&scoreList[1].record[i].time,
-			&scoreList[1].record[i].level,
-			scoreList[1].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/masterscore.bin","r");
-	for(int i=0 ; i<10 ; i++){
-		fscanf(fp , "%d %d %d %s",
-			&scoreList[2].record[i].score,
-			&scoreList[2].record[i].time,
-			&scoreList[2].record[i].level,
-			scoreList[2].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/deathscore.bin","r");
-	for(int i=0 ; i<10 ; i++){
-		fscanf(fp , "%d %d %d %s",
-			&scoreList[3].record[i].score,
-			&scoreList[3].record[i].time,
-			&scoreList[3].record[i].level,
-			scoreList[3].record[i].name
-		);
-	}
-	fclose(fp);
+    _load_score_list(easyscore_bin, easyscore_bin_size, scoreList[0]);
+    _load_score_list(normalscore_bin, normalscore_bin_size, scoreList[1]);
+    _load_score_list(masterscore_bin, masterscore_bin_size, scoreList[2]);
+    _load_score_list(deathscore_bin, deathscore_bin_size, scoreList[3]);
 }
 
 ScoreManager::~ScoreManager()
@@ -83,49 +157,5 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	scoreList[difficulty].record[order].time = time;
 	strcpy(scoreList[difficulty].record[order].name,name);
 
-	//スコア情報をファイルに書き込み
-	static FILE *fp;
-	fp = fopen("./Data/easyscore.bin","w");
-	for(int i=0 ; i<10 ; i++){
-		fprintf(fp , "%d %d %d %s\n",
-			scoreList[0].record[i].score,
-			scoreList[0].record[i].time,
-			scoreList[0].record[i].level,
-			scoreList[0].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/normalscore.bin","w");
-	for(int i=0 ; i<10 ; i++){
-		fprintf(fp , "%d %d %d %s\n",
-			scoreList[1].record[i].score,
-			scoreList[1].record[i].time,
-			scoreList[1].record[i].level,
-			scoreList[1].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/masterscore.bin","w");
-	for(int i=0 ; i<10 ; i++){
-		fprintf(fp , "%d %d %d %s\n",
-			scoreList[2].record[i].score,
-			scoreList[2].record[i].time,
-			scoreList[2].record[i].level,
-			scoreList[2].record[i].name
-		);
-	}
-	fclose(fp);
-
-	fp = fopen("./Data/deathscore.bin","w");
-	for(int i=0 ; i<10 ; i++){
-		fprintf(fp , "%d %d %d %s\n",
-			scoreList[3].record[i].score,
-			scoreList[3].record[i].time,
-			scoreList[3].record[i].level,
-			scoreList[3].record[i].name
-		);
-	}
-	fclose(fp);
+	// ROM 上の bin データは書き換えできないため、保存は実施しない。
 }
