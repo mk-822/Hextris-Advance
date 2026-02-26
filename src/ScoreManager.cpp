@@ -154,7 +154,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	scoreList[difficulty].record[order].score = score;
 	scoreList[difficulty].record[order].level = level;
 	scoreList[difficulty].record[order].time = time;
-	strcpy(scoreList[difficulty].record[order].name,name);
+	compat_strcpy(scoreList[difficulty].record[order].name,name);
 
 	// ROM 上の bin データは書き換えできないため、保存は実施しない。
 }

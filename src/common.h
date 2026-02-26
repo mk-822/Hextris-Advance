@@ -1,9 +1,7 @@
 #ifndef COMMONHEADER
 #define COMMONHEADER
 
-#define for if(0);else for	//for の謎スコープを無理矢理fix
-#pragma warning ( disable : 4996 )
-#include <stdarg.h>
+#include <cstdarg>
 #include "bn_timer.h"
 #include "bn_timers.h"
 #include "Sound.h"
@@ -13,12 +11,12 @@ inline int compat_strlen(const char* text){
 		return 0;
 	}
 
-	int len = 0;
-	while(text[len] != '\0'){
-		len++;
+	int i=0;
+	for(;*text;i++){
+		text++;
 	}
 
-	return len;
+	return i;
 }
 
 inline char* compat_strcpy(char* destination, const char* source){
@@ -203,7 +201,6 @@ inline unsigned long GetTickCount(){
 }
 
 //画面モード定義
-static const char* WINDOW_INIPATH = "./setting.ini";
 static const int WINDOW_WIDE = 320;
 static const int WINDOW_HEIGHT = 240;
 extern bool WINDOW_FULL;
