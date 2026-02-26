@@ -9,7 +9,7 @@ char* FrameCountToStr(int count,char* timestr){
 	csec %= 100;
 	sec %= 60;
 	min %= 60;
-	sprintf(timestr,"%02d:%02d:%02d",min,sec,csec);
+	compat_sprintf(timestr,"%02d:%02d:%02d",min,sec,csec);
 	return timestr;
 };
 

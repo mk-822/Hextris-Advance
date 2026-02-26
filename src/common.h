@@ -3,6 +3,7 @@
 
 #define for if(0);else for	//for の謎スコープを無理矢理fix
 #pragma warning ( disable : 4996 )
+#include <stdarg.h>
 #include "bn_timer.h"
 #include "bn_timers.h"
 #include "Sound.h"
@@ -18,6 +19,129 @@ inline int compat_strlen(const char* text){
 	}
 
 	return len;
+}
+
+inline char* compat_strcpy(char* destination, const char* source){
+	if(! destination){
+		return destination;
+	}
+
+	if(! source){
+		destination[0] = '\0';
+		return destination;
+	}
+
+	int i = 0;
+	while(source[i] != '\0'){
+		destination[i] = source[i];
+		i++;
+	}
+	destination[i] = '\0';
+
+	return destination;
+}
+
+inline int compat_append_char(char* destination, int index, char value){
+	destination[index] = value;
+	return index + 1;
+}
+
+inline int compat_append_text(char* destination, int index, const char* text){
+	if(! text){
+		text = "(null)";
+	}
+
+	for(int i = 0; text[i] != '\0'; ++i){
+		destination[index++] = text[i];
+	}
+
+	return index;
+}
+
+inline int compat_append_int(char* destination, int index, int value, int min_width, bool zero_pad){
+	char tmp[16];
+	int tmp_len = 0;
+	int current = value;
+	bool negative = current < 0;
+
+	if(negative){
+		current = -current;
+	}
+
+	do{
+		tmp[tmp_len++] = static_cast<char>('0' + (current % 10));
+		current /= 10;
+	} while(current > 0);
+
+	if(negative){
+		tmp[tmp_len++] = '-';
+	}
+
+	while(tmp_len < min_width){
+		tmp[tmp_len++] = zero_pad ? '0' : ' ';
+	}
+
+	for(int i = tmp_len - 1; i >= 0; --i){
+		destination[index++] = tmp[i];
+	}
+
+	return index;
+}
+
+inline int compat_vsprintf(char* destination, const char* format, va_list arguments){
+	int index = 0;
+
+	for(int i = 0; format && format[i] != '\0'; ++i){
+		if(format[i] != '%'){
+			index = compat_append_char(destination, index, format[i]);
+			continue;
+		}
+
+		++i;
+		if(format[i] == '%'){
+			index = compat_append_char(destination, index, '%');
+			continue;
+		}
+
+		bool zero_pad = false;
+		int min_width = 0;
+		if(format[i] == '0'){
+			zero_pad = true;
+			++i;
+		}
+
+		while(format[i] >= '0' && format[i] <= '9'){
+			min_width = min_width * 10 + (format[i] - '0');
+			++i;
+		}
+
+		switch(format[i]){
+		case 'd':
+			index = compat_append_int(destination, index, va_arg(arguments, int), min_width, zero_pad);
+			break;
+		case 'c':
+			index = compat_append_char(destination, index, static_cast<char>(va_arg(arguments, int)));
+			break;
+		case 's':
+			index = compat_append_text(destination, index, va_arg(arguments, const char*));
+			break;
+		default:
+			index = compat_append_char(destination, index, '%');
+			index = compat_append_char(destination, index, format[i]);
+			break;
+		}
+	}
+
+	destination[index] = '\0';
+	return index;
+}
+
+inline int compat_sprintf(char* destination, const char* format, ...){
+	va_list arguments;
+	va_start(arguments, format);
+	const int result = compat_vsprintf(destination, format, arguments);
+	va_end(arguments);
+	return result;
 }
 
 inline unsigned long GetTickCount(){

@@ -314,7 +314,7 @@ void SoloPlay::Main(){
 			if(ScoreData.JudgeOrder(score,difficulty) != -1){
 				phase += 1;
 					// 名前入れ用処理
-				strcpy(name.name,"   ");
+				compat_strcpy(name.name,"   ");
 				name.cur_pos = 0;
 				name.cur_word = 65;
 				cur_pos = 96-24;
@@ -354,7 +354,7 @@ void SoloPlay::Main(){
 			}
 			char tmp[9];
 			char tmp2[5];
-			strcpy(tmp2,rankname[ScoreData.JudgeOrder(score,difficulty)]);
+			compat_strcpy(tmp2,rankname[ScoreData.JudgeOrder(score,difficulty)]);
 			DrawImageFont(90,88,dxg,font,"Please input your name.");
 			DrawImageFont(80,100,dxg,font,"%s [%s]%d %d %s",tmp2,gradename[grade],score,cntLevel,FrameCountToStr(cntTime,tmp));
 			if(NameEntry()){
