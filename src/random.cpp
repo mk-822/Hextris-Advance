@@ -1,5 +1,23 @@
 #include "stdafx.h"
+#include "common.h"
+#include "bn_seed_random.h"
 #include "random.h"
+
+namespace
+{
+	bn::seed_random game_random;
+}
+
+void SeedGameRandom(unsigned seed)
+{
+	game_random = bn::seed_random(seed);
+}
+
+int GameRandomInt(int limit)
+{
+	return game_random.get_int(limit);
+}
+
 const int Sub=6;
 
 
@@ -15,7 +33,7 @@ random :: random()
 
 int random::Decision(){
 	do{
-		num = rand()%10;
+		num = GameRandomInt(10);
 		cnt[num].count2++;
 		switch(cnt[num].num)
 		{

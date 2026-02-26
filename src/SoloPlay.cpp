@@ -1,5 +1,4 @@
 #include "soloplay.h"
-#include <stdlib.h>
 #include <string.h>
 
 static const char* difficname[]={
@@ -50,7 +49,7 @@ void SoloPlay::Main(){
 		break;
 	case 2:	// 初期化
 		Sound::ChangeBgm(1);
-		srand(GetTickCount());
+		SeedGameRandom(GetTickCount());
 
 		score = 0;
 		grade = 0;
