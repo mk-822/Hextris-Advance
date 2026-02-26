@@ -144,6 +144,54 @@ inline int compat_sprintf(char* destination, const char* format, ...){
 	return result;
 }
 
+inline bool compat_parse_int(const char* text, const char* text_end, int& value, const char*& parse_end){
+	if(! text){
+		value = 0;
+		parse_end = text;
+		return false;
+	}
+
+	const char* current = text;
+	const bool has_range_limit = text_end != nullptr;
+
+	if(has_range_limit && current >= text_end){
+		value = 0;
+		parse_end = text;
+		return false;
+	}
+
+	int sign = 1;
+	if(*current == '+' || *current == '-'){
+		sign = (*current == '-') ? -1 : 1;
+		++current;
+	}
+
+	int parsed_value = 0;
+	bool has_digit = false;
+
+	while(current && (! has_range_limit || current < text_end)){
+		const char chr = *current;
+
+		if(chr < '0' || chr > '9'){
+			break;
+		}
+
+		has_digit = true;
+		parsed_value = parsed_value * 10 + (chr - '0');
+		++current;
+	}
+
+	if(! has_digit){
+		value = 0;
+		parse_end = text;
+		return false;
+	}
+
+	value = parsed_value * sign;
+	parse_end = current;
+	return true;
+}
+
 inline unsigned long GetTickCount(){
 	static bn::timer timer;
 	const int elapsed_ticks = timer.elapsed_ticks();

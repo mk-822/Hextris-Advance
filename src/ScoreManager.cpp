@@ -5,11 +5,11 @@
 #include "stdafx.h"
 #include "ScoreManager.h"
 #include <string.h>
+#include "common.h"
 #include "easyscore_bin.h"
 #include "normalscore_bin.h"
 #include "masterscore_bin.h"
 #include "deathscore_bin.h"
-#include <cstdlib>
 
 namespace
 {
@@ -33,10 +33,9 @@ public:
             return false;
         }
 
-        char* parse_end = nullptr;
-        value = static_cast<int>(strtol(_current, &parse_end, 10));
+        const char* parse_end = _current;
 
-        if(parse_end == _current)
+        if(! compat_parse_int(_current, _end, value, parse_end))
         {
             value = 0;
             return false;
