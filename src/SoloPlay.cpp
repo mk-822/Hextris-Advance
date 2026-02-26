@@ -1,6 +1,6 @@
 #include "soloplay.h"
-#include "debug.h"
 #include <stdlib.h>
+#include <string.h>
 
 static const char* difficname[]={
 	"EASY",

@@ -18,9 +18,9 @@ ScoreDisplay :: ScoreDisplay()
 	FadeLevel = 0;
 }
 /*
-			&ScoreList[0].record[i].score,
-			&ScoreList[0].record[i].time,
-			&ScoreList[0].record[i].name
+			&scoreList[0].record[i].score,
+			&scoreList[0].record[i].time,
+			&scoreList[0].record[i].name
 */
 void ScoreDisplay :: Main()
 {
@@ -142,10 +142,10 @@ void ScoreDisplay ::ScoreDraw(int s)
 	DrawImageFont(110 , 40 , dxg, image->i[BIGFONT_IMG],16,16,-2, "%s",DrawRank);
 	for(int i = 0 ; i < 5 ; i++){
 		DrawImageFont(8+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-6,"%2d", i+s+1);
-		DrawImageFont(40+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-2,"%s", Score.ScoreList[Rank].record[i+s].name);
-		DrawImageFont(96+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%d", Score.ScoreList[Rank].record[i+s].score);
-		DrawImageFont(164+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%4d", Score.ScoreList[Rank].record[i+s].level);
-		DrawImageFont(212+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%s", FrameCountToStr(Score.ScoreList[Rank].record[i+s].time,tmp));
+		DrawImageFont(40+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-2,"%s", Score.scoreList[Rank].record[i+s].name);
+		DrawImageFont(96+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%d", Score.scoreList[Rank].record[i+s].score);
+		DrawImageFont(164+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%4d", Score.scoreList[Rank].record[i+s].level);
+		DrawImageFont(212+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%s", FrameCountToStr(Score.scoreList[Rank].record[i+s].time,tmp));
 	}
 }
 

@@ -154,7 +154,7 @@ void draw :: Draw(int num , float transX , float transY , bool flag, int tr_all,
 	// in the same way as DxLib's DerivationGraph + DrawGraph APIs.
 	// The game needs to be migrated to bn::sprite_item / bn::regular_bg_item generated assets,
 	// and then this method can instantiate and update sprite/bg pointers from those items.
-	BN_LOG("draw::Draw dst:", pos_x, ",", pos_y, " scale:", scale_x, ",", scale_y);
+	//BN_LOG("draw::Draw dst:", pos_x, ",", pos_y, " scale:", scale_x, ",", scale_y);
 }
 
 

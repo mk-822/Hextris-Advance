@@ -27,18 +27,18 @@ class ScoreManager
 public:
 	void EntryScore(int order, int difficulty, int score, int level, int time, char* name);
 	int JudgeOrder(int score, int difficulty);
-	struct record{
+	struct Record{
 		int score;
 		int time;
 		int level;
 		char name[4];
 	};
-	struct scorelist{
-		record record[10];
+	struct Scorelist{
+		Record record[10];
 	};
 	ScoreManager();
 	~ScoreManager();
-	scorelist ScoreList[4];
+	Scorelist scoreList[4];
 };
 
 #endif // !defined(AFX_SCOREMANAGER_H__F3758F90_794E_48A0_A70C_589E2B054CBB__INCLUDED_)
