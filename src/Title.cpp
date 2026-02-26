@@ -44,13 +44,13 @@ void Title::Main(){
 				*scene = SINGLE_SCENE;
 				break;
 			case 1:
-				*scene = MULTI_SCENE;
+				//*scene = MULTI_SCENE;
 				break;
 			case 2:
 				*scene = SCORE_SCENE;
 				break;
 			case 3:
-				*scene = OPTION_SCENE;
+				//*scene = OPTION_SCENE;
 				break;
 			case 5:
 				*scene = SCORE_SCENE;
