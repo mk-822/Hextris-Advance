@@ -12,7 +12,6 @@
 #include "normal_bin.h"
 #include "master_bin.h"
 #include "death_bin.h"
-#include <cstdlib>
 
 namespace
 {
@@ -36,10 +35,9 @@ public:
             return false;
         }
 
-        char* parse_end = nullptr;
-        value = static_cast<int>(strtol(_current, &parse_end, 10));
+        const char* parse_end = _current;
 
-        if(parse_end == _current)
+        if(! compat_parse_int(_current, _end, value, parse_end))
         {
             value = 0;
             return false;
