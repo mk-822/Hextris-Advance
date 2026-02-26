@@ -14,7 +14,7 @@ ScoreManager::ScoreManager()
 {
 	//スコア情報をファイルから読み込み
 	static FILE *fp;
-	fp = fopen("./Data/easyscore.dat","r");
+	fp = fopen("./Data/easyscore.bin","r");
 	for(int i=0 ; i<10 ; i++){
 		fscanf(fp , "%d %d %d %s",
 			&scoreList[0].record[i].score,
@@ -25,7 +25,7 @@ ScoreManager::ScoreManager()
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/normalscore.dat","r");
+	fp = fopen("./Data/normalscore.bin","r");
 	for(int i=0 ; i<10 ; i++){
 		fscanf(fp , "%d %d %d %s",
 			&scoreList[1].record[i].score,
@@ -36,7 +36,7 @@ ScoreManager::ScoreManager()
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/masterscore.dat","r");
+	fp = fopen("./Data/masterscore.bin","r");
 	for(int i=0 ; i<10 ; i++){
 		fscanf(fp , "%d %d %d %s",
 			&scoreList[2].record[i].score,
@@ -47,7 +47,7 @@ ScoreManager::ScoreManager()
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/deathscore.dat","r");
+	fp = fopen("./Data/deathscore.bin","r");
 	for(int i=0 ; i<10 ; i++){
 		fscanf(fp , "%d %d %d %s",
 			&scoreList[3].record[i].score,
@@ -85,7 +85,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 
 	//スコア情報をファイルに書き込み
 	static FILE *fp;
-	fp = fopen("./Data/easyscore.dat","w");
+	fp = fopen("./Data/easyscore.bin","w");
 	for(int i=0 ; i<10 ; i++){
 		fprintf(fp , "%d %d %d %s\n",
 			scoreList[0].record[i].score,
@@ -96,7 +96,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/normalscore.dat","w");
+	fp = fopen("./Data/normalscore.bin","w");
 	for(int i=0 ; i<10 ; i++){
 		fprintf(fp , "%d %d %d %s\n",
 			scoreList[1].record[i].score,
@@ -107,7 +107,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/masterscore.dat","w");
+	fp = fopen("./Data/masterscore.bin","w");
 	for(int i=0 ; i<10 ; i++){
 		fprintf(fp , "%d %d %d %s\n",
 			scoreList[2].record[i].score,
@@ -118,7 +118,7 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	}
 	fclose(fp);
 
-	fp = fopen("./Data/deathscore.dat","w");
+	fp = fopen("./Data/deathscore.bin","w");
 	for(int i=0 ; i<10 ; i++){
 		fprintf(fp , "%d %d %d %s\n",
 			scoreList[3].record[i].score,
