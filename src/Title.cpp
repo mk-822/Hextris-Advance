@@ -1,4 +1,6 @@
 #include "title.h"
+#include "bn_regular_bg_items_title.h"
+#include "bn_blending.h"
 
 void Title::Main(){
 	switch(phase){
@@ -7,11 +9,14 @@ void Title::Main(){
 			menu_pos = 320;
 			cur_pos = 240;
 			cur_count = 0;
+			bg = bn::regular_bg_items::title.create_bg(8, 48);
+			bg->set_blending_enabled(true);
 		}
 
 		Sound::ChangeBgm(0);
-		dxg->TexturePos();
-		dxg->Draw(image->i[TITLE_IMG], 0, 0, true, count*(256/FADETIME));
+		//dxg->TexturePos();
+		//dxg->Draw(image->i[TITLE_IMG], 0, 0, true, count*(256/FADETIME));
+		bn::blending::set_fade_alpha((float)1 - (float)count / FADETIME);
 		InMenu();
 		
 		if(count>=FADETIME){
@@ -34,8 +39,9 @@ void Title::Main(){
 		}
 		break;
 	case 2:	// 消えるとき
-		dxg->TexturePos();
-		dxg->Draw(image->i[TITLE_IMG], 0, 0, true, 255-count*(256/FADETIME));
+		//dxg->TexturePos();
+		//dxg->Draw(image->i[TITLE_IMG], 0, 0, true, 255-count*(256/FADETIME));
+		bn::blending::set_fade_alpha((float)count / FADETIME);
 		OutMenu();
 
 		if(count>=FADETIME){
@@ -58,6 +64,7 @@ void Title::Main(){
 			default:
 				break;
 			}
+			bg.reset();
 		}
 		break;
 	}

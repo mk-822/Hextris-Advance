@@ -14,7 +14,7 @@ void Logo::Main(){
 		//dxg->TexturePos(0,0,64,32);
 		//dxg->ColorChange(2);
 		//dxg->Draw(image->i[LOGO_IMG], LOGOX, logo_pos, false, count*(256/FADETIME));
-		bn::blending::set_transparency_alpha((float)count/FADETIME);
+		bn::blending::set_fade_alpha((float)1 - (float)count/FADETIME);
 		spr->set_position(LOGOX, logo_pos);
 
 		// ロゴ位置を移動
@@ -38,12 +38,13 @@ void Logo::Main(){
 		//dxg->TexturePos(0,0,64,32);
 		//dxg->ColorChange(2);
 		//dxg->Draw(image->i[LOGO_IMG], LOGOX,LOGOY, false, 255-count*(256/FADETIME));
-		bn::blending::set_transparency_alpha((float)1 - (float)count/FADETIME);
+		bn::blending::set_fade_alpha((float)count/FADETIME);
 		spr->set_position(LOGOX,LOGOY);
 		if(count>=FADETIME){
 			*scene = TITLE_SCENE;
 			phase = 0;
 			count = 0;
+			spr->set_blending_enabled(false);
 			spr.reset();
 		}
 		break;

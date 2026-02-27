@@ -3,6 +3,8 @@
 
 #include "common.h"
 #include "GameCtrl.h"
+#include <bn_regular_bg_ptr.h>
+#include <bn_sprite_ptr.h>
 
 const double OUTMOVESPEED = 1.05;
 
@@ -23,6 +25,9 @@ private:
 	int cur_count;	// カレントアニメ用の専用カウンタ
 	int current;
 	int scene_tmp;
+	bn::optional<bn::regular_bg_ptr> bg;
+	bn::optional<bn::sprite_ptr> cursor;
+	bn::optional<bn::sprite_ptr> menu;
 
 public:
 	Title(){};
