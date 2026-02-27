@@ -62,3 +62,7 @@ build/
 *.config
 *.cflags
 *.cxxflags
+
+#Emulator
+
+BoycottAdvance.ini

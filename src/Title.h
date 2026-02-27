@@ -12,11 +12,16 @@ class Title : public Mode{
 private:
 	enum {
 		FADETIME = 64,
-		MENUX = 192,
-		MENUY = 128,
-		MENUMAX = 3,
+		CURSOR_OFFSET_X = 0,
+		MENUX = 32,
+		MENUY = 6,
+		MENU_AMOUNT = 4,
 		ANIMSPEED = 3,
 		MOVESPEED = 4,
+
+		CURSOR_PAT_INDEX = 6,
+		MENU_PAT_INDEX = 0,
+		MENU_SELECTED_PAT_INDEX = 32,
 	};
 	float cur_pos;	// カレントアニメがちょっとづつ動く用
 	float menu_pos;	// メニューがちょっとづつ入ってくる用
@@ -26,8 +31,8 @@ private:
 	int current;
 	int scene_tmp;
 	bn::optional<bn::regular_bg_ptr> bg;
-	bn::optional<bn::sprite_ptr> cursor;
-	bn::optional<bn::sprite_ptr> menu;
+	bn::optional<bn::sprite_ptr> cursor[2];
+	bn::optional<bn::sprite_ptr> menu[3*4];
 
 public:
 	Title(){};
@@ -35,6 +40,8 @@ public:
 	int Select();
 	void InMenu();
 	void OutMenu();
+	void HighlightMenu();
+	void OffsetMenuSprite();
 };
 
 #endif
