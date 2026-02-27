@@ -43,10 +43,8 @@ void Sound::PlaySe(int no){
 		case 7: bn::sound_items::levelup.play(); break;
 		case 8: bn::sound_items::spin.play(); break;
 		case 9: bn::sound_items::shutout.play(); break;
-		case 10:
+		case 10: bn::sound_items::hiscore.play(); break;
 		default:
-			// 旧実装では SE 10 に MP3(hiscore) を割り当てていた。
-			// GBA版では MP3 再生ができないため未使用扱い。
 			break;
 	}
 #else
