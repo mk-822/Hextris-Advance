@@ -216,6 +216,7 @@ static const int LOGO_IMG = 5;
 static const int TITLE_IMG = 6;
 static const int WORDS_IMG = 7;
 static const int FRAME_IMG = 8;
+static const int BG_IMG_START = 9;
 static const int BG_IMG[] = {9,10,11,12,13,14,15,16,17,18,19,20,21,22,23};
 static const int SCOREBG_IMG = 26;
 static const int BIGINT_IMG = 27;

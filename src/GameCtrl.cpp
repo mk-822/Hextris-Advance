@@ -15,7 +15,8 @@ GameCtrl::GameCtrl(){
 	// 時計ライブラリの初期化＆画像読み込み
 	dxg.Initialize(WINDOW_FULL,WINDOW_ZOOM,WINDOW_WIDE,WINDOW_HEIGHT);
 	image.i[RANK_IMG] = dxg.LoadImage("./image/rank.bmp",1,0,0,0);//描画ロード(ファイルパスchar* , 描画モード , 透過色R , 透過色G , 透過色B)
-	image.i[BLANK_IMG] = dxg.LoadImage("./image/blank.bmp",0,0,0,0);
+	image.i[BLANK_IMG] = BLANK_IMG;
+	//image.i[BLANK_IMG] = dxg.LoadImage("./image/blank.bmp",0,0,0,0);
 	image.i[FONT_IMG] = dxg.LoadImage("./image/font.bmp",1,0,0,0);
 	image.i[FONTEX_IMG] = dxg.LoadImage("./image/font_ex.bmp",1,0,0,0);
 	image.i[BLOCK_IMG] = dxg.LoadImage("./image/blocks.bmp",1,0,0,0);
@@ -31,18 +32,30 @@ GameCtrl::GameCtrl(){
 	image.i[BIGFONT_IMG] = dxg.LoadImage("./image/font16.bmp",1,0,0,0);
 	image.i[MULTI_IMG] = dxg.LoadImage("./image/multi.bmp",1,0,0,0);
 
-	image.i[BG_IMG[0]] = dxg.LoadImage("./image/bg00.bmp",1,0,0,0);
-	image.i[BG_IMG[1]] = dxg.LoadImage("./image/bg01.bmp",1,0,0,0);
-	image.i[BG_IMG[2]] = dxg.LoadImage("./image/bg02.bmp",1,0,0,0);
-	image.i[BG_IMG[3]] = dxg.LoadImage("./image/bg03.bmp",1,0,0,0);
-	image.i[BG_IMG[4]] = dxg.LoadImage("./image/bg04.bmp",1,0,0,0);
-	image.i[BG_IMG[5]] = dxg.LoadImage("./image/bg05.bmp",1,0,0,0);
-	image.i[BG_IMG[6]] = dxg.LoadImage("./image/bg06.bmp",1,0,0,0);
-	image.i[BG_IMG[7]] = dxg.LoadImage("./image/bg07.bmp",1,0,0,0);
-	image.i[BG_IMG[8]] = dxg.LoadImage("./image/bg08.bmp",1,0,0,0);
-	image.i[BG_IMG[9]] = dxg.LoadImage("./image/bg09.bmp",1,0,0,0);
-	image.i[BG_IMG[10]] = dxg.LoadImage("./image/bg10.bmp",1,0,0,0);
-	image.i[BG_IMG[11]] = dxg.LoadImage("./image/bg11.bmp",1,0,0,0);
+	// image.i[BG_IMG[0]] = dxg.LoadImage("./image/bg00.bmp",1,0,0,0);
+	// image.i[BG_IMG[1]] = dxg.LoadImage("./image/bg01.bmp",1,0,0,0);
+	// image.i[BG_IMG[2]] = dxg.LoadImage("./image/bg02.bmp",1,0,0,0);
+	// image.i[BG_IMG[3]] = dxg.LoadImage("./image/bg03.bmp",1,0,0,0);
+	// image.i[BG_IMG[4]] = dxg.LoadImage("./image/bg04.bmp",1,0,0,0);
+	// image.i[BG_IMG[5]] = dxg.LoadImage("./image/bg05.bmp",1,0,0,0);
+	// image.i[BG_IMG[6]] = dxg.LoadImage("./image/bg06.bmp",1,0,0,0);
+	// image.i[BG_IMG[7]] = dxg.LoadImage("./image/bg07.bmp",1,0,0,0);
+	// image.i[BG_IMG[8]] = dxg.LoadImage("./image/bg08.bmp",1,0,0,0);
+	// image.i[BG_IMG[9]] = dxg.LoadImage("./image/bg09.bmp",1,0,0,0);
+	// image.i[BG_IMG[10]] = dxg.LoadImage("./image/bg10.bmp",1,0,0,0);
+	// image.i[BG_IMG[11]] = dxg.LoadImage("./image/bg11.bmp",1,0,0,0);
+	image.i[BG_IMG[0]] = BG_IMG[0];
+	image.i[BG_IMG[1]] = BG_IMG[1];
+	image.i[BG_IMG[2]] = BG_IMG[2];
+	image.i[BG_IMG[3]] = BG_IMG[3];
+	image.i[BG_IMG[4]] = BG_IMG[4];
+	image.i[BG_IMG[5]] = BG_IMG[5];
+	image.i[BG_IMG[6]] = BG_IMG[6];
+	image.i[BG_IMG[7]] = BG_IMG[7];
+	image.i[BG_IMG[8]] = BG_IMG[8];
+	image.i[BG_IMG[9]] = BG_IMG[9];
+	image.i[BG_IMG[10]] = BG_IMG[10];
+	image.i[BG_IMG[11]] = BG_IMG[11];
 
 	DrawImageFont(8,8,&dxg,image.i[FONT_IMG],"Now Loading...");
 	dxg.DrawEnd();

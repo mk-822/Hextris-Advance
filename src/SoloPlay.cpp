@@ -2,6 +2,8 @@
 #include <string.h>
 #include <math.h>
 #include <stdio.h>
+#include <bn_sprite_items_words.h>
+#include <bn_sprite_items_font_big.h>
 
 static const char* difficname[]={
 	"EASY",
@@ -84,6 +86,12 @@ void SoloPlay::Main(){
 			hCtrl.ChangeLevel(&gameData.difficultyData[difficulty][0]);
 			BGImage.Change(image->i[BG_IMG[1]],8);
 			phase++; count = 0; cur_pos = 32;
+
+			imgReady[0] = bn::sprite_items::words.create_sprite(-32, 0, READY_PAT_INDEX);
+			imgReady[1] = bn::sprite_items::words.create_sprite(0, 0, READY_PAT_INDEX + 1);
+			imgReady[2] = bn::sprite_items::words.create_sprite(32, 0, READY_PAT_INDEX + 2);
+
+			imgCountDown = bn::sprite_items::words.create_sprite(0, 16, 6 + 8*10); // 透明にしておく
 		}
 		break;
 	case 4: // Ready ...?
@@ -102,6 +110,14 @@ void SoloPlay::Main(){
 		dxg->Draw(image->i[WORDS_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y + 96);
 
 		if(count < 90){
+			// Ready位置・パターン更新
+			int readyPattern = count/2;
+			if(readyPattern > 3)
+				readyPattern = 3;
+			imgReady[0]->set_tiles(bn::sprite_items::words.tiles_item(), READY_PAT_INDEX + readyPattern * 8);
+			imgReady[1]->set_tiles(bn::sprite_items::words.tiles_item(), READY_PAT_INDEX + readyPattern * 8 + 1);
+			imgReady[2]->set_tiles(bn::sprite_items::words.tiles_item(), READY_PAT_INDEX + readyPattern * 8 + 2);
+			
 			if(!(count%30)){
 				Sound::PlaySe(1);
 				cur_pos = 32;
@@ -116,11 +132,17 @@ void SoloPlay::Main(){
 				16,16,-4,
 				"%d",3-count/30
 			);
+			imgCountDown->set_tiles(bn::sprite_items::words.tiles_item(), 6 + 8*11 + (count/30)*8);
 		}
 		if(count >= 90){
 			if(count == 90){
 				Sound::PlaySe(1);
 				cur_pos = 0.0625;
+				
+				// Ready解放
+				imgReady[0].reset();
+				imgReady[1].reset();
+				imgReady[2].reset();
 			}
 			cur_pos *= 1.25;
 			dxg->TexturePos(160,176,24,16);
@@ -133,8 +155,12 @@ void SoloPlay::Main(){
 				(float)drawData.game_pos_y + 128 - cur_pos,
 				true
 			);
+			int flash = (count%4) ? 0 : 1;
+			imgCountDown->set_tiles(bn::sprite_items::words.tiles_item(), 6 + 8*(14+flash));
+			imgCountDown->set_y(-cur_pos);
 		}
 		if(count == 120){
+			imgCountDown.reset();
 			phase++;
 			Sound::ChangeBgm(2);
 		}

@@ -42,10 +42,16 @@ private:
 	int cntCombo;
 	int cntErace;
 	int startTime;
-	enum {FADETIME = 64};
+	enum {
+		READY_PAT_INDEX = 8 * 8,
+		FADETIME = 64
+	};
 	HextrisCtrl hCtrl;
 	HexFieldDrawData drawData;
 	DataFileLoader gameData;
+	
+	bn::optional<bn::sprite_ptr> imgReady[3];
+	bn::optional<bn::sprite_ptr> imgCountDown;
 
 public:
 	int NameEntry();
