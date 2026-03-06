@@ -21,7 +21,9 @@
 #include "bn_direct_bitmap_items_bg10_dbmp.h"
 #include "bn_direct_bitmap_items_bg11_dbmp.h"
 #include "bn_direct_bitmap_items_block_cell_dbmp.h"
+#include "bn_direct_bitmap_items_font_dbmp.h"
 #include "bn_direct_bitmap_items_frame_dbmp.h"
+#include "bn_colors.h"
 
 namespace
 {
@@ -40,8 +42,20 @@ namespace
 	constexpr int FIELD_MAX_X = FIELD_BLOCK_COLS - 1;
 	constexpr int FIELD_MAX_Y = FIELD_DRAW_ROWS - 1;
 
-	constexpr int BG_SRC_OFFSET_X = 40;
-	constexpr int BG_SRC_OFFSET_Y = 40;
+	constexpr int BG_SRC_OFFSET_X = 0;
+	constexpr int BG_SRC_OFFSET_Y = 0;
+	constexpr int HUD_BASE_X = 208;
+	constexpr int HUD_BASE_Y = 80;
+	constexpr int HUD_TIME_X = 40;
+	constexpr int HUD_TIME_Y = 96;
+	constexpr int HUD_LINE_STEP = 8;
+	constexpr int HUD_CHAR_ADVANCE = 6;
+	constexpr int HUD_CHAR_WIDTH = 8;
+	constexpr int HUD_CHAR_HEIGHT = 8;
+	constexpr int HUD_LINE_COUNT = 6;
+	constexpr int HUD_CACHE_SLOTS = 7;
+	constexpr int HUD_TEXT_MAX_CHARS = 24;
+	constexpr int HUD_TIME_MAX_CHARS = 8;
 
 	inline int virtual_to_screen_x(int value)
 	{
@@ -224,6 +238,46 @@ namespace
 			}
 		}
 	}
+
+	void draw_hud_glyph(
+			bn::sp_direct_bitmap_bg_painter& painter,
+			int screen_x,
+			int screen_y,
+			char chr)
+	{
+		const bn::direct_bitmap_item& font_item = bn::direct_bitmap_items::font_dbmp;
+		const bn::color transparent_key = font_item.color(0, 0);
+		int glyph_index = static_cast<unsigned char>(chr) - 32;
+		if(glyph_index < 0 || glyph_index > 127)
+		{
+			glyph_index = 0;
+		}
+
+		const int src_base_x = glyph_index * 8;
+		for(int py = 0; py < HUD_CHAR_HEIGHT; ++py)
+		{
+			const int sy = screen_y + py;
+			if(sy < 0 || sy >= SCREEN_HEIGHT)
+			{
+				continue;
+			}
+
+			for(int px = 0; px < HUD_CHAR_WIDTH; ++px)
+			{
+				const int sx = screen_x + px;
+				if(sx < 0 || sx >= SCREEN_WIDTH)
+				{
+					continue;
+				}
+
+				const bn::color src_color = font_item.color(src_base_x + px, py);
+				if(src_color != transparent_key)
+				{
+					painter.unsafe_plot(sx, sy, src_color);
+				}
+			}
+		}
+	}
 }
 
 enum PHASE{
@@ -288,6 +342,14 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	fieldBitmapDirty = true;
 	fieldBitmapFullRedraw = true;
 	fieldDirtyCellsValid = false;
+	scoreHudCacheValid = false;
+	for(int i = 0; i < HUD_CACHE_SLOTS; ++i)
+	{
+		for(int j = 0; j <= HUD_TEXT_MAX_CHARS; ++j)
+		{
+			scoreHudLines[i][j] = '\0';
+		}
+	}
 
 	if(! fieldBitmapBg)
 	{
@@ -583,7 +645,65 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 	const int frame_y = virtual_to_screen_y(drawData->game_pos_y + 40);
 	draw_frame_overlay(painter, frame_x, frame_y, clip_left, clip_top, clip_right, clip_bottom);
 
+	// Full background redraw can overwrite HUD text drawn in a previous phase/frame.
+	// Repaint cached HUD strings immediately so they never remain erased.
+	if(fieldBitmapFullRedraw && scoreHudCacheValid)
+	{
+		for(int cache_index = 0; cache_index < HUD_CACHE_SLOTS; ++cache_index)
+		{
+			const char* cached_text = scoreHudLines[cache_index].data();
+			if(! cached_text[0])
+			{
+				continue;
+			}
+
+			int virtual_x = HUD_BASE_X;
+			int virtual_y = HUD_BASE_Y + cache_index * HUD_LINE_STEP;
+			int max_chars = HUD_TEXT_MAX_CHARS;
+			if(cache_index == HUD_LINE_COUNT)
+			{
+				virtual_x = HUD_TIME_X;
+				virtual_y = HUD_TIME_Y;
+				max_chars = HUD_TIME_MAX_CHARS;
+			}
+
+			const int screen_y = virtual_to_screen_y(virtual_y);
+			for(int i = 0; i < max_chars && cached_text[i]; ++i)
+			{
+				const int screen_x = virtual_to_screen_x(virtual_x + i * HUD_CHAR_ADVANCE);
+				for(int py = 0; py < HUD_CHAR_HEIGHT; ++py)
+				{
+					const int sy = screen_y + py;
+					if(sy < 0 || sy >= SCREEN_HEIGHT)
+					{
+						continue;
+					}
+
+					for(int px = 0; px < HUD_CHAR_WIDTH; ++px)
+					{
+						const int sx = screen_x + px;
+						if(sx < 0 || sx >= SCREEN_WIDTH)
+						{
+							continue;
+						}
+
+						painter.unsafe_plot(sx, sy, bn::colors::black);
+					}
+				}
+
+				if(cached_text[i] != ' ')
+				{
+					draw_hud_glyph(painter, screen_x, screen_y, cached_text[i]);
+				}
+			}
+		}
+	}
+
 	fieldDirtyCellsValid = false;
+	if(fieldBitmapFullRedraw)
+	{
+		scoreHudCacheValid = false;
+	}
 	fieldBitmapFullRedraw = false;
 	fieldBitmapDirty = false;
 }
@@ -603,8 +723,7 @@ void HextrisCtrl::SetBitmapBackground(int image_id)
 	if(next_background_index != fieldBackgroundIndex)
 	{
 		fieldBackgroundIndex = next_background_index;
-		fieldBitmapDirty = true;
-		fieldBitmapFullRedraw = true;
+		MarkAllFieldDirty();
 	}
 }
 
@@ -1169,6 +1288,106 @@ void HextrisCtrl::FloorUp(int color)
 		}
 	}
 	MarkFieldRectDirty(0, 0, FIELD_MAX_X, FIELD_MAX_Y);
+}
+
+void HextrisCtrl::DrawCachedHudText(int cache_index, int virtual_x, int virtual_y, const char* text, int max_chars)
+{
+	if(cache_index < 0 || cache_index >= HUD_CACHE_SLOTS || ! text || max_chars <= 0 || max_chars > HUD_TEXT_MAX_CHARS)
+	{
+		return;
+	}
+
+	if(! fieldBitmapBg)
+	{
+		fieldBitmapBg = bn::sp_direct_bitmap_bg_ptr::create();
+		fieldBitmapBg->set_priority(3);
+		fieldBitmapBg->set_blending_enabled(false);
+		scoreHudCacheValid = false;
+	}
+
+	char new_text[HUD_TEXT_MAX_CHARS + 1];
+	int new_len = 0;
+	while(new_len < max_chars && text[new_len])
+	{
+		new_text[new_len] = text[new_len];
+		++new_len;
+	}
+	new_text[new_len] = '\0';
+
+	char* old_text = scoreHudLines[cache_index].data();
+	int old_len = 0;
+	while(old_len < HUD_TEXT_MAX_CHARS && old_text[old_len])
+	{
+		++old_len;
+	}
+
+	int redraw_len = old_len > new_len ? old_len : new_len;
+	if(redraw_len <= 0 && scoreHudCacheValid)
+	{
+		return;
+	}
+
+	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
+	const bn::color bg_color = bn::colors::black;
+	const int screen_y = virtual_to_screen_y(virtual_y);
+
+	for(int i = 0; i < redraw_len; ++i)
+	{
+		const char old_chr = scoreHudCacheValid ? old_text[i] : '\0';
+		const char new_chr = i < new_len ? new_text[i] : '\0';
+		if(scoreHudCacheValid && old_chr == new_chr)
+		{
+			continue;
+		}
+
+		const int screen_x = virtual_to_screen_x(virtual_x + i * HUD_CHAR_ADVANCE);
+		for(int py = 0; py < HUD_CHAR_HEIGHT; ++py)
+		{
+			const int sy = screen_y + py;
+			if(sy < 0 || sy >= SCREEN_HEIGHT)
+			{
+				continue;
+			}
+
+			for(int px = 0; px < HUD_CHAR_WIDTH; ++px)
+			{
+				const int sx = screen_x + px;
+				if(sx < 0 || sx >= SCREEN_WIDTH)
+				{
+					continue;
+				}
+
+				painter.unsafe_plot(sx, sy, bg_color);
+			}
+		}
+
+		if(new_chr && new_chr != ' ')
+		{
+			draw_hud_glyph(painter, screen_x, screen_y, new_chr);
+		}
+	}
+
+	for(int i = 0; i < new_len; ++i)
+	{
+		old_text[i] = new_text[i];
+	}
+	old_text[new_len] = '\0';
+	scoreHudCacheValid = true;
+}
+
+void HextrisCtrl::DrawScoreHudLine(int line_index, const char* text)
+{
+	if(line_index < 0 || line_index >= HUD_LINE_COUNT)
+	{
+		return;
+	}
+
+	DrawCachedHudText(line_index, HUD_BASE_X, HUD_BASE_Y + line_index * HUD_LINE_STEP, text, HUD_TEXT_MAX_CHARS);
+}
+
+void HextrisCtrl::DrawScoreTime(const char* text)
+{
+	DrawCachedHudText(HUD_LINE_COUNT, HUD_TIME_X, HUD_TIME_Y, text, HUD_TIME_MAX_CHARS);
 }
 
 

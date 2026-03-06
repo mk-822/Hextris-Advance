@@ -595,17 +595,20 @@ int SoloPlay::SelectDifficulty()
 
 void SoloPlay::DrawScore()
 {
-	// プレイ時間描画
+	// スコア表示文字列の準備
 	char time[9];
-	DrawImageFont(
-		24, 96, dxg,
-		image->i[FONT_IMG],
-		"TIME:%s", FrameCountToStr(cntTime,time)
-	);
+	char line0[32];
+	char line1[32];
+	char line2[32];
+	char line3[32];
+	char line4[32];
+	char line5[32];
 
-	// スコアなどの背景を暗くする処理
-	dxg->TexturePos(0,0,96,64);
-	dxg->Draw(image->i[BLANK_IMG],212,76,true,128);
+	compat_sprintf(line0, "SCORE:%d", score);
+	compat_sprintf(line1, "NEXT :%d", gameData.borderScore[grade]);
+	compat_sprintf(line2, "ERASE:%d", cntErace);
+	compat_sprintf(line3, "FALL :%d", cntFall);
+
 	// ランクの描画
 	const int rank_x = 224 + 16 - WINDOW_WIDE / 2;
 	const int rank_y = 40 + 16 - WINDOW_HEIGHT / 2;
@@ -618,10 +621,6 @@ void SoloPlay::DrawScore()
 		imgRank->set_visible(true);
 	}
 	// スコアなどの描画
-	DrawImageFont(216,80,dxg,image->i[FONT_IMG],"SCORE:%d",score);
-	DrawImageFont(216,88,dxg,image->i[FONT_IMG],"NEXT :%d",gameData.borderScore[grade]);
-	DrawImageFont(216,96,dxg,image->i[FONT_IMG],"ERASE:%d",cntErace);
-	DrawImageFont(216,104,dxg,image->i[FONT_IMG],"FALL :%d",cntFall);
 	int nextlevel = cntLevel-cntLevel%100+99;
 	if(nextlevel > 1000){
 		nextlevel = 1000;
@@ -629,14 +628,22 @@ void SoloPlay::DrawScore()
 	if((nextlevel > 300)&&(difficulty == 0)){
 		nextlevel = 300;
 	}
-	DrawImageFont(216,112,dxg,image->i[FONT_IMG],"LEVEL:%d/%d",cntLevel,nextlevel);
+	compat_sprintf(line4, "LEVEL:%d/%d", cntLevel, nextlevel);
 	if(difficulty == -1){
-		DrawImageFont(216,120,dxg,image->i[FONT_IMG],"MODE :SELECTING");
+		compat_sprintf(line5, "MODE :SELECTING");
 	}else{
-		DrawImageFont(216,120,dxg,image->i[FONT_IMG],"MODE :%s",difficname[difficulty]);
+		compat_sprintf(line5, "MODE :%s", difficname[difficulty]);
 	}
 
 	// エフェクトなど描画
+	hCtrl.DrawScoreTime(FrameCountToStr(cntTime, time));
+	hCtrl.DrawScoreHudLine(0, line0);
+	hCtrl.DrawScoreHudLine(1, line1);
+	hCtrl.DrawScoreHudLine(2, line2);
+	hCtrl.DrawScoreHudLine(3, line3);
+	hCtrl.DrawScoreHudLine(4, line4);
+	hCtrl.DrawScoreHudLine(5, line5);
+
 	if(effect.combo){
 		ComboEffect();
 	}

@@ -16,6 +16,7 @@
 #include "HexField.h"
 #include "DataFileLoader.h"
 #include "random.h"
+#include "bn_array.h"
 #include "bn_optional.h"
 #include "bn_sp_direct_bitmap_bg_ptr.h"
 #include "bn_sprite_ptr.h"
@@ -130,6 +131,9 @@ private:
 	void HideCurrentBlockSprites();
 	void HideNextBlockSprites();
 	void HideEraseEffectSprites();
+	void DrawCachedHudText(int cache_index, int virtual_x, int virtual_y, const char* text, int max_chars);
+	bool scoreHudCacheValid;
+	bn::array<bn::array<char, 25>, 7> scoreHudLines;
 
 public:
 	void EnqueFloorUp(int up, int color);
@@ -144,6 +148,8 @@ public:
 	int Main(int player);
 	virtual void DrawField(HexFieldDrawData* drawData, int trans, bool shadow=true);
 	virtual void Draw(HexFieldDrawData* drawData);
+	void DrawScoreHudLine(int line_index, const char* text);
+	void DrawScoreTime(const char* text);
 };
 
 #endif // !defined(AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_)
