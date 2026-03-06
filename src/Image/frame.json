@@ -1,3 +1,5 @@
 {
-    "type": "regular_bg"
+    "type": "sprite",
+    "width": 64,
+    "height": 64
 }
