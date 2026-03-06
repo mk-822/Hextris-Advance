@@ -27,11 +27,11 @@ void ScoreDisplay :: Main()
 	Sound::ChangeBgm(7);
 	dxg->TexturePos();
 	dxg->Draw(image->i[SCOREBG_IMG],0,0);
-	DrawImageFont(64,10,dxg,image->i[BIGFONT_IMG],16,16,-2,"Score Ranking");
-	DrawImageFont(40,60,dxg,image->i[BIGFONT_IMG],16,16,-4,"Name");
-	DrawImageFont(96,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Score");
-	DrawImageFont(156,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Level");
-	DrawImageFont(212,60,dxg,image->i[BIGFONT_IMG],16,16,-4,"Time");
+	DrawRankingFontSprite(64,10,dxg,image->i[BIGFONT_IMG],16,16,-2,"Score Ranking");
+	DrawRankingFontSprite(40,60,dxg,image->i[BIGFONT_IMG],16,16,-4,"Name");
+	DrawRankingFontSprite(96,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Score");
+	DrawRankingFontSprite(156,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Level");
+	DrawRankingFontSprite(212,60,dxg,image->i[BIGFONT_IMG],16,16,-4,"Time");
 	if(count < 0)
 		Fade_In();
 	if(count == 0)
@@ -139,13 +139,13 @@ void ScoreDisplay ::animateionReset()
 void ScoreDisplay ::ScoreDraw(int s)
 {
 	char tmp[9];
-	DrawImageFont(110 , 40 , dxg, image->i[BIGFONT_IMG],16,16,-2, "%s",DrawRank);
+	DrawRankingFontSprite(110 , 40 , dxg, image->i[BIGFONT_IMG],16,16,-2, "%s",DrawRank);
 	for(int i = 0 ; i < 5 ; i++){
-		DrawImageFont(8+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-6,"%2d", i+s+1);
-		DrawImageFont(40+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-2,"%s", Score.scoreList[Rank].record[i+s].name);
-		DrawImageFont(96+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%d", Score.scoreList[Rank].record[i+s].score);
-		DrawImageFont(164+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%4d", Score.scoreList[Rank].record[i+s].level);
-		DrawImageFont(212+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%s", FrameCountToStr(Score.scoreList[Rank].record[i+s].time,tmp));
+		DrawRankingFontSprite(8+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-6,"%2d", i+s+1);
+		DrawRankingFontSprite(40+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-2,"%s", Score.scoreList[Rank].record[i+s].name);
+		DrawRankingFontSprite(96+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%d", Score.scoreList[Rank].record[i+s].score);
+		DrawRankingFontSprite(164+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%4d", Score.scoreList[Rank].record[i+s].level);
+		DrawRankingFontSprite(212+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-6, "%s", FrameCountToStr(Score.scoreList[Rank].record[i+s].time,tmp));
 	}
 }
 

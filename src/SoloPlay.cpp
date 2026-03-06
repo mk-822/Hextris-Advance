@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <bn_sprite_items_words.h>
 #include <bn_sprite_items_font_big.h>
+#include <bn_sprite_items_rank.h>
 
 static const char* difficname[]={
 	"EASY",
@@ -570,8 +571,16 @@ void SoloPlay::DrawScore()
 	dxg->TexturePos(0,0,96,64);
 	dxg->Draw(image->i[BLANK_IMG],212,76,true,128);
 	// ランクの描画
-	dxg->TexturePos((grade+1)*32,0,32,32);
-	dxg->Draw(image->i[RANK_IMG],224,40);
+	const int rank_x = 224 + 16 - WINDOW_WIDE / 2;
+	const int rank_y = 40 + 16 - WINDOW_HEIGHT / 2;
+	const int rank_index = grade + 1;
+	if(! imgRank){
+		imgRank = bn::sprite_items::rank.create_sprite(rank_x, rank_y, rank_index);
+	}else{
+		imgRank->set_position(rank_x, rank_y);
+		imgRank->set_tiles(bn::sprite_items::rank.tiles_item(), rank_index);
+		imgRank->set_visible(true);
+	}
 	// スコアなどの描画
 	DrawImageFont(216,80,dxg,image->i[FONT_IMG],"SCORE:%d",score);
 	DrawImageFont(216,88,dxg,image->i[FONT_IMG],"NEXT :%d",gameData.borderScore[grade]);

@@ -52,6 +52,7 @@ private:
 	
 	bn::optional<bn::sprite_ptr> imgReady[3];
 	bn::optional<bn::sprite_ptr> imgCountDown;
+	bn::optional<bn::sprite_ptr> imgRank;
 
 public:
 	int NameEntry();
