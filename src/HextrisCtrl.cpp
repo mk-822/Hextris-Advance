@@ -1,4 +1,4 @@
-﻿// HextrisCtrl.cpp: HextrisCtrl 繧ｯ繝ｩ繧ｹ縺ｮ繧､繝ｳ繝励Μ繝｡繝ｳ繝・・繧ｷ繝ｧ繝ｳ
+// HextrisCtrl.cpp: Implementation of the HextrisCtrl class
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -293,7 +293,7 @@ enum SPECIALDRAW{
 };
 
 //////////////////////////////////////////////////////////////////////
-// 讒狗ｯ・豸域ｻ・
+// Constructor / initialization
 //////////////////////////////////////////////////////////////////////
 
 HextrisCtrl::HextrisCtrl(){
@@ -363,23 +363,23 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	HideEraseEffectSprites();
 }
 
-// 笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆繝｡繧､繝ｳ笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆
+// Main update loop
 int HextrisCtrl::Main(int player){
 	if(wait){
 		wait--;
 	}else{
 		switch(phase){
-////// 蜃ｺ迴ｾ蜃ｦ逅・////////////
+////// Piece spawn phase //////
 		case PHASE_APPEAR:
-			if(queFloorUp[0] != -1){	// 縺帙ｊ荳翫′繧・
+			if(queFloorUp[0] != -1){	// Apply queued floor-up lines first
 				FloorUp(DequeFloorUp());
 				break;
 			}
 
-			if(input->GetKeyState(player,0) & (BUTTON[0] | BUTTON[2])){	//蟾ｦ蝗櫁ｻ｢
+			if(input->GetKeyState(player,0) & (BUTTON[0] | BUTTON[2])){	// Rotate left on spawn
 				NextToCurrent(-1);
 				Sound::PlaySe(8);
-			}else if(input->GetKeyState(player,0) & BUTTON[1]){	//蜿ｳ蝗櫁ｻ｢
+			}else if(input->GetKeyState(player,0) & BUTTON[1]){	// Rotate right on spawn
 				NextToCurrent(1);
 				Sound::PlaySe(8);
 			}else{
@@ -409,7 +409,7 @@ int HextrisCtrl::Main(int player){
 				fixcount = delayData.fix;
 			}
 			break;
-////// 繝悶Ο繝・け遘ｻ蜍穂ｸｭ ///////
+////// Falling phase //////
 		case PHASE_MOVING:
 			if(IsGrounded()){
 				ShiftPhase(1);
@@ -423,30 +423,30 @@ int HextrisCtrl::Main(int player){
 				fixcount = delayData.fix;
 			}
 
-			//謫堺ｽ懊↓繧医ｋ遘ｻ蜍・
-			if(input->GetKeyState(player,2) & UP){	//荳豌励↓關ｽ荳・
+			// Movement controls
+			if(input->GetKeyState(player,2) & UP){	// Hard drop
 				BlockMove(0,20);
 			}
-			if(input->GetKeyState(player,1) & LEFT){	//蟾ｦ縺ｫ遘ｻ蜍・
+			if(input->GetKeyState(player,1) & LEFT){	// Move left
 				BlockMove(-1,0);
 			}
-			if(input->GetKeyState(player,1) & RIGHT){//蜿ｳ縺ｫ遘ｻ蜍・
+			if(input->GetKeyState(player,1) & RIGHT){// Move right
 				BlockMove(1,0);
 			}
-			if(input->GetKeyState(player,0) & DOWN){	//荳谿ｵ關ｽ荳・
+			if(input->GetKeyState(player,0) & DOWN){	// Soft drop
 				BlockMove(0,1);
 			}
-			//蝗櫁ｻ｢
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//蟾ｦ蝗櫁ｻ｢
+			// Rotation controls
+			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	// Rotate left
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	//蜿ｳ蝗櫁ｻ｢
+			if(input->GetKeyState(player,2) & BUTTON[1]){	// Rotate right
 				BlockSpin(1);
 				Sound::PlaySe(8);
 			}
 			break;
-////// 遘ｻ蜍穂ｸｭ縺縺梧磁蝨ｰ縺励※縺・ｋ /////
+////// Grounded phase //////
 		case PHASE_GROUNDED:
 			if(fixcount){
 				fixcount--;
@@ -456,35 +456,35 @@ int HextrisCtrl::Main(int player){
 				break;
 			}
 
-			// 縺・ｍ縺｡繧・ｍ縺励※繧九→蠑ｷ蛻ｶ蝗ｺ螳・
+			// Force-fix after too many adjustments on the ground
 			if(forcefixcount >= 30){
 				BlockFix();
 				ShiftPhase(1);
 				break;
 			}
 
-			//謗･蝨ｰ荳ｭ縺縺｣縺溘ｉ蝗ｺ螳・
+			// Down input can also force a fix
 			if(input->GetKeyState(player,0) & DOWN){
 				BlockFix();
 				ShiftPhase(1);
 				break;
 			}
-			if(input->GetKeyState(player,1) & LEFT){	//蟾ｦ縺ｫ遘ｻ蜍・
+			if(input->GetKeyState(player,1) & LEFT){	// Move left
 				BlockMove(-1,0);
 				forcefixcount++;
 			}
-			if(input->GetKeyState(player,1) & RIGHT){//蜿ｳ縺ｫ遘ｻ蜍・
+			if(input->GetKeyState(player,1) & RIGHT){// Move right
 				BlockMove(1,0);
 				forcefixcount++;
 			}
 
-			//蝗櫁ｻ｢
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	//蟾ｦ蝗櫁ｻ｢
+			// Rotation controls
+			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	// Rotate left
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 				forcefixcount++;
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	//蜿ｳ蝗櫁ｻ｢
+			if(input->GetKeyState(player,2) & BUTTON[1]){	// Rotate right
 				BlockSpin(1);
 				Sound::PlaySe(8);
 				forcefixcount++;
@@ -501,7 +501,7 @@ int HextrisCtrl::Main(int player){
 				ShiftPhase(-1);
 			}
 			break;
-////// 蝗ｺ螳壼ｾ後・蜃ｦ逅・/////////
+////// Piece fixed phase //////
 		case PHASE_FIXED:
 			Sound::PlaySe(5);
 			effectFlag |= BLOCK_FIX_EFFECT;
@@ -539,7 +539,7 @@ int HextrisCtrl::Main(int player){
 	count++;
 	return false;
 }
-//笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆繝｡繧､繝ｳ邨ゅｏ繧岩蔓笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆笆
+// Main draw entry
 
 
 void HextrisCtrl::Draw(HexFieldDrawData* drawData)
@@ -981,7 +981,7 @@ int HextrisCtrl::NextToCurrent(int rotation)
 	GenerateNext(10);
 
 	return 0;
-}// 霑斐ｊ蛟､縺・1 縺縺｣縺溘ｉ謇玖ｩｰ縺ｾ繧・
+} // Load next block data into current block
 
 int HextrisCtrl::GenerateNext(int max)
 {
@@ -990,7 +990,7 @@ int HextrisCtrl::GenerateNext(int max)
 
 int HextrisCtrl::BlockMove(int x, int y)
 {
-	// 縺ｾ縺壹・邨ｶ蟇ｾ蛟､繧堤ｮ怜・
+	// Use absolute values for step-by-step movement checks
 	int abs_x = x; int abs_y = y;
 	if(abs_x<0)
 		abs_x *= -1;
@@ -1001,12 +1001,12 @@ int HextrisCtrl::BlockMove(int x, int y)
 	if(curBlock.center_x % 2)
 		adjust_y = -1;
 
-	// 蜍輔￠縺溷屓謨ｰ
+	// Number of successful movement steps
 	int movecount = 0;
-	// 蜍輔￠縺ｪ縺九▲縺溘ｉ繧ｪ繝ｳ縺ｫ縺ｪ繧九ヵ繝ｩ繧ｰ・医ぜ繝ｬ縺ｦ蜍輔￠繧九°隧ｦ縺呻ｼ・
+	// Stop movement when any step collides
 	bool movefailed = false;
 
-	// 蜃ｦ逅・ｒ蠑ｷ蛻ｶ蛻・ｲ・x 霆ｸ y 霆ｸ繧貞酔譎ゅ↓蜍輔°縺吶％縺ｨ縺ｯ縺ｧ縺阪↑縺・
+	// Move in unit steps and validate each intermediate position
 	if(abs_x){
 		for(int i=0 ; i<abs_x ; i++){
 			for(int j=0 ; j<=4 ; j++){
@@ -1054,35 +1054,35 @@ int HextrisCtrl::BlockMove(int x, int y)
 
 int HextrisCtrl::BlockSpin(int spin)
 {
-	// 蝗櫁ｻ｢縺梧・蜉溘＠縺溘°縺ｩ縺・°
+	// Try wall-kick offsets for rotation
 	int spincount=0;
 	int adjust_x , adjust_y;
 
 	if(spin){
 		for(int k=0 ; k<=7 ; k++){
 			switch(k){
-			case 0:	//縺ｾ縺壹・譎ｮ騾壹↓
+			case 0:	// no offset
 				adjust_x = 0; adjust_y = 0;
 				break;
-			case 1: //荳九□
+			case 1: // down
 				adjust_x = 0; adjust_y = 2;
 				break;
-			case 2:	//縺昴ｌ縺ｧ鬧・岼縺ｪ繧俄ｦ蟾ｦ・・
+			case 2:	// left
 				adjust_x = -1; adjust_y = AdjustX();
 				break;
-			case 3: //縺上▲窶ｦ蜿ｳ・・
+			case 3: // right
 				adjust_x = 1; adjust_y = AdjustX();
 				break;
-			case 4: //蟾ｦ荳・
+			case 4: // left + down
 				adjust_x = -1; adjust_y = 2 + AdjustX();
 				break;
-			case 5: //蜿ｳ荳・
+			case 5: // right + down
 				adjust_x = 1; adjust_y = 2 + AdjustX();
 				break;
-			case 6:	//荳倶ｸ・
+			case 6:	// further down
 				adjust_x = 0; adjust_y = 4;
 				break;
-			case 7: //縺・♀縺奇ｼ√≠縺ｨ縺ｯ荳翫＠縺九・縺茨ｼ・
+			case 7: // up (last-resort kick)
 				adjust_x = 0; adjust_y = -2;
 				break;
 			}
@@ -1159,7 +1159,7 @@ int HextrisCtrl::BlockErase()
 		for(int j = 0 ; j <= FIELD_BLOCK_COLS ; j++){
 			if(j == FIELD_BLOCK_COLS){
 				for(int k = 0 ; k < FIELD_BLOCK_COLS ; k++){
-			// 繧ｨ繝輔ぉ繧ｯ繝医∈縺ｮ繝・・繧ｿ貂｡縺・///////////////
+			// Build erase effect data for this cleared line //////////////////
 					eraseEffectData[erasecount].GenerateMove();
 					eraseEffectData[erasecount].color[k] = hField.GetField(k,i);
 					eraseEffectData[erasecount].x[k] = (float)(GAME_POS_OFFSET_X + k*BLOCK_OFFSET_X);
@@ -1247,7 +1247,7 @@ int HextrisCtrl::IsDead()
 	return 1;
 }
 
-void HextrisCtrl::CountUp()	// 蜉帶･ｭ縺ｧ繧ｴ繝｡繝ｳ
+void HextrisCtrl::CountUp()	// Game frame counter
 {
 	count++;
 }

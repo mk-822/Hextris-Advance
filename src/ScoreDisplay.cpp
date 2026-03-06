@@ -1,10 +1,10 @@
-// ScoreDisplay.cpp: ScoreDisplay クラスのインプリメンテーション
+// ScoreDisplay.cpp: ScoreDisplay Class implementation
 //
 //////////////////////////////////////////////////////////////////////
 #include "ScoreDisplay.h"
 
 //////////////////////////////////////////////////////////////////////
-// 構築/消滅
+// construction/extinction
 //////////////////////////////////////////////////////////////////////
 char* FrameCountToStr(int,char*);
 ScoreDisplay :: ScoreDisplay()
@@ -62,7 +62,7 @@ void ScoreDisplay :: Main()
 		GetBackAnimateion();
 	else
 		num = animateion(num);
-	////////////////デバック用///////////////////////////////////////////
+	////////////////For debugging///////////////////////////////////////////
 	//DrawImageFont(300, 10, dxg, image->i[GRAYFONT_IMG], "%d",count);
 	//DrawImageFont(300, 100, dxg, image->i[GRAYFONT_IMG], "%d",Speed);
 	//DrawImageFont(300, 200, dxg, image->i[GRAYFONT_IMG], "%d",num);

@@ -5,7 +5,7 @@
 
 void Title::Main(){
 	switch(phase){
-	case 0:	//出るとき
+	case 0:	//when leaving
 		if(!count){
 			menu_pos = 320;
 			cur_pos = 240;
@@ -13,7 +13,7 @@ void Title::Main(){
 			bg = bn::regular_bg_items::title.create_bg(8, 48);
 			bg->set_blending_enabled(true);
 
-			// カーソル用スプライト　幅1.5倍にして使う
+			// Cursor sprite width1.5double use
 			cursor[0] = bn::sprite_items::words.create_sprite(0, 0, CURSOR_PAT_INDEX);
 			cursor[1] = bn::sprite_items::words.create_sprite(0, 0, CURSOR_PAT_INDEX + 1);
 			cursor[0]->set_horizontal_scale(1.5);
@@ -21,7 +21,7 @@ void Title::Main(){
 			cursor[0]->set_blending_enabled(true);
 			cursor[1]->set_blending_enabled(true);
 
-			// メニュー用スプライト 32x16を横3枚、縦4枚
+			// sprite for menu 32x16sideways3sheet, vertical4sheet
 			for(int i = 0; i < MENU_AMOUNT; ++i){
 				for(int j = 0; j < 3; ++j){
 					menu[i + j * MENU_AMOUNT] = bn::sprite_items::words.create_sprite(0, 0,
@@ -45,7 +45,7 @@ void Title::Main(){
 			cur_pos = 0;
 		}
 		break;
-	case 1:	//選ぶとき
+	case 1:	//when choosing
 		dxg->TexturePos();
 		dxg->Draw(image->i[TITLE_IMG], 0, 0);
 		scene_tmp = Select();
@@ -57,7 +57,7 @@ void Title::Main(){
 			cur_movemove = (float)-0.1;
 		}
 		break;
-	case 2:	// 消えるとき
+	case 2:	// when it disappears
 		//dxg->TexturePos();
 		//dxg->Draw(image->i[TITLE_IMG], 0, 0, true, 255-count*(256/FADETIME));
 		bn::blending::set_fade_alpha((float)count / FADETIME);
@@ -98,7 +98,7 @@ void Title::Main(){
 	cur_count++;
 }
 
-// メニュースプライトをハイライトする
+// Highlight menu sprites
 void Title::HighlightMenu(){
 	for(int i=0; i<MENU_AMOUNT; i++){
 		for(int j=0; j<3; j++){
@@ -108,7 +108,7 @@ void Title::HighlightMenu(){
 	}
 }
 
-// メニュースプライトの位置を変更する
+// Change the position of menu sprites
 void Title::OffsetMenuSprite(){
 	for(int i=0; i<MENU_AMOUNT; i++){
 		for(int j=0; j<3; j++){
@@ -117,9 +117,9 @@ void Title::OffsetMenuSprite(){
 	}
 }
 
-// メニューが入ってくるメソッド
+// Method that brings in the menu
 void Title::InMenu(){
-	// メニューの位置を変更
+	// Change menu position
 	menu_pos = (MENUX + menu_pos*7) / 8;
 	cur_pos = (MENUY + cur_pos*7) / 8;
 	
@@ -129,7 +129,7 @@ void Title::InMenu(){
 	}
 	OffsetMenuSprite();
 
-	// カレントアニメ
+	// current anime
 	//dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
 	//dxg->Draw(image->i[WORDS_IMG], MENUX-8, (float)cur_pos, true, count*(256/FADETIME));
 	auto curPattern = (cur_count/ANIMSPEED)%10;
@@ -139,9 +139,9 @@ void Title::InMenu(){
 	cursor[1]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + 1 + curPattern * 256 / 32);
 }
 
-// 選ぶメソッド
+// Method of choice
 int Title::Select(){
-	// カレントアニメの位置を変更
+	// Change the position of the current animation
 	cur_pos = (current + cur_pos*(MOVESPEED-1)) / (MOVESPEED);
 
 	dxg->ColorChange(1);
@@ -152,11 +152,11 @@ int Title::Select(){
 		}
 	}
 	OffsetMenuSprite();
-	// カレント画像
+	// current image
 	dxg->TexturePos(80,16*current,80,16);
 	dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+16*current), true, 255);
 
-	// カレントアニメ
+	// current anime
 	//dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
 	//dxg->Draw(image->i[WORDS_IMG], MENUX-8, (float)(MENUY+(int)(16*cur_pos+0.5)), true, 255);
 	auto curPattern = (cur_count/ANIMSPEED)%10;
@@ -190,7 +190,7 @@ int Title::Select(){
 	return -1;
 }
 
-// メニューが出てくメソッド
+// Method that brings up the menu
 void Title::OutMenu(){
 	for(int i=0; i<MENU_AMOUNT; i++){
 		dxg->TexturePos(0,i*16,80,16);
@@ -198,7 +198,7 @@ void Title::OutMenu(){
 	}
 	OffsetMenuSprite();
 	
-	// カレントアニメ
+	// current anime
 	cur_movemove *= (float)OUTMOVESPEED;
 	cur_move += cur_movemove;
 	cur_pos += cur_move;

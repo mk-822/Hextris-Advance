@@ -9,28 +9,28 @@ class JoyPadCtrl{
 private:	
 	struct GamePadState
 	{
-		INPUT input;		// どのボタンが押されているか(keydefine.h に一覧があります)
-		INPUT inputleg;		// ト・・・・トトトトトトトトトトト
-		INPUT inputonce;	// ト。
-		INPUT inputold[KEYDELAY];	// 入力状態のバックアップ
+		INPUT input;		// which button is pressed(keydefine.h There is a list in)
+		INPUT inputleg;		// Tototototototototototototototototototototototototototototototototototo
+		INPUT inputonce;	// to.
+		INPUT inputold[KEYDELAY];	// Backup of input state
 
-		int player;					// どのプレイヤーにアサインするか(ini から読み込み)
-		int button[MAXBUTTONS];				// どのボタンにアサインするか(ini から読み込み)
-		bool enable;					// 使用可能かどうか
+		int player;					// Which player to assign(ini read from)
+		int button[MAXBUTTONS];				// Which button to assign(ini read from)
+		bool enable;					// Is it available?
 	}joystate[MAXPLAYERS];
 	static INPUT keystate;
 	static INPUT keystate_leg;
 	static INPUT keystate_once;
 	static INPUT keystate_old[KEYDELAY];
 
-	int count;							// カウンター（キーリピートするためだけに）
-	void IniFileLoad();					// ini ファイルをロードするための内部メソッド
+	int count;							// Counter (just for key repeat)
+	void IniFileLoad();					// ini Internal method for loading files
 	void GetJoyStickDeviceState();
 public:
 	JoyPadCtrl();
-	static void SetKeyState(bool in, int key);	// WM_KEYDOWN WM_KEYUP の時にキーボード情報を更新する用
-	void RenewKeyState();				// 入力状況を更新
-	INPUT GetKeyState(int player, int flag=0);		// プレイヤーごとの入力状態をげと
+	static void SetKeyState(bool in, int key);	// WM_KEYDOWN WM_KEYUP For updating keyboard information when
+	void RenewKeyState();				// Update input status
+	INPUT GetKeyState(int player, int flag=0);		// Get input status for each player
 };
 
 #endif

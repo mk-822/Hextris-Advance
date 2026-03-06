@@ -4,7 +4,7 @@
 
 void Logo::Main(){
 	switch(phase){
-	case 0:	//出るとき
+	case 0:	//when leaving
 		if(!count){
 			logo_pos = 64;
 			spr = bn::sprite_items::logo.create_sprite(0, 0);
@@ -17,7 +17,7 @@ void Logo::Main(){
 		bn::blending::set_fade_alpha((float)1 - (float)count/FADETIME);
 		spr->set_position(LOGOX, logo_pos);
 
-		// ロゴ位置を移動
+		// Move logo position
 		logo_pos = (LOGOY + logo_pos*(MOVESPEED-1)) / MOVESPEED;
 		
 		if(count>=FADETIME){
@@ -25,7 +25,7 @@ void Logo::Main(){
 			count = 0;
 		}
 		break;
-	case 1:	//静止してるとき
+	case 1:	//when it's stationary
 		//dxg->TexturePos(0,0,64,32);
 		//dxg->Draw(image->i[LOGO_IMG], LOGOX,LOGOY, false, 255);
 		spr->set_position(LOGOX,LOGOY);
@@ -34,7 +34,7 @@ void Logo::Main(){
 			count = 0;
 		}
 		break;
-	case 2:	//消えるとき
+	case 2:	//when it disappears
 		//dxg->TexturePos(0,0,64,32);
 		//dxg->ColorChange(2);
 		//dxg->Draw(image->i[LOGO_IMG], LOGOX,LOGOY, false, 255-count*(256/FADETIME));

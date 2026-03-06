@@ -1,11 +1,11 @@
-﻿// HextrisCtrl.h: HextrisCtrl 繧ｯ繝ｩ繧ｹ縺ｮ繧､繝ｳ繧ｿ繝ｼ繝輔ぉ繧､繧ｹ
+// HextrisCtrl.h: HextrisCtrl class interface
 //
 //////////////////////////////////////////////////////////////////////
 
 #if !defined(AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_)
 #define AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_
 
-#include "EraseData.h"	// ClassView 縺ｫ繧医▲縺ｦ霑ｽ蜉縺輔ｌ縺ｾ縺励◆縲・
+#include "EraseData.h"	// Included for ClassView and erase effect data
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
@@ -21,7 +21,7 @@
 #include "bn_sp_direct_bitmap_bg_ptr.h"
 #include "bn_sprite_ptr.h"
 
-// 繧ｲ繝ｼ繝縺昴・繧ゅ・縺ｯ 96x216 繝峨ャ繝医ｒ蜊諡縺励∪縺・
+// Playfield size used by this controller: 96x216 pixels
 
 struct HexFieldDrawData{
 	int game_pos_x;
@@ -69,27 +69,27 @@ private:
 	int effectFlag;
 	int BlockFix();
 	int IsGrounded();
-	int BlockSpin(int spin);	// 蝗櫁ｻ｢ spin = -1:蟾ｦ蝗櫁ｻ｢ 1:蜿ｳ蝗櫁ｻ｢
-	int BlockMove(int x , int y);	// 遘ｻ蜍・
-	int groundedTime;	// 謗･蝨ｰ譎る俣
+	int BlockSpin(int spin);	// Rotate block: -1 = left, 1 = right
+	int BlockMove(int x , int y);	// Move block
+	int groundedTime;	// Time spent grounded
 	int fixcount;
 	enum DEFINE{
-		BLOCK_OFFSET_X = 6,	// 繝悶Ο繝・け縺昴・繧ゅ・縺ｮ繝輔ぅ繝ｼ繝ｫ繝我ｸ翫〒縺ｮ螟ｧ縺阪＆
+		BLOCK_OFFSET_X = 6,	// Horizontal spacing between block cells
 		BLOCK_OFFSET_Y = 4,
-		BLOCK_SIZE_X = 8,	// 繝悶Ο繝・け逕ｻ蜒上・繧ｵ繧､繧ｺ
+		BLOCK_SIZE_X = 8,	// Block sprite width
 		BLOCK_SIZE_Y = 8,
 		GAME_POS_X = 112,
 		GAME_POS_Y = 8,
-		GAME_POS_OFFSET_X = 8,	// 繝悶Ο繝・け繧帝・鄂ｮ髢句ｧ九☆繧句ｺｧ讓・隕√☆繧九↓繝ｯ繧ｯ縺ｮ螟ｪ縺・
+		GAME_POS_OFFSET_X = 8,	// Field draw X offset inside the frame
 		GAME_POS_OFFSET_Y = 44,
-		BLOCK_IMAGE_OFFSET_Y = 24,	// 縺ｩ縺ｮ Y 蠎ｧ讓吶・繝悶Ο繝・け逕ｻ蜒上ｒ菴ｿ縺・°
-		NEXT_OFFSET_X = -72,	// 繝阪け繧ｹ繝育判蜒上ｒ縺ｩ繧後□縺大承縺ｫ縺壹ｉ縺吶°
-		NEXT_OFFSET_Y = 40,	// 荳九↓縺壹ｉ縺吶°
-		NEXT_SIZE_X = 40,	// 繝阪け繧ｹ繝育判蜒上・繧ｵ繧､繧ｺ
+		BLOCK_IMAGE_OFFSET_Y = 24,	// Source Y offset for block images
+		NEXT_OFFSET_X = -72,	// Next-piece preview X offset
+		NEXT_OFFSET_Y = 40,	// Next-piece preview Y offset
+		NEXT_SIZE_X = 40,	// Next-piece preview width
 		NEXT_SIZE_Y = 24,
 		NEXT_IMAGE_OFFSET_Y = 0,	// next image Y offset
 		SPAWN_OFFSET_X = -2,
-		FLOORUP_MAX = 8		// 譛鬮倥〒菴募・縺ｾ縺ｧ霑ｫ繧贋ｸ翫′繧九°
+		FLOORUP_MAX = 8		// Maximum queued floor-up entries
 	};
 
 	EraseData eraseData;

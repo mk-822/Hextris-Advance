@@ -1,7 +1,7 @@
 #ifndef MAINHEADER
 #define MAINHEADER
 
-// クライアント領域のサイズに合わせてウィンドウをリサイズする関数
+// Function to resize the window to fit the size of the client area
 // LRESULT SetWindowSizeClient(HWND hwnd,WORD width,WORD height,int resX,int resY){
 //     RECT    WindowRect;
 //     int     delta_width;

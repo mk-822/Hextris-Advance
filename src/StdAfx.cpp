@@ -1,8 +1,8 @@
-// stdafx.cpp : 標準インクルードファイルを含むソース ファイル
-//              dmusic2.pch 生成されるプリコンパイル済ヘッダー
-//              stdafx.obj 生成されるプリコンパイル済タイプ情報
+// stdafx.cpp : Source files containing standard include files
+//              dmusic2.pch Generated precompiled header
+//              stdafx.obj Generated precompiled type information
 
 #include "stdafx.h"
 
-// TODO: STDAFX.H に含まれていて、このファイルに記述されていない
-// ヘッダーファイルを追加してください。
+// TODO: STDAFX.H and is not written in this file.
+// Please add the header file.

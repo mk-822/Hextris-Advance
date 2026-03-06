@@ -200,13 +200,13 @@ inline unsigned long GetTickCount(){
 	);
 }
 
-//画面モード定義
+//Screen mode definition
 static const int WINDOW_WIDE = 320;
 static const int WINDOW_HEIGHT = 240;
 extern bool WINDOW_FULL;
 extern int WINDOW_ZOOM;
 
-//画像ファイル定義
+//Image file definition
 static const int RANK_IMG = 0;
 static const int BLANK_IMG = 1;
 static const int FONT_IMG = 2;
@@ -226,17 +226,17 @@ static const int OP_BG_IMG = 30;
 static const int GRAYFONT_IMG = 31;
 static const int MULTI_IMG = 32;
 
-//シーン管理定義
-static const int LOGO_SCENE = 0;			// ロゴ画面
-static const int TITLE_SCENE = 1;			// タイトル画面
-//static const int OPTION_SCENE = 2;			//オプション
-static const int SCORE_SCENE = 3;			// スコアランキング
-static const int SINGLE_SCENE = 4;		// シングルプレイ
-//static const int MULTI_SCENE = 5;		// マルチプレイ
+//scene management definition
+static const int LOGO_SCENE = 0;			// logo screen
+static const int TITLE_SCENE = 1;			// Title screen
+//static const int OPTION_SCENE = 2;			//option
+static const int SCORE_SCENE = 3;			// Score ranking
+static const int SINGLE_SCENE = 4;		// single play
+//static const int MULTI_SCENE = 5;		// multiplayer
 
-//ブレンド方法定義
-static const int NORMAL_BLEND = 0;	// 通常ブレンド
-static const int TRANS_BLEND = 1;	// 透過付きブレンド
-static const int ADD_BLEND = 2;		// 加算合成
+//Blend method definition
+static const int NORMAL_BLEND = 0;	// Normal blend
+static const int TRANS_BLEND = 1;	// Blend with transparency
+static const int ADD_BLEND = 2;		// additive synthesis
 
 #endif

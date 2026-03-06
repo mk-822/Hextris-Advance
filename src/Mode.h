@@ -11,7 +11,7 @@ void DrawString(int x, int y, draw* dxg, int font, const char* format, ...);
 void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int sizey, int offsetx, const char* format, ...);
 char* FrameCountToStr(int count,char* timestr);
 
-// 継承して使ってください
+// Please inherit and use
 class Mode{
 protected:
 	int* scene;

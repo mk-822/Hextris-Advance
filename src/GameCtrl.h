@@ -6,15 +6,15 @@
 #include "common.h"
 #include "Mode.h"
 
-// BMP フォントを使って文字を描画。英数字だけ。
+// BMP Draw characters using fonts. Only alphanumeric characters.
 void DrawImageFont(int x, int y, draw* dxg, int font, const char*, ...);
 void DrawString(int x, int y, draw* dxg, int font, const char*, ...);
 void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int sizey, int offsetx, const char* format, ...);
 
-// FPS カウンタ。返値は FPS
+// FPS counter. The return value is FPS
 int CalcuFps();
 
-// ゲーム管理のいちばんだいじなところ
+// The most important part of game management
 class GameCtrl{
 private:
 	float posX, posY;

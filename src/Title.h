@@ -23,11 +23,11 @@ private:
 		MENU_PAT_INDEX = 0,
 		MENU_SELECTED_PAT_INDEX = 32,
 	};
-	float cur_pos;	// カレントアニメがちょっとづつ動く用
-	float menu_pos;	// メニューがちょっとづつ入ってくる用
-	float cur_move;	// カレントアニメが出てく時の移動量
-	float cur_movemove;	// 移動量の変化量
-	int cur_count;	// カレントアニメ用の専用カウンタ
+	float cur_pos;	// For the current animation to move little by little
+	float menu_pos;	// The menu is coming in little by little.
+	float cur_move;	// Amount of movement when the current animation appears
+	float cur_movemove;	// Amount of change in travel amount
+	int cur_count;	// Dedicated counter for current anime
 	int current;
 	int scene_tmp;
 	bn::optional<bn::regular_bg_ptr> bg;

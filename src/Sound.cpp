@@ -18,15 +18,15 @@ void Sound::Initialize(){
 	bgm_no = -1;
 	bgm_mode = 0;
 
-	// GBA / Butano 版では DXライブラリのサウンドハンドルは使用しないため、
-	// 互換性維持用に配列だけ初期化しておく。
+	// GBA / Butano In the edition DXSince the library's sound handle is not used,
+	// Initialize only the array to maintain compatibility.
 	std::fill_n(bgm, BGM_MAX, -1);
 	std::fill_n(se_no, SE_MAX, -1);
 }
 
 void Sound::ChangeBgm(int no){
-	// MP3 BGM は GBA / Butano でそのまま再生できないためダミー実装。
-	// 既存ロジックとの整合を保つため、現在番号のみ更新する。
+	// MP3 BGM teeth GBA / Butano This is a dummy implementation because it cannot be played as is.
+	// To maintain consistency with existing logic, only the current number will be updated.
 	bgm_no = no;
 }
 

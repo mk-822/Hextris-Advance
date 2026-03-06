@@ -1,5 +1,5 @@
 #pragma once
-// BackGroundImageCtrl.h: BackGroundImageCtrl クラスのインターフェイス
+// BackGroundImageCtrl.h: BackGroundImageCtrl class interface
 //
 //////////////////////////////////////////////////////////////////////
 #include <bn_regular_bg_ptr.h>

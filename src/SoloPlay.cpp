@@ -33,7 +33,7 @@ namespace
 
 void SoloPlay::Main(){
 	switch(phase){
-	case 0: //前初期化
+	case 0: //pre-initialization
 		Sound::ChangeBgm(-1);
 		drawData.game_pos_x = 112;
 		drawData.game_pos_y = 0;
@@ -48,21 +48,21 @@ void SoloPlay::Main(){
 		hCtrl.SetBitmapBackground(image->i[BG_IMG[0]]);
 
 		phase++; count = 0;
-		// あえてbreak を入れていません
-	case 1:	// フェードイン
-		// 背景の描画
+		// Darebreak not included
+	case 1:	// fade in
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
 
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,count*8);
 
 		if(count == 32){
 			phase++; count = 0;
 		}
 		break;
-	case 2:	// 初期化
+	case 2:	// Initialization
 		Sound::ChangeBgm(1);
 		SeedGameRandom(GetTickCount());
 
@@ -81,17 +81,17 @@ void SoloPlay::Main(){
 		cntLevel = 0;
 		phase++;
 
-		// あえて break を入れていません
+		// Dare break not included
 		cur_diffic = 0;
 		difficulty = -1;
-	case 3: // 難易度選択
-		// 背景の描画
+	case 3: // Difficulty selection
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255);
-		// スコア関連の描画
+		// Score-related drawings
 		DrawScore();
 
 		difficulty = SelectDifficulty();
@@ -107,18 +107,18 @@ void SoloPlay::Main(){
 			imgReady[1] = bn::sprite_items::words.create_sprite(0, 0, READY_PAT_INDEX + 1);
 			imgReady[2] = bn::sprite_items::words.create_sprite(32, 0, READY_PAT_INDEX + 2);
 
-			imgCountDown = bn::sprite_items::words.create_sprite(0, 16, 6 + 8*10); // 透明にしておく
+			imgCountDown = bn::sprite_items::words.create_sprite(0, 16, 6 + 8*10); // keep it transparent
 		}
 		break;
 	case 4: // Ready ...?
 		Sound::ChangeBgm(-1);
-		// 背景の描画
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255);
-		// スコア関連の描画
+		// Score-related drawings
 		DrawScore();
 
 		dxg->TexturePos(80,112,80,16);
@@ -128,7 +128,7 @@ void SoloPlay::Main(){
 		dxg->Draw(image->i[WORDS_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y + 96);
 
 		if(count < 90){
-			// Ready位置・パターン更新
+			// ReadyPosition/pattern update
 			int readyPattern = count/2;
 			if(readyPattern > 3)
 				readyPattern = 3;
@@ -157,7 +157,7 @@ void SoloPlay::Main(){
 				Sound::PlaySe(1);
 				cur_pos = 0.0625;
 				
-				// Ready解放
+				// Readyrelease
 				imgReady[0].reset();
 				imgReady[1].reset();
 				imgReady[2].reset();
@@ -184,13 +184,13 @@ void SoloPlay::Main(){
 		}
 
 		break;
-	case 5:	// ゲーム中
-		// 背景の描画
+	case 5:	// in game
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
 
-		// メインゲームの描画
+		// main game drawing
 		if(hCtrl.Main(0)){
 			cur_pos = 120;
 			Sound::ChangeBgm(-1);
@@ -199,15 +199,15 @@ void SoloPlay::Main(){
 		hCtrl.Draw(&drawData);
 
 		cntTime++;
-		// スコアなどの処理
+		// Processing of scores etc.
 		if(hCtrl.queFix){
 			hCtrl.queFix = 0;
 			cntFall++;
 			cntLevel++;
-			if(!(cntLevel%100)&&(cntLevel!=0)){	// ライン消しじゃないと難易度はアップしない
+			if(!(cntLevel%100)&&(cntLevel!=0)){	// The difficulty level will not increase unless you erase the line.
 				cntLevel--;
 			}
-			if(hCtrl.queErace){	// 消去時のスコア加算率 combo は連続で消したときの得点上昇倍率
+			if(hCtrl.queErace){	// Score addition rate when erasing combo is the score increase rate when erasing consecutively
 				effect.erace = 1;
 				switch(hCtrl.queErace){
 				case 1:
@@ -226,7 +226,7 @@ void SoloPlay::Main(){
 				score += getscore;
 				cntErace += hCtrl.queErace;
 				cntLevel += hCtrl.queErace;
-				if(cntLevel%100 < (cntLevel-hCtrl.queErace)%100){ // 難易度上昇
+				if(cntLevel%100 < (cntLevel-hCtrl.queErace)%100){ // Increased difficulty
 					Sound::PlaySe(7);
 					switch(cntLevel/100){
 					case 2:
@@ -249,13 +249,13 @@ void SoloPlay::Main(){
 					hCtrl.SetBitmapBackground(image->i[BG_IMG[cntLevel/100+1]]);
 					effect.levelup = 1;
 					hCtrl.ChangeLevel(&gameData.difficultyData[difficulty][cntLevel/100]);
-					if((difficulty==0)&&(cntLevel>=300)){ // EASYクリア
+					if((difficulty==0)&&(cntLevel>=300)){ // EASYclear
 						Sound::ChangeBgm(6);
 						cntLevel = 300;
 						cur_pos = 240;
 						phase++;
 					}
-					if(cntLevel>=1000){	//クリアー
+					if(cntLevel>=1000){	//clear
 						Sound::ChangeBgm(6);
 						cntLevel = 1000;
 						cur_pos = 240;
@@ -263,10 +263,10 @@ void SoloPlay::Main(){
 					}
 				}
 				cntCombo++;
-				if(cntCombo>=2){ // 2コンボ以上
+				if(cntCombo>=2){ // 2combo or more
 					effect.combo = 1;
 				}
-				if(score >= gameData.borderScore[grade]){ // グレード(SS,S,ABCDEF)アップ
+				if(score >= gameData.borderScore[grade]){ // grade(SS,S,ABCDEF)up
 					Sound::PlaySe(10);
 					grade++;
 					effect.gradeup = 1;
@@ -278,29 +278,29 @@ void SoloPlay::Main(){
 			}
 		}
 
-		// スコアなど描画
+		// Drawing scores etc.
 		DrawScore();
 
 		break;
-	case 6:	// 死亡
+	case 6:	// death
 		hCtrl.CountUp();
 
-		// 背景の描画
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.Draw(&drawData);
-		// スコアなど描画
+		// Drawing scores etc.
 		DrawScore();
 
 		cur_pos--;
 
-		// ゲームオーバ画像
+		// game over image
 		dxg->TexturePos(96,0,96,160-(int)(160/60*cur_pos)-8);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40+(160/60*cur_pos));
 
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
 
 		if(cur_pos <= 0){
@@ -312,19 +312,19 @@ void SoloPlay::Main(){
 			}
 		}
 		break;
-	case 7: // うぇいと もしくはおめでとう
-		// 背景の描画
+	case 7: // Wow or congratulations
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.Draw(&drawData);
-		// スコアなど描画
+		// Drawing scores etc.
 		DrawScore();
-		// ゲームオーバ画像
+		// game over image
 		dxg->TexturePos(96,0,96,160);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
 		
 		if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
@@ -366,7 +366,7 @@ void SoloPlay::Main(){
 		if(cur_pos <= 0){
 			if(ScoreData.JudgeOrder(score,difficulty) != -1){
 				phase += 1;
-					// 名前入れ用処理
+					// Name processing
 				compat_strcpy(name.name,"   ");
 				name.cur_pos = 0;
 				name.cur_word = 65;
@@ -380,20 +380,20 @@ void SoloPlay::Main(){
 			}
 		}
 		break;
-	case 8: // ハイスコアにはいれるようだ
+	case 8: // Looks like I'll be able to get a high score
 		Sound::ChangeBgm(8);
-		// 背景の描画
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// スコアなど描画
+		// Drawing scores etc.
 		DrawScore();
-		// 壁をびょうが
+		// Thread the wall
 		hCtrl.DrawField(&drawData,255);
-		// ゲームオーバ画像
+		// game over image
 		dxg->TexturePos(96,0,96,160);
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
 
 		{
@@ -424,18 +424,18 @@ void SoloPlay::Main(){
 			cur_pos = 0;
 		}
 		break;
-	case 9: // 次のゲームへ
+	case 9: // Next game
 		Sound::ChangeBgm(3);
-		// 背景の描画
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
-		// スコアなど描画
+		// Drawing scores etc.
 		DrawScore();
-		// 壁をびょうが
+		// Thread the wall
 		hCtrl.DrawField(&drawData,255);
 
-		// ゲームオーバ画像
+		// game over image
 		cur_pos = (float)count * 2;
 		if(cur_pos > 160){
 			cur_pos = 160;
@@ -455,7 +455,7 @@ void SoloPlay::Main(){
 			phase++;
 		}
 		if(input->GetKeyState(0,2)&BUTTON[0]){
-			// 1プレイして戻ってきた時用にもう一度初期化
+			// 1Initialize again for when you come back after playing
 			hCtrl.Initialize(dxg,image,input,&gameData);
 			hCtrl.SetBitmapBackground(image->i[BG_IMG[0]]);
 			// BGImage
@@ -466,15 +466,15 @@ void SoloPlay::Main(){
 			phase = 2;
 		}
 		break;
-	case 10: // フェードアウト
-		// 背景の描画
+	case 10: // fade out
+		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
 		}
 
 		dxg->TexturePos();
 		dxg->Draw(image->i[BLANK_IMG],0,0,true,count*8);
-		// メインゲームの描画
+		// main game drawing
 		hCtrl.DrawField(&drawData,255-count*8);
 
 		if(count == 32){
@@ -565,7 +565,7 @@ int SoloPlay::SelectDifficulty()
 			dxg->Draw(image->i[WORDS_IMG], (float)drawData.game_pos_x+8, (float)(drawData.game_pos_y+ 80 +i*16), false, 128);
 		}
 	}
-	// カレント画像
+	// current image
 	if(count%4){
 		dxg->TexturePos(0,16*cur_diffic+128,80,16);
 	}else{
@@ -595,7 +595,7 @@ int SoloPlay::SelectDifficulty()
 
 void SoloPlay::DrawScore()
 {
-	// スコア表示文字列の準備
+	// Preparing the score display string
 	char time[9];
 	char line0[32];
 	char line1[32];
@@ -609,7 +609,7 @@ void SoloPlay::DrawScore()
 	compat_sprintf(line2, "ERASE:%d", cntErace);
 	compat_sprintf(line3, "FALL :%d", cntFall);
 
-	// ランクの描画
+	// Rank drawing
 	const int rank_x = 224 + 16 - WINDOW_WIDE / 2;
 	const int rank_y = 40 + 16 - WINDOW_HEIGHT / 2;
 	const int rank_index = grade + 1;
@@ -620,7 +620,7 @@ void SoloPlay::DrawScore()
 		imgRank->set_tiles(bn::sprite_items::rank.tiles_item(), rank_index);
 		imgRank->set_visible(true);
 	}
-	// スコアなどの描画
+	// Drawing scores etc.
 	int nextlevel = cntLevel-cntLevel%100+99;
 	if(nextlevel > 1000){
 		nextlevel = 1000;
@@ -635,7 +635,7 @@ void SoloPlay::DrawScore()
 		compat_sprintf(line5, "MODE :%s", difficname[difficulty]);
 	}
 
-	// エフェクトなど描画
+	// Draw effects etc.
 	hCtrl.DrawScoreTime(FrameCountToStr(cntTime, time));
 	hCtrl.DrawScoreHudLine(0, line0);
 	hCtrl.DrawScoreHudLine(1, line1);

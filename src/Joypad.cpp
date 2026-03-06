@@ -1,4 +1,4 @@
-// ジョイパッド操作 JoyPadCtrl クラス
+// Joypad operation JoyPadCtrl class
 
 #include "Joypad.h"
 #include "bn_keypad.h"
@@ -29,7 +29,7 @@ namespace
             input |= RIGHT;
         }
 
-        // 固定アサイン (ini カスタム機能は省略)
+        // Fixed assignment (ini Custom functions omitted)
         if(bn::keypad::a_held())
         {
             input |= BUTTON[0];
@@ -90,8 +90,8 @@ JoyPadCtrl::JoyPadCtrl() :
 
 void JoyPadCtrl::SetKeyState(bool in, int key)
 {
-    // Butano では bn::keypad から毎フレーム入力を取得する。
-    // 既存インターフェース互換のため、明示呼び出し時は keystate を更新しておく。
+    // Butano Well then bn::keypad Get every frame input from .
+    // For compatibility with existing interfaces, when explicitly calling keystate Please update.
     if(in)
     {
         keystate |= key;
@@ -149,12 +149,12 @@ void JoyPadCtrl::RenewKeyState()
 
 void JoyPadCtrl::IniFileLoad()
 {
-    // GBA/Butano 版では ini によるカスタムアサインは使用しない。
+    // GBA/Butano In the edition ini Do not use custom assignments.
 }
 
 void JoyPadCtrl::GetJoyStickDeviceState()
 {
-    // GBA 実機の入力は 1P 固定。
+    // GBA The input of the actual machine is 1P Fixed.
     for(int i = 0; i < MAXPLAYERS; ++i)
     {
         joystate[i].enable = (i == 0);

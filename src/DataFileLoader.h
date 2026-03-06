@@ -1,4 +1,4 @@
-// DataFileLoader.h: DataFileLoader クラスのインターフェイス
+// DataFileLoader.h: DataFileLoader class interface
 //
 //////////////////////////////////////////////////////////////////////
 

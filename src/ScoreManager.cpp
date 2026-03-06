@@ -1,4 +1,4 @@
-// ScoreManager.cpp: ScoreManager クラスのインプリメンテーション
+// ScoreManager.cpp: ScoreManager Class implementation
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -121,7 +121,7 @@ void _load_score_list(const unsigned char* data, const int size, ScoreManager::S
 }
 
 //////////////////////////////////////////////////////////////////////
-// 構築/消滅
+// construction/extinction
 //////////////////////////////////////////////////////////////////////
 
 ScoreManager::ScoreManager()
@@ -156,5 +156,5 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	scoreList[difficulty].record[order].time = time;
 	compat_strcpy(scoreList[difficulty].record[order].name,name);
 
-	// ROM 上の bin データは書き換えできないため、保存は実施しない。
+	// ROM above bin Since the data cannot be rewritten, it is not saved.
 }

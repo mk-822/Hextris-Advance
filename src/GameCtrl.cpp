@@ -341,15 +341,15 @@ namespace
 }
 
 GameCtrl::GameCtrl(){
-	// ゲーム開始からのフレーム数
+	// Number of frames since game start
 	count = 0;
 	scene = LOGO_SCENE;
 	mode = new Mode();
 	mode->Initialize(&scene,&dxg,&image,&input);
 
-	// 時計ライブラリの初期化＆画像読み込み
+	// Initialize clock library & load images
 	dxg.Initialize(WINDOW_FULL,WINDOW_ZOOM,WINDOW_WIDE,WINDOW_HEIGHT);
-	image.i[RANK_IMG] = dxg.LoadImage("./image/rank.bmp",1,0,0,0);//描画ロード(ファイルパスchar* , 描画モード , 透過色R , 透過色G , 透過色B)
+	image.i[RANK_IMG] = dxg.LoadImage("./image/rank.bmp",1,0,0,0);//drawing load(file pathchar* , drawing mode , transparent colorR , transparent colorG , transparent colorB)
 	image.i[BLANK_IMG] = BLANK_IMG;
 	//image.i[BLANK_IMG] = dxg.LoadImage("./image/blank.bmp",0,0,0,0);
 	image.i[FONT_IMG] = dxg.LoadImage("./image/font.bmp",1,0,0,0);
@@ -392,7 +392,7 @@ GameCtrl::GameCtrl(){
 	image.i[BG_IMG[10]] = BG_IMG[10];
 	image.i[BG_IMG[11]] = BG_IMG[11];
 
-	// Butano 側では画像ハンドルを使わないため、フォント種別は固定IDで保持する
+	// Butano Since the image handle is not used on the side, the font type is fixed.IDhold in
 	image.i[FONT_IMG] = FONT_IMG;
 	image.i[BIGINT_IMG] = BIGINT_IMG;
 	image.i[BIGFONT_IMG] = BIGFONT_IMG;
@@ -404,28 +404,28 @@ GameCtrl::GameCtrl(){
 	dxg.DrawEnd();
 }
 
-// メインだおおおおおおおおおおおおお-----------------
+// It’s the main thing!-----------------
 void GameCtrl::Main(){
 	begin_image_font_frame();
 	dxg.DrawBegin(true);
 	input.RenewKeyState();
 
-	// シーンとシーンバックアップが異なっていたらモードチェンジだろう
+	// If the scene and scene backup are different, it will be a mode change.
 	if(scene!=scene_bk){
 		ChangeScene();
 	}scene_bk = scene;
 
 	mode->Main();
 
-	//入力チェック用
+	//For input check
 	//::DrawImageFont(0,0,&dxg,image.i[FONT_IMG],"%d %d %d",input.GetKeyState(0,0),input.GetKeyState(0,1),input.GetKeyState(0,2));
 
 	dxg.DrawEnd();
 
-	// あとしまつ
+	// Atoshimatsu
 	count++;
 }
-// メインおわりい-------------------------------------
+// Main end-------------------------------------
 
 void GameCtrl::ChangeScene(){
 	release_image_font_resources();
@@ -447,7 +447,7 @@ void GameCtrl::ChangeScene(){
 	// case MULTI_SCENE:
 	// 	mode = new MultiPlay();
 	// 	break;
-	// case OPTION_SCENE://Clockが追加しますた
+	// case OPTION_SCENE://Clockadded
 	// 	mode = new Option();
 	// 	break;
 	}

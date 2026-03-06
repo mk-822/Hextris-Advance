@@ -1,4 +1,4 @@
-// BackGroundImageCtrl.cpp: BackGroundImageCtrl クラスのインプリメンテーション
+// BackGroundImageCtrl.cpp: BackGroundImageCtrl Class implementation
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -22,13 +22,13 @@
 #include "bn_colors.h"
 
 //////////////////////////////////////////////////////////////////////
-// 構築/消滅
+// construction/extinction
 //////////////////////////////////////////////////////////////////////
 
 
 bn::regular_bg_ptr LoadImageImpl(int image)
 {
-	// GBA対応
+	// GBAcorrespondence
 	switch(image){
 		case BG_IMG_START:
 		return bn::regular_bg_items::bg00.create_bg(8, 48);
@@ -91,11 +91,11 @@ void BackGroundImageCtrl::Draw(draw* dxg)
 	}
 	if(current != back)
 	{
-		// currentがセットされたばかりのときはまずフェードアウトする
+		// currentIf it has just been set, it will first fade out.
 		bn::bg_palettes::set_fade_color(bn::colors::black);
-		bn::bg_palettes::set_fade_intensity(blend); // フェード率を変える
+		bn::bg_palettes::set_fade_intensity(blend); // Change the fade rate
 
-		// フェードアウトが終わったら次の画像に取り替え
+		// Once the fade out is complete, replace it with the next image.
 		if(blend == 1){
 			count = 0;
 			back = current;
@@ -106,7 +106,7 @@ void BackGroundImageCtrl::Draw(draw* dxg)
 	}
 	else{
 		bn::bg_palettes::set_fade_color(bn::colors::black);
-		bn::bg_palettes::set_fade_intensity(1 - blend); // フェード率を変える
+		bn::bg_palettes::set_fade_intensity(1 - blend); // Change the fade rate
 	}
 	// dxg->TexturePos();
 	// if((back != -1)&&(blend != 255)){

@@ -1,6 +1,6 @@
-// stdafx.h : 標準のシステム インクルード ファイル、
-//            または参照回数が多く、かつあまり変更されない
-//            プロジェクト専用のインクルード ファイルを記述します。
+// stdafx.h : standard system include files,
+//            or frequently referenced and rarely changed
+//            Write include files specifically for your project.
 //
 #pragma once
 #include "DxGraph.h"

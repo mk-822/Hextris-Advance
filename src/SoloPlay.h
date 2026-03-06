@@ -1,12 +1,12 @@
 #ifndef SOLOPLAYHEADER
 #define SOLOPLAYHEADER
 
-#include "ScoreManager.h"	// ClassView によって追加されました。
+#include "ScoreManager.h"	// ClassView added by
 #include "common.h"
 #include "GameCtrl.h"
 #include "HextrisCtrl.h"
 #include "DataFileLoader.h"
-#include "BackGroundImageCtrl.h"	// ClassView によって追加されました。
+#include "BackGroundImageCtrl.h"	// ClassView added by
 
 class SoloPlay : public Mode{
 private:
