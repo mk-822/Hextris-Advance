@@ -23,6 +23,9 @@
 #include "bn_direct_bitmap_items_block_cell_dbmp.h"
 #include "bn_direct_bitmap_items_font_dbmp.h"
 #include "bn_direct_bitmap_items_frame_dbmp.h"
+#include "bn_blending.h"
+#include "bn_backdrop.h"
+#include "bn_sprites.h"
 #include "bn_colors.h"
 
 namespace
@@ -50,12 +53,13 @@ namespace
 	constexpr int HUD_TIME_Y = 96;
 	constexpr int HUD_LINE_STEP = 8;
 	constexpr int HUD_CHAR_ADVANCE = 6;
-	constexpr int HUD_CHAR_WIDTH = 8;
+	constexpr int HUD_CHAR_WIDTH = 7;
 	constexpr int HUD_CHAR_HEIGHT = 8;
 	constexpr int HUD_LINE_COUNT = 6;
 	constexpr int HUD_CACHE_SLOTS = 7;
 	constexpr int HUD_TEXT_MAX_CHARS = 24;
 	constexpr int HUD_TIME_MAX_CHARS = 8;
+	constexpr bn::color UI_BG_COLOR(1, 1, 1);
 
 	inline int virtual_to_screen_x(int value)
 	{
@@ -397,6 +401,7 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	fieldBackgroundIndex = 0;
 	fieldBitmapDirty = true;
 	fieldBitmapFullRedraw = true;
+	ghostTransparencyConfigured = false;
 	fieldDirtyCellsValid = false;
 	scoreHudCacheValid = false;
 	for(int i = 0; i < HUD_CACHE_SLOTS; ++i)
@@ -412,8 +417,11 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 		fieldBitmapBg = bn::sp_direct_bitmap_bg_ptr::create();
 		fieldBitmapBg->set_priority(3);
 		fieldBitmapBg->set_blending_enabled(false);
+		fieldBitmapBg->set_blending_bottom_enabled(true);
 	}
-
+	bn::backdrop::set_blending_bottom_enabled(true);
+	bn::sprites::set_blending_bottom_enabled(true);
+	HideGhostBlockSprites();
 	HideCurrentBlockSprites();
 	HideNextBlockSprites();
 	HideEraseEffectSprites();
@@ -602,6 +610,7 @@ void HextrisCtrl::Draw(HexFieldDrawData* drawData)
 {
 	DrawBitmapField(drawData);
 	UpdateNextBlockSprites(drawData);
+	UpdateGhostBlockSprites(drawData);
 	UpdateCurrentBlockSprites(drawData);
 	UpdateEraseEffectSprites(drawData);
 
@@ -615,6 +624,8 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 	{
 		fieldBitmapBg = bn::sp_direct_bitmap_bg_ptr::create();
 		fieldBitmapBg->set_priority(3);
+		fieldBitmapBg->set_blending_enabled(false);
+		fieldBitmapBg->set_blending_bottom_enabled(true);
 		fieldBitmapDirty = true;
 		fieldBitmapFullRedraw = true;
 	}
@@ -698,7 +709,7 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			clip_top,
 			clip_right,
 			clip_bottom,
-			bn::colors::black);
+			UI_BG_COLOR);
 
 	for(int i = row_begin; i <= row_end; ++i)
 	{
@@ -767,7 +778,7 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 							continue;
 						}
 
-						painter.unsafe_plot(sx, sy, bn::colors::black);
+						painter.unsafe_plot(sx, sy, UI_BG_COLOR);
 					}
 				}
 
@@ -912,6 +923,84 @@ void HextrisCtrl::UpdateCurrentBlockSprites(HexFieldDrawData* drawData)
 	}
 }
 
+int HextrisCtrl::ComputeGhostDropSteps()
+{
+	int drop_steps = 0;
+
+	while(drop_steps < FIELD_LOGICAL_ROWS)
+	{
+		bool blocked = false;
+		for(int i = 0; i < 4; ++i)
+		{
+			const int next_x = blockData->posData[curBlock.pos[i]].x + curBlock.center_x;
+			const int next_y = blockData->posData[curBlock.pos[i]].y + curBlock.center_y + (drop_steps + 1) * 2;
+			if(out_of_playfield(next_x, next_y) || hField.Get(next_x, next_y))
+			{
+				blocked = true;
+				break;
+			}
+		}
+
+		if(blocked)
+		{
+			break;
+		}
+
+		++drop_steps;
+	}
+
+	return drop_steps;
+}
+
+void HextrisCtrl::UpdateGhostBlockSprites(HexFieldDrawData* drawData)
+{
+	if(phase != PHASE_MOVING && phase != PHASE_GROUNDED)
+	{
+		HideGhostBlockSprites();
+		return;
+	}
+
+	const int drop_steps = ComputeGhostDropSteps();
+	if(drop_steps <= 0)
+	{
+		HideGhostBlockSprites();
+		return;
+	}
+
+	if(! ghostTransparencyConfigured)
+	{
+		// Fade and transparency blending can't be active at the same time.
+		bn::blending::set_fade_alpha(0);
+		bn::blending::set_transparency_weights(0.5, 0.5);
+		ghostTransparencyConfigured = true;
+	}
+
+	const int ghost_center_y = curBlock.center_y + drop_steps * 2;
+	const int tile_index = clamp_block_color(curBlock.color);
+	for(int i = 0; i < 4; ++i)
+	{
+		const int block_x = drawData->game_pos_x + GAME_POS_OFFSET_X +
+				(blockData->posData[curBlock.pos[i]].x + curBlock.center_x) * BLOCK_OFFSET_X;
+		const int block_y = drawData->game_pos_y + GAME_POS_OFFSET_Y +
+				(blockData->posData[curBlock.pos[i]].y + ghost_center_y) * BLOCK_OFFSET_Y;
+		const int sprite_x = block_x + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
+		const int sprite_y = block_y + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;
+
+		if(! ghostBlockSprites[i])
+		{
+			ghostBlockSprites[i] = bn::sprite_items::block_cell.create_sprite(sprite_x, sprite_y, tile_index);
+			ghostBlockSprites[i]->set_blending_enabled(true);
+		}
+		else
+		{
+			ghostBlockSprites[i]->set_position(sprite_x, sprite_y);
+			ghostBlockSprites[i]->set_tiles(bn::sprite_items::block_cell.tiles_item(), tile_index);
+		}
+
+		ghostBlockSprites[i]->set_visible(true);
+	}
+}
+
 void HextrisCtrl::UpdateNextBlockSprites(HexFieldDrawData* drawData)
 {
 	const BlockData& next_data = blockData->blockData[nextBlock];
@@ -946,6 +1035,17 @@ void HextrisCtrl::HideCurrentBlockSprites()
 		if(currentBlockSprites[i])
 		{
 			currentBlockSprites[i]->set_visible(false);
+		}
+	}
+}
+
+void HextrisCtrl::HideGhostBlockSprites()
+{
+	for(int i = 0; i < 4; ++i)
+	{
+		if(ghostBlockSprites[i])
+		{
+			ghostBlockSprites[i]->set_visible(false);
 		}
 	}
 }
@@ -1313,6 +1413,7 @@ void HextrisCtrl::DrawField(HexFieldDrawData* drawData, int trans, bool shadow)
 	(void) shadow;
 	DrawBitmapField(drawData);
 	UpdateNextBlockSprites(drawData);
+	HideGhostBlockSprites();
 	HideCurrentBlockSprites();
 	UpdateEraseEffectSprites(drawData);
 }
@@ -1388,6 +1489,7 @@ void HextrisCtrl::DrawCachedHudText(int cache_index, int virtual_x, int virtual_
 		fieldBitmapBg = bn::sp_direct_bitmap_bg_ptr::create();
 		fieldBitmapBg->set_priority(3);
 		fieldBitmapBg->set_blending_enabled(false);
+		fieldBitmapBg->set_blending_bottom_enabled(true);
 		scoreHudCacheValid = false;
 	}
 
@@ -1414,7 +1516,7 @@ void HextrisCtrl::DrawCachedHudText(int cache_index, int virtual_x, int virtual_
 	}
 
 	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
-	const bn::color bg_color = bn::colors::black;
+	const bn::color bg_color = UI_BG_COLOR;
 	const int screen_y = virtual_to_screen_y(virtual_y);
 
 	for(int i = 0; i < redraw_len; ++i)

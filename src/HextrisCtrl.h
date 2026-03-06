@@ -111,6 +111,7 @@ private:
 	int forcefixcount;
 	bool fieldBitmapDirty;
 	bool fieldBitmapFullRedraw;
+	bool ghostTransparencyConfigured;
 	bool fieldDirtyCellsValid;
 	int fieldDirtyMinX;
 	int fieldDirtyMinY;
@@ -119,15 +120,19 @@ private:
 	int fieldBackgroundIndex;
 	bn::optional<bn::sp_direct_bitmap_bg_ptr> fieldBitmapBg;
 	bn::optional<bn::sprite_ptr> currentBlockSprites[4];
+	bn::optional<bn::sprite_ptr> ghostBlockSprites[4];
 	bn::optional<bn::sprite_ptr> nextBlockSprites[4];
 	bn::optional<bn::sprite_ptr> eraseEffectSprites[4][11];
 	void MarkAllFieldDirty();
 	void MarkFieldCellDirty(int x, int y);
 	void MarkFieldRectDirty(int min_x, int min_y, int max_x, int max_y);
 	void DrawBitmapField(HexFieldDrawData* drawData);
+	int ComputeGhostDropSteps();
+	void UpdateGhostBlockSprites(HexFieldDrawData* drawData);
 	void UpdateCurrentBlockSprites(HexFieldDrawData* drawData);
 	void UpdateNextBlockSprites(HexFieldDrawData* drawData);
 	void UpdateEraseEffectSprites(HexFieldDrawData* drawData);
+	void HideGhostBlockSprites();
 	void HideCurrentBlockSprites();
 	void HideNextBlockSprites();
 	void HideEraseEffectSprites();
