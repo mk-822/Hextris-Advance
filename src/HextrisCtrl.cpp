@@ -99,6 +99,22 @@ namespace
 		return adjusted_y > FIELD_MAX_Y;
 	}
 
+	inline int logical_row_from_draw_row(int x, int draw_row)
+	{
+		int adjusted_row = draw_row;
+		if(x & 1)
+		{
+			adjusted_row -= 1;
+		}
+
+		if(adjusted_row < 0 || (adjusted_row & 1))
+		{
+			return -1;
+		}
+
+		return adjusted_row / 2;
+	}
+
 	const bn::direct_bitmap_item& field_background_item(int index)
 	{
 		switch(index)
@@ -178,8 +194,17 @@ namespace
 			return;
 		}
 
-		const int clamped_color = clamp_block_color(color_index);
 		const bn::direct_bitmap_item& item = bn::direct_bitmap_items::block_cell_dbmp;
+		int clamped_color = color_index;
+		const int max_color_index = item.dimensions().width() / BLOCK_PIXEL_SIZE - 1;
+		if(clamped_color < 0)
+		{
+			clamped_color = 0;
+		}
+		else if(clamped_color > max_color_index)
+		{
+			clamped_color = max_color_index;
+		}
 		const int src_x_base = clamped_color * BLOCK_PIXEL_SIZE;
 		const bn::color transparent_key = item.color(0, 0);
 
@@ -308,6 +333,7 @@ namespace
 			}
 		}
 	}
+
 }
 
 enum PHASE{
@@ -681,9 +707,16 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			const int color = hField.Get(j, i);
 			if(color)
 			{
+				int draw_color = color;
+				const int logical_row = logical_row_from_draw_row(j, i);
+				if(logical_row >= 0 && (logical_row & 1))
+				{
+					draw_color += 10;
+				}
+
 				const int x = field_left + j * BLOCK_OFFSET_X;
 				const int y = field_top + i * BLOCK_OFFSET_Y;
-				draw_block_bitmap(painter, x, y, color, clip_left, clip_top, clip_right, clip_bottom);
+				draw_block_bitmap(painter, x, y, draw_color, clip_left, clip_top, clip_right, clip_bottom);
 			}
 		}
 	}
@@ -848,12 +881,14 @@ void HextrisCtrl::MarkFieldRectDirty(int min_x, int min_y, int max_x, int max_y)
 
 void HextrisCtrl::UpdateCurrentBlockSprites(HexFieldDrawData* drawData)
 {
-	if(! (phase & (PHASE_MOVING | PHASE_GROUNDED)))
+	const bool flash_now = (effectFlag & BLOCK_FIX_EFFECT) != 0;
+	if(! flash_now && phase != PHASE_MOVING && phase != PHASE_GROUNDED)
 	{
 		HideCurrentBlockSprites();
 		return;
 	}
 
+	const int tile_index = flash_now ? 13 : clamp_block_color(curBlock.color);
 	for(int i = 0; i < 4; ++i)
 	{
 		const int block_x = drawData->game_pos_x + GAME_POS_OFFSET_X +
@@ -862,7 +897,6 @@ void HextrisCtrl::UpdateCurrentBlockSprites(HexFieldDrawData* drawData)
 				(blockData->posData[curBlock.pos[i]].y + curBlock.center_y) * BLOCK_OFFSET_Y;
 		const int sprite_x = block_x + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
 		const int sprite_y = block_y + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;
-		const int tile_index = clamp_block_color(curBlock.color);
 
 		if(! currentBlockSprites[i])
 		{
