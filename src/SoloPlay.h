@@ -44,6 +44,9 @@ private:
 	int startTime;
 	enum {
 		READY_PAT_INDEX = 8 * 8,
+		DIFFICULTY_MENU_PAT_INDEX = 4 * 8,
+		DIFFICULTY_SELECTED_PAT_INDEX = 8 * 8,
+		ERASE_PAT_INDEX = 12 * 8,
 		FADETIME = 64
 	};
 	HextrisCtrl hCtrl;
@@ -53,6 +56,8 @@ private:
 	bn::optional<bn::sprite_ptr> imgReady[3];
 	bn::optional<bn::sprite_ptr> imgCountDown;
 	bn::optional<bn::sprite_ptr> imgRank;
+	bn::optional<bn::sprite_ptr> imgDifficulty[3 * 4];
+	bn::optional<bn::sprite_ptr> imgErase[3];
 
 public:
 	int NameEntry();

@@ -84,6 +84,12 @@ void SoloPlay::Main(){
 		// Dare break not included
 		cur_diffic = 0;
 		difficulty = -1;
+		for(int i = 0; i < 3 * 4; ++i){
+			imgDifficulty[i].reset();
+		}
+		for(int i = 0; i < 3; ++i){
+			imgErase[i].reset();
+		}
 	case 3: // Difficulty selection
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){
@@ -96,6 +102,9 @@ void SoloPlay::Main(){
 
 		difficulty = SelectDifficulty();
 		if(difficulty != -1){
+			for(int i = 0; i < 3 * 4; ++i){
+				imgDifficulty[i].reset();
+			}
 			hCtrl.ChangeLevel(&gameData.difficultyData[difficulty][0]);
 			hCtrl.SetBitmapBackground(image->i[BG_IMG[1]]);
 			if(SOLO_USE_REGULAR_BG){
@@ -538,29 +547,43 @@ void SoloPlay::EraceEffect()
 		tmp *= tmp;
 	}
 
-	static const char* erase_names[] = {
-		"SINGLE",
-		"DOUBLE",
-		"TRIPLE",
-		"HEXTRIS"
-	};
+	int line_index = effect.line - 1;
+	if(line_index < 0){
+		line_index = 0;
+	}else if(line_index > 3){
+		line_index = 3;
+	}
 
-	int erase_index = effect.line - 1;
-	if(erase_index < 0){
-		erase_index = 0;
-	}else if(erase_index > 3){
-		erase_index = 3;
+	int erase_pattern = ERASE_PAT_INDEX + line_index * 8;
+	if(! (count % 4)){
+		erase_pattern += 3;
+	}
+
+	const int erase_left = 40 - tmp;
+	const int erase_top = 104;
+	for(int i = 0; i < 3; ++i){
+		const int sprite_x = erase_left + 16 + i * 32 - WINDOW_WIDE / 2;
+		const int sprite_y = erase_top + 8 - WINDOW_HEIGHT / 2;
+		if(! imgErase[i]){
+			imgErase[i] = bn::sprite_items::words.create_sprite(sprite_x, sprite_y, erase_pattern + i);
+		}else{
+			imgErase[i]->set_position(sprite_x, sprite_y);
+			imgErase[i]->set_tiles(bn::sprite_items::words.tiles_item(), erase_pattern + i);
+			imgErase[i]->set_visible(true);
+		}
 	}
 
 	int font =  image->i[WHITEFONT_IMG];
 	if(count%4){
 		font = image->i[FONT_IMG];
 	}
-	DrawRankingFontSprite(24-tmp,104,dxg,image->i[BIGFONT_IMG],16,16,-4,"%s",erase_names[erase_index]);
-	DrawImageFont(48-tmp,120,dxg,font,"%d pts",getscore);
+	DrawImageFont(72-tmp,120,dxg,font,"%d pts",getscore);
 
 	if(effect.erace>64){
 		effect.erace = 0;
+		for(int i = 0; i < 3; ++i){
+			imgErase[i].reset();
+		}
 	}else{
 	effect.erace++;
 	}
@@ -569,29 +592,26 @@ void SoloPlay::EraceEffect()
 int SoloPlay::SelectDifficulty()
 {
 	for(int i=0; i<=3; i++){
-		int font = image->i[GRAYFONT_IMG];
-		int size = 8;
-		int offset = -2;
+		int menu_pattern = 3 + i * 8;
 		if(cur_diffic == i){
-			font = image->i[BIGFONT_IMG];
-			size = 16;
-			offset = -4;
+			menu_pattern += 8 * 4;
 			if(count % 4){
-				font = image->i[WHITEFONT_IMG];
-				size = 8;
-				offset = -2;
+				menu_pattern += 8 * 4;
 			}
 		}
 
-		DrawRankingFontSprite(
-			drawData.game_pos_x + 16,
-			drawData.game_pos_y + 80 + i * 16,
-			dxg,
-			font,
-			size, size, offset,
-			"%s",
-			difficname[i]
-		);
+		for(int j = 0; j < 3; ++j){
+			const int sprite_x = drawData.game_pos_x + 8 + 16 + j * 32 - WINDOW_WIDE / 2;
+			const int sprite_y = drawData.game_pos_y + 80 + i * 16 + 8 - WINDOW_HEIGHT / 2;
+			const int sprite_index = i + j * 4;
+			if(! imgDifficulty[sprite_index]){
+				imgDifficulty[sprite_index] = bn::sprite_items::words.create_sprite(sprite_x, sprite_y, menu_pattern + j);
+			}else{
+				imgDifficulty[sprite_index]->set_position(sprite_x, sprite_y);
+				imgDifficulty[sprite_index]->set_tiles(bn::sprite_items::words.tiles_item(), menu_pattern + j);
+				imgDifficulty[sprite_index]->set_visible(true);
+			}
+		}
 	}
 
 	if((input->GetKeyState(0,1)) & UP){
@@ -676,6 +696,10 @@ void SoloPlay::DrawScore()
 	}
 	if(effect.erace){
 		EraceEffect();
+	}else{
+		for(int i = 0; i < 3; ++i){
+			imgErase[i].reset();
+		}
 	}
 }
 
