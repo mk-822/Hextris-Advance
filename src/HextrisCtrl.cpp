@@ -278,6 +278,36 @@ namespace
 			}
 		}
 	}
+
+	void fill_rect(
+			bn::sp_direct_bitmap_bg_painter& painter,
+			int left,
+			int top,
+			int width,
+			int height,
+			int clip_left,
+			int clip_top,
+			int clip_right,
+			int clip_bottom,
+			bn::color color)
+	{
+		const int draw_left = left > clip_left ? left : clip_left;
+		const int draw_top = top > clip_top ? top : clip_top;
+		const int draw_right = left + width < clip_right ? left + width : clip_right;
+		const int draw_bottom = top + height < clip_bottom ? top + height : clip_bottom;
+		if(draw_left >= draw_right || draw_top >= draw_bottom)
+		{
+			return;
+		}
+
+		for(int y = draw_top; y < draw_bottom; ++y)
+		{
+			for(int x = draw_left; x < draw_right; ++x)
+			{
+				painter.unsafe_plot(x, y, color);
+			}
+		}
+	}
 }
 
 enum PHASE{
@@ -627,6 +657,23 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
 	draw_background(painter, fieldBackgroundIndex, clip_left, clip_top, clip_right, clip_bottom);
 
+	// Keep the next-piece panel readable regardless of the current background.
+	const int next_panel_x = virtual_to_screen_x(drawData->game_pos_x + NEXT_OFFSET_X + 16);
+	const int next_panel_y = 8;
+	const int next_panel_width = NEXT_SIZE_X + 10;
+	const int next_panel_height = NEXT_SIZE_Y + 10;
+	fill_rect(
+			painter,
+			next_panel_x,
+			next_panel_y,
+			next_panel_width,
+			next_panel_height,
+			clip_left,
+			clip_top,
+			clip_right,
+			clip_bottom,
+			bn::colors::black);
+
 	for(int i = row_begin; i <= row_end; ++i)
 	{
 		for(int j = col_begin; j <= col_end; ++j)
@@ -836,9 +883,9 @@ void HextrisCtrl::UpdateNextBlockSprites(HexFieldDrawData* drawData)
 	const BlockData& next_data = blockData->blockData[nextBlock];
 	for(int i = 0; i < 4; ++i)
 	{
-		const int block_x = drawData->game_pos_x + NEXT_OFFSET_X + 12 +
+		const int block_x = drawData->game_pos_x + NEXT_OFFSET_X + 12 - 16 + 8 +
 				(blockData->posData[next_data.pos[i]].x + next_data.center_x) * BLOCK_OFFSET_X;
-		const int block_y = drawData->game_pos_y + NEXT_OFFSET_Y + 6 +
+		const int block_y = drawData->game_pos_y + NEXT_OFFSET_Y + 6 + 8 +
 				(blockData->posData[next_data.pos[i]].y + next_data.center_y) * BLOCK_OFFSET_Y;
 		const int sprite_x = block_x + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
 		const int sprite_y = block_y + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;

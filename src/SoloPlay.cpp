@@ -537,16 +537,26 @@ void SoloPlay::EraceEffect()
 	}else{
 		tmp *= tmp;
 	}
-	dxg->TexturePos(96, 192 + (effect.line-1)*16, 96, 16);
-	if(count%4){
-		dxg->TexturePos(0, 192 + (effect.line-1)*16, 96, 16);
+
+	static const char* erase_names[] = {
+		"SINGLE",
+		"DOUBLE",
+		"TRIPLE",
+		"HEXTRIS"
+	};
+
+	int erase_index = effect.line - 1;
+	if(erase_index < 0){
+		erase_index = 0;
+	}else if(erase_index > 3){
+		erase_index = 3;
 	}
-	dxg->Draw(image->i[WORDS_IMG],16-(float)tmp,104);
 
 	int font =  image->i[WHITEFONT_IMG];
 	if(count%4){
 		font = image->i[FONT_IMG];
 	}
+	DrawRankingFontSprite(24-tmp,104,dxg,image->i[BIGFONT_IMG],16,16,-4,"%s",erase_names[erase_index]);
 	DrawImageFont(48-tmp,120,dxg,font,"%d pts",getscore);
 
 	if(effect.erace>64){
@@ -558,20 +568,31 @@ void SoloPlay::EraceEffect()
 
 int SoloPlay::SelectDifficulty()
 {
-	dxg->ColorChange(1);
 	for(int i=0; i<=3; i++){
-		if(cur_diffic!=i){
-			dxg->TexturePos(0,i*16+64,80,16);
-			dxg->Draw(image->i[WORDS_IMG], (float)drawData.game_pos_x+8, (float)(drawData.game_pos_y+ 80 +i*16), false, 128);
+		int font = image->i[GRAYFONT_IMG];
+		int size = 8;
+		int offset = -2;
+		if(cur_diffic == i){
+			font = image->i[BIGFONT_IMG];
+			size = 16;
+			offset = -4;
+			if(count % 4){
+				font = image->i[WHITEFONT_IMG];
+				size = 8;
+				offset = -2;
+			}
 		}
+
+		DrawRankingFontSprite(
+			drawData.game_pos_x + 16,
+			drawData.game_pos_y + 80 + i * 16,
+			dxg,
+			font,
+			size, size, offset,
+			"%s",
+			difficname[i]
+		);
 	}
-	// current image
-	if(count%4){
-		dxg->TexturePos(0,16*cur_diffic+128,80,16);
-	}else{
-		dxg->TexturePos(80,16*cur_diffic+128,80,16);
-	}
-	dxg->Draw(image->i[WORDS_IMG], (float)drawData.game_pos_x+8, (float)(drawData.game_pos_y+ 80 +16*cur_diffic), true, 255);
 
 	if((input->GetKeyState(0,1)) & UP){
 		Sound::PlaySe(1);
