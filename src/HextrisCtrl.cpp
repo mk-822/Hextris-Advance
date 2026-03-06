@@ -401,6 +401,7 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	fieldBackgroundIndex = 0;
 	fieldBitmapDirty = true;
 	fieldBitmapFullRedraw = true;
+	gameOverPetrifyProgress = -1;
 	ghostTransparencyConfigured = false;
 	fieldDirtyCellsValid = false;
 	scoreHudCacheValid = false;
@@ -425,6 +426,58 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	HideCurrentBlockSprites();
 	HideNextBlockSprites();
 	HideEraseEffectSprites();
+}
+
+void HextrisCtrl::StartGameOverPetrify(int stone_color)
+{
+	for(int i = 0; i < 4; ++i)
+	{
+		const int raw_x = blockData->posData[curBlock.pos[i]].x + curBlock.center_x;
+		const int raw_y = blockData->posData[curBlock.pos[i]].y + curBlock.center_y;
+		if(raw_x < 0 || raw_x > FIELD_MAX_X)
+		{
+			continue;
+		}
+
+		const int logical_row = logical_row_from_draw_row(raw_x, raw_y);
+		if(logical_row < 0 || logical_row >= FIELD_LOGICAL_ROWS)
+		{
+			continue;
+		}
+
+		hField.SetField(raw_x, logical_row, curBlock.color);
+	}
+
+	gameOverPetrifyProgress = 0;
+	MarkAllFieldDirty();
+	StepGameOverPetrify(stone_color);
+}
+
+void HextrisCtrl::StepGameOverPetrify(int stone_color)
+{
+	if(gameOverPetrifyProgress < 0 || gameOverPetrifyProgress >= FIELD_LOGICAL_ROWS)
+	{
+		return;
+	}
+
+	const int logical_row = FIELD_LOGICAL_ROWS - 1 - gameOverPetrifyProgress;
+	bool row_changed = false;
+	for(int x = 0; x < FIELD_BLOCK_COLS; ++x)
+	{
+		const int color = hField.GetField(x, logical_row);
+		if(color && color != stone_color)
+		{
+			hField.SetField(x, logical_row, stone_color);
+			row_changed = true;
+		}
+	}
+
+	if(row_changed)
+	{
+		MarkFieldRectDirty(0, logical_row * 2, FIELD_MAX_X, logical_row * 2 + 1);
+	}
+
+	++gameOverPetrifyProgress;
 }
 
 // Main update loop
@@ -720,7 +773,7 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			{
 				int draw_color = color;
 				const int logical_row = logical_row_from_draw_row(j, i);
-				if(logical_row >= 0 && (logical_row & 1))
+				if(draw_color != 21 && logical_row >= 0 && (logical_row & 1))
 				{
 					draw_color += 10;
 				}

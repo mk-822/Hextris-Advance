@@ -29,6 +29,7 @@ static const char* rankname[]={
 namespace
 {
 	constexpr bool SOLO_USE_REGULAR_BG = false;
+	constexpr int GAMEOVER_STONE_TILE = 21;
 }
 
 void SoloPlay::Main(){
@@ -115,8 +116,6 @@ void SoloPlay::Main(){
 			imgReady[0] = bn::sprite_items::words.create_sprite(-32, 0, READY_PAT_INDEX);
 			imgReady[1] = bn::sprite_items::words.create_sprite(0, 0, READY_PAT_INDEX + 1);
 			imgReady[2] = bn::sprite_items::words.create_sprite(32, 0, READY_PAT_INDEX + 2);
-
-			imgCountDown = bn::sprite_items::words.create_sprite(0, 16, 6 + 8*10); // keep it transparent
 		}
 		break;
 	case 4: // Ready ...?
@@ -159,7 +158,6 @@ void SoloPlay::Main(){
 				16,16,-4,
 				"%d",3-count/30
 			);
-			imgCountDown->set_tiles(bn::sprite_items::words.tiles_item(), 6 + 8*11 + (count/30)*8);
 		}
 		if(count >= 90){
 			if(count == 90){
@@ -182,12 +180,8 @@ void SoloPlay::Main(){
 				(float)drawData.game_pos_y + 128 - cur_pos,
 				true
 			);
-			int flash = (count%4) ? 0 : 1;
-			imgCountDown->set_tiles(bn::sprite_items::words.tiles_item(), 6 + 8*(14+flash));
-			imgCountDown->set_y(-cur_pos);
 		}
 		if(count == 120){
-			imgCountDown.reset();
 			phase++;
 			Sound::ChangeBgm(2);
 		}
@@ -201,6 +195,7 @@ void SoloPlay::Main(){
 
 		// main game drawing
 		if(hCtrl.Main(0)){
+			hCtrl.StartGameOverPetrify(GAMEOVER_STONE_TILE);
 			cur_pos = 120;
 			Sound::ChangeBgm(-1);
 			phase++;
@@ -293,6 +288,7 @@ void SoloPlay::Main(){
 		break;
 	case 6:	// death
 		hCtrl.CountUp();
+		hCtrl.StepGameOverPetrify(GAMEOVER_STONE_TILE);
 
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){

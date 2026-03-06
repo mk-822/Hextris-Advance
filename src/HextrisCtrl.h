@@ -109,6 +109,7 @@ private:
 	DataFileLoader* blockData;
 	int fallcount;
 	int forcefixcount;
+	int gameOverPetrifyProgress;
 	bool fieldBitmapDirty;
 	bool fieldBitmapFullRedraw;
 	bool ghostTransparencyConfigured;
@@ -141,6 +142,8 @@ private:
 	bn::array<bn::array<char, 25>, 7> scoreHudLines;
 
 public:
+	void StartGameOverPetrify(int stone_color);
+	void StepGameOverPetrify(int stone_color);
 	void EnqueFloorUp(int up, int color);
 	void CountUp();
 	int queFloorUp[FLOORUP_MAX];
