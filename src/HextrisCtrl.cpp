@@ -45,8 +45,8 @@ namespace
 	constexpr int BG_SRC_OFFSET_X = 0;
 	constexpr int BG_SRC_OFFSET_Y = 0;
 	constexpr int HUD_BASE_X = 208;
-	constexpr int HUD_BASE_Y = 80;
-	constexpr int HUD_TIME_X = 40;
+	constexpr int HUD_BASE_Y = 88;
+	constexpr int HUD_TIME_X = 56;
 	constexpr int HUD_TIME_Y = 96;
 	constexpr int HUD_LINE_STEP = 8;
 	constexpr int HUD_CHAR_ADVANCE = 6;
@@ -641,7 +641,7 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 		}
 	}
 
-	const int frame_x = virtual_to_screen_x(drawData->game_pos_x);
+	const int frame_x = virtual_to_screen_x(drawData->game_pos_x + 8);
 	const int frame_y = virtual_to_screen_y(drawData->game_pos_y + 40);
 	draw_frame_overlay(painter, frame_x, frame_y, clip_left, clip_top, clip_right, clip_bottom);
 
@@ -974,6 +974,11 @@ int HextrisCtrl::NextToCurrent(int rotation)
 	curBlock.color = nextBlock + 1;
 	curBlock.center_x = blockData->blockData[nextBlock].center_x + SPAWN_OFFSET_X;
 	curBlock.center_y = blockData->blockData[nextBlock].center_y;
+	if((curBlock.center_x & 1) != (curBlock.center_y & 1))
+	{
+		// Keep spawn coordinates on valid hex lattice parity.
+		curBlock.center_y += 1;
+	}
 	for(int i=0 ; i<4 ; i++)
 		curBlock.pos[i] = blockData->blockData[nextBlock].pos[i];
 

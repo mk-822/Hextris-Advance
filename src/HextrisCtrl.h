@@ -80,7 +80,7 @@ private:
 		BLOCK_SIZE_Y = 8,
 		GAME_POS_X = 112,
 		GAME_POS_Y = 8,
-		GAME_POS_OFFSET_X = 8,	// Field draw X offset inside the frame
+		GAME_POS_OFFSET_X = 16,	// Field draw X offset inside the frame
 		GAME_POS_OFFSET_Y = 44,
 		BLOCK_IMAGE_OFFSET_Y = 24,	// Source Y offset for block images
 		NEXT_OFFSET_X = -72,	// Next-piece preview X offset
@@ -88,7 +88,7 @@ private:
 		NEXT_SIZE_X = 40,	// Next-piece preview width
 		NEXT_SIZE_Y = 24,
 		NEXT_IMAGE_OFFSET_Y = 0,	// next image Y offset
-		SPAWN_OFFSET_X = -2,
+		SPAWN_OFFSET_X = -1,
 		FLOORUP_MAX = 8		// Maximum queued floor-up entries
 	};
 

@@ -298,7 +298,7 @@ void SoloPlay::Main(){
 
 		// game over image
 		dxg->TexturePos(96,0,96,160-(int)(160/60*cur_pos)-8);
-		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40+(160/60*cur_pos));
+		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40+(160/60*cur_pos));
 
 		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
@@ -323,7 +323,7 @@ void SoloPlay::Main(){
 		DrawScore();
 		// game over image
 		dxg->TexturePos(96,0,96,160);
-		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
+		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40);
 		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
 		
@@ -392,7 +392,7 @@ void SoloPlay::Main(){
 		hCtrl.DrawField(&drawData,255);
 		// game over image
 		dxg->TexturePos(96,0,96,160);
-		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
+		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40);
 		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
 
@@ -441,7 +441,7 @@ void SoloPlay::Main(){
 			cur_pos = 160;
 		}
 		dxg->TexturePos(96,0,96,(int)cur_pos);
-		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x,(float)drawData.game_pos_y+40);
+		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40);
 
 		hCtrl.DrawField(&drawData,255,false);
 		DrawImageFont(132,116,dxg,image->i[FONT_IMG],"CONTINUE?");
@@ -510,7 +510,7 @@ void SoloPlay::GradeupEffect()
 {
 	if(effect.gradeup/2%2){
 		dxg->TexturePos(0,0,32,32);
-		dxg->Draw(image->i[RANK_IMG],224,40);
+		dxg->Draw(image->i[RANK_IMG],224,48);
 	}
 
 	if(effect.gradeup>32){
@@ -604,14 +604,14 @@ void SoloPlay::DrawScore()
 	char line4[32];
 	char line5[32];
 
-	compat_sprintf(line0, "SCORE:%d", score);
-	compat_sprintf(line1, "NEXT :%d", gameData.borderScore[grade]);
-	compat_sprintf(line2, "ERASE:%d", cntErace);
-	compat_sprintf(line3, "FALL :%d", cntFall);
+	compat_sprintf(line0, "SCORE:%5d", score);
+	compat_sprintf(line1, "NEXT :%5d", gameData.borderScore[grade]);
+	compat_sprintf(line2, "ERASE:%5d", cntErace);
+	compat_sprintf(line3, "FALL :%5d", cntFall);
 
 	// Rank drawing
 	const int rank_x = 224 + 16 - WINDOW_WIDE / 2;
-	const int rank_y = 40 + 16 - WINDOW_HEIGHT / 2;
+	const int rank_y = 48 + 16 - WINDOW_HEIGHT / 2;
 	const int rank_index = grade + 1;
 	if(! imgRank){
 		imgRank = bn::sprite_items::rank.create_sprite(rank_x, rank_y, rank_index);
