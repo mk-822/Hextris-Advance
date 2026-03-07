@@ -165,23 +165,16 @@ void SoloPlay::Main(){
 				cur_pos = 0.0625;
 				
 				// Readyrelease
-				imgReady[0].reset();
 				imgReady[1].reset();
 				imgReady[2].reset();
 			}
 			cur_pos *= 1.25;
-			dxg->TexturePos(160,176,24,16);
-			if(count%4){
-				dxg->TexturePos(160,160,24,16);
-			}
-			dxg->Draw(
-				image->i[WORDS_IMG],
-				(float)drawData.game_pos_x + 36,
-				(float)drawData.game_pos_y + 128 - cur_pos,
-				true
-			);
+			int flash = (count%4) ? 0 : 1;
+			imgReady[0]->set_tiles(bn::sprite_items::words.tiles_item(), 6 + 8*(14+flash));
+			imgReady[0]->set_position(0, -cur_pos);
 		}
 		if(count == 120){
+			imgReady[0].reset();
 			phase++;
 			Sound::ChangeBgm(2);
 		}
