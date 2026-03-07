@@ -493,10 +493,10 @@ int HextrisCtrl::Main(int player){
 				break;
 			}
 
-			if(input->GetKeyState(player,0) & (BUTTON[0] | BUTTON[2])){	// Rotate left on spawn
+			if(input->GetKeyState(player,0) & (BUTTON[1] | BUTTON[2])){	// Rotate left on spawn
 				NextToCurrent(-1);
 				Sound::PlaySe(8);
-			}else if(input->GetKeyState(player,0) & BUTTON[1]){	// Rotate right on spawn
+			}else if(input->GetKeyState(player,0) & BUTTON[0]){	// Rotate right on spawn
 				NextToCurrent(1);
 				Sound::PlaySe(8);
 			}else{
@@ -554,11 +554,11 @@ int HextrisCtrl::Main(int player){
 				BlockMove(0,1);
 			}
 			// Rotation controls
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	// Rotate left
+			if(input->GetKeyState(player,2) & (BUTTON[1] | BUTTON[2])){	// Rotate left
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	// Rotate right
+			if(input->GetKeyState(player,2) & BUTTON[0]){	// Rotate right
 				BlockSpin(1);
 				Sound::PlaySe(8);
 			}
@@ -596,12 +596,12 @@ int HextrisCtrl::Main(int player){
 			}
 
 			// Rotation controls
-			if(input->GetKeyState(player,2) & (BUTTON[0] | BUTTON[2])){	// Rotate left
+			if(input->GetKeyState(player,2) & (BUTTON[1] | BUTTON[2])){	// Rotate left
 				BlockSpin(-1);
 				Sound::PlaySe(8);
 				forcefixcount++;
 			}
-			if(input->GetKeyState(player,2) & BUTTON[1]){	// Rotate right
+			if(input->GetKeyState(player,2) & BUTTON[0]){	// Rotate right
 				BlockSpin(1);
 				Sound::PlaySe(8);
 				forcefixcount++;
