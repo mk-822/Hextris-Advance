@@ -32,7 +32,7 @@ void EraseData::SetLine(int ln)
 
 int EraseData::GetLine()
 {
-	if(line<0){
+	if(line<=0){
 		return -1;
 	}
 

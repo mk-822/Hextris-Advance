@@ -112,12 +112,14 @@ private:
 	int gameOverPetrifyProgress;
 	bool fieldBitmapDirty;
 	bool fieldBitmapFullRedraw;
+	bool fieldBitmapSegmentedRedraw;
 	bool ghostTransparencyConfigured;
 	bool fieldDirtyCellsValid;
 	int fieldDirtyMinX;
 	int fieldDirtyMinY;
 	int fieldDirtyMaxX;
 	int fieldDirtyMaxY;
+	int fieldSegmentedRedrawNextY;
 	int fieldBackgroundIndex;
 	bn::optional<bn::sp_direct_bitmap_bg_ptr> fieldBitmapBg;
 	bn::optional<bn::sprite_ptr> currentBlockSprites[4];
@@ -127,6 +129,7 @@ private:
 	void MarkAllFieldDirty();
 	void MarkFieldCellDirty(int x, int y);
 	void MarkFieldRectDirty(int min_x, int min_y, int max_x, int max_y);
+	void MarkFieldRectDirtySegmented(int min_x, int min_y, int max_x, int max_y);
 	void DrawBitmapField(HexFieldDrawData* drawData);
 	int ComputeGhostDropSteps();
 	void UpdateGhostBlockSprites(HexFieldDrawData* drawData);

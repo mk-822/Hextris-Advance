@@ -44,6 +44,7 @@ namespace
 	constexpr int FIELD_DRAW_ROWS = FIELD_LOGICAL_ROWS * 2;
 	constexpr int FIELD_MAX_X = FIELD_BLOCK_COLS - 1;
 	constexpr int FIELD_MAX_Y = FIELD_DRAW_ROWS - 1;
+	constexpr int FIELD_SEGMENTED_REDRAW_ROWS = 6;
 
 	constexpr int BG_SRC_OFFSET_X = 0;
 	constexpr int BG_SRC_OFFSET_Y = 0;
@@ -401,6 +402,8 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	fieldBackgroundIndex = 0;
 	fieldBitmapDirty = true;
 	fieldBitmapFullRedraw = true;
+	fieldBitmapSegmentedRedraw = false;
+	fieldSegmentedRedrawNextY = 0;
 	gameOverPetrifyProgress = -1;
 	ghostTransparencyConfigured = false;
 	fieldDirtyCellsValid = false;
@@ -636,20 +639,30 @@ int HextrisCtrl::Main(int player){
 			break;
 		case PHASE_ERASED:
 			Sound::PlaySe(0);
-			for(int i=eraseData.GetFreq() ; i>0 ; i--){
-				for(int j=eraseData.GetLine() ; j>=0 ; j--){
-					for(int k=0 ; k<FIELD_BLOCK_COLS ; k++){
-						if(j==0){
-							hField.SetField(k,j,0);
-						}else{
-							hField.SetField(k,j,hField.GetField(k,j-1));
+			{
+				const int erase_freq = eraseData.GetFreq();
+				int dirty_max_line = 0;
+				for(int i=erase_freq ; i>0 ; i--){
+					const int erased_line = eraseData.GetLine();
+					if(erased_line > dirty_max_line){
+						dirty_max_line = erased_line;
+					}
+					for(int j=erased_line ; j>=0 ; j--){
+						for(int k=0 ; k<FIELD_BLOCK_COLS ; k++){
+							if(j==0){
+								hField.SetField(k,j,0);
+							}else{
+								hField.SetField(k,j,hField.GetField(k,j-1));
+							}
 						}
 					}
 				}
+				if(erase_freq > 0){
+					MarkFieldRectDirtySegmented(0, 0, FIELD_MAX_X, dirty_max_line * 2 + 1);
+				}
+				eraseData.Clear();
+				ShiftPhase(1);
 			}
-			MarkFieldRectDirty(0, 0, FIELD_MAX_X, eraseData.GetLine() * 2 + 1);
-			eraseData.Clear();
-			ShiftPhase(1);
 			break;
 		}
 	}
@@ -696,6 +709,8 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 	int row_end = FIELD_MAX_Y;
 	int col_begin = 0;
 	int col_end = FIELD_MAX_X;
+	bool segmented_draw_active = false;
+	int segmented_draw_max_y = FIELD_MAX_Y;
 
 	const int field_left = virtual_to_screen_x(drawData->game_pos_x + GAME_POS_OFFSET_X);
 	const int field_top = virtual_to_screen_y(drawData->game_pos_y + GAME_POS_OFFSET_Y);
@@ -741,6 +756,44 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 		if(col_end > FIELD_MAX_X)
 		{
 			col_end = FIELD_MAX_X;
+		}
+
+		if(fieldBitmapSegmentedRedraw)
+		{
+			int segment_min_y = fieldSegmentedRedrawNextY;
+			if(segment_min_y < fieldDirtyMinY)
+			{
+				segment_min_y = fieldDirtyMinY;
+			}
+
+			segmented_draw_max_y = segment_min_y + FIELD_SEGMENTED_REDRAW_ROWS - 1;
+			if(segmented_draw_max_y > fieldDirtyMaxY)
+			{
+				segmented_draw_max_y = fieldDirtyMaxY;
+			}
+
+			const int segment_clip_top = field_top + segment_min_y * BLOCK_OFFSET_Y;
+			const int segment_clip_bottom = field_top + segmented_draw_max_y * BLOCK_OFFSET_Y + BLOCK_PIXEL_SIZE;
+			if(segment_clip_top > clip_top)
+			{
+				clip_top = segment_clip_top;
+			}
+			if(segment_clip_bottom < clip_bottom)
+			{
+				clip_bottom = segment_clip_bottom;
+			}
+
+			row_begin = segment_min_y - 2;
+			if(row_begin < 0)
+			{
+				row_begin = 0;
+			}
+			row_end = segmented_draw_max_y + 2;
+			if(row_end > FIELD_MAX_Y)
+			{
+				row_end = FIELD_MAX_Y;
+			}
+			segmented_draw_active = true;
 		}
 	}
 
@@ -843,7 +896,16 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 		}
 	}
 
+	if(segmented_draw_active && segmented_draw_max_y < fieldDirtyMaxY)
+	{
+		fieldSegmentedRedrawNextY = segmented_draw_max_y + 1;
+		fieldBitmapDirty = true;
+		return;
+	}
+
 	fieldDirtyCellsValid = false;
+	fieldBitmapSegmentedRedraw = false;
+	fieldSegmentedRedrawNextY = 0;
 	if(fieldBitmapFullRedraw)
 	{
 		scoreHudCacheValid = false;
@@ -875,6 +937,8 @@ void HextrisCtrl::MarkAllFieldDirty()
 {
 	fieldBitmapDirty = true;
 	fieldBitmapFullRedraw = true;
+	fieldBitmapSegmentedRedraw = false;
+	fieldSegmentedRedrawNextY = 0;
 	fieldDirtyCellsValid = false;
 }
 
@@ -940,7 +1004,22 @@ void HextrisCtrl::MarkFieldRectDirty(int min_x, int min_y, int max_x, int max_y)
 		}
 	}
 
+	if(fieldBitmapSegmentedRedraw && min_y < fieldSegmentedRedrawNextY)
+	{
+		fieldSegmentedRedrawNextY = min_y;
+	}
+
 	fieldBitmapDirty = true;
+}
+
+void HextrisCtrl::MarkFieldRectDirtySegmented(int min_x, int min_y, int max_x, int max_y)
+{
+	MarkFieldRectDirty(min_x, min_y, max_x, max_y);
+	if(fieldDirtyCellsValid && ! fieldBitmapFullRedraw)
+	{
+		fieldBitmapSegmentedRedraw = true;
+		fieldSegmentedRedrawNextY = fieldDirtyMinY;
+	}
 }
 
 void HextrisCtrl::UpdateCurrentBlockSprites(HexFieldDrawData* drawData)
