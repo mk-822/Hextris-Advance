@@ -3,6 +3,11 @@
 #include "bn_sprite_items_words.h"
 #include "bn_blending.h"
 
+namespace{
+	const int MENU_WORD_INDEX[] = {0, 2};
+	const int MENU_ROW_INDEX[] = {1, 2};
+}
+
 void Title::Main(){
 	switch(phase){
 	case 0:	//when leaving
@@ -25,7 +30,7 @@ void Title::Main(){
 			for(int i = 0; i < MENU_AMOUNT; ++i){
 				for(int j = 0; j < 3; ++j){
 					menu[i + j * MENU_AMOUNT] = bn::sprite_items::words.create_sprite(0, 0,
-						MENU_PAT_INDEX + i * 8 + j);
+						MENU_PAT_INDEX + MENU_WORD_INDEX[i] * 8 + j);
 					menu[i + j * MENU_AMOUNT]->set_blending_enabled(true);
 				}
 			}
@@ -42,7 +47,7 @@ void Title::Main(){
 			phase = 1;
 			count = 0;
 			current = 0;
-			cur_pos = 0;
+			cur_pos = MENU_ROW_INDEX[current];
 		}
 		break;
 	case 1:	//when choosing
@@ -68,14 +73,8 @@ void Title::Main(){
 			case 0:
 				*scene = SINGLE_SCENE;
 				break;
-			case 1:
-				//*scene = MULTI_SCENE;
-				break;
 			case 2:
 				*scene = SCORE_SCENE;
-				break;
-			case 3:
-				//*scene = OPTION_SCENE;
 				break;
 			case 5:
 				*scene = SCORE_SCENE;
@@ -103,7 +102,8 @@ void Title::HighlightMenu(){
 	for(int i=0; i<MENU_AMOUNT; i++){
 		for(int j=0; j<3; j++){
 			auto menuPattern = i == current ? MENU_SELECTED_PAT_INDEX : MENU_PAT_INDEX;
-			menu[i + j * MENU_AMOUNT]->set_tiles(bn::sprite_items::words.tiles_item(), menuPattern + i * 8 + j);
+			menu[i + j * MENU_AMOUNT]->set_tiles(bn::sprite_items::words.tiles_item(),
+				menuPattern + MENU_WORD_INDEX[i] * 8 + j);
 		}
 	}
 }
@@ -112,7 +112,7 @@ void Title::HighlightMenu(){
 void Title::OffsetMenuSprite(){
 	for(int i=0; i<MENU_AMOUNT; i++){
 		for(int j=0; j<3; j++){
-			menu[i + j * MENU_AMOUNT]->set_position(menu_pos + j*32, (float)(MENUY+i*16));
+			menu[i + j * MENU_AMOUNT]->set_position(menu_pos + j*32, (float)(MENUY+MENU_ROW_INDEX[i]*16));
 		}
 	}
 }
@@ -124,8 +124,8 @@ void Title::InMenu(){
 	cur_pos = (MENUY + cur_pos*7) / 8;
 	
 	for(int i=0; i<MENU_AMOUNT; i++){
-		dxg->TexturePos(0,i*16,80,16);
-		dxg->Draw(image->i[WORDS_IMG], menu_pos, (float)(MENUY+i*16), true, count*(128/FADETIME));
+		dxg->TexturePos(0,MENU_WORD_INDEX[i]*16,80,16);
+		dxg->Draw(image->i[WORDS_IMG], menu_pos, (float)(MENUY+MENU_ROW_INDEX[i]*16), true, count*(128/FADETIME));
 	}
 	OffsetMenuSprite();
 
@@ -133,8 +133,8 @@ void Title::InMenu(){
 	//dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
 	//dxg->Draw(image->i[WORDS_IMG], MENUX-8, (float)cur_pos, true, count*(256/FADETIME));
 	auto curPattern = (cur_count/ANIMSPEED)%10;
-	cursor[0]->set_position(MENUX+CURSOR_OFFSET_X, (float)cur_pos);
-	cursor[1]->set_position(MENUX+CURSOR_OFFSET_X+48, (float)cur_pos);
+	cursor[0]->set_position(MENUX+CURSOR_OFFSET_X, (float)(MENUY+MENU_ROW_INDEX[current]*16));
+	cursor[1]->set_position(MENUX+CURSOR_OFFSET_X+48, (float)(MENUY+MENU_ROW_INDEX[current]*16));
 	cursor[0]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + curPattern * 256 / 32);
 	cursor[1]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + 1 + curPattern * 256 / 32);
 }
@@ -142,19 +142,19 @@ void Title::InMenu(){
 // Method of choice
 int Title::Select(){
 	// Change the position of the current animation
-	cur_pos = (current + cur_pos*(MOVESPEED-1)) / (MOVESPEED);
+	cur_pos = (MENU_ROW_INDEX[current] + cur_pos*(MOVESPEED-1)) / (MOVESPEED);
 
 	dxg->ColorChange(1);
 	for(int i=0; i<MENU_AMOUNT; i++){
 		if(current!=i){
-			dxg->TexturePos(0,i*16,80,16);
-			dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+i*16), false, 128);
+			dxg->TexturePos(0,MENU_WORD_INDEX[i]*16,80,16);
+			dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+MENU_ROW_INDEX[i]*16), false, 128);
 		}
 	}
 	OffsetMenuSprite();
 	// current image
-	dxg->TexturePos(80,16*current,80,16);
-	dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+16*current), true, 255);
+	dxg->TexturePos(80,16*MENU_WORD_INDEX[current],80,16);
+	dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+16*MENU_ROW_INDEX[current]), true, 255);
 
 	// current anime
 	//dxg->TexturePos(160,16*((cur_count/ANIMSPEED)%10),96,16);
@@ -185,7 +185,7 @@ int Title::Select(){
 
 	if((input->GetKeyState(0,1)) & BUTTON[0]){
 		Sound::PlaySe(2);
-		return current;
+		return MENU_WORD_INDEX[current];
 	}
 	return -1;
 }
@@ -193,8 +193,8 @@ int Title::Select(){
 // Method that brings up the menu
 void Title::OutMenu(){
 	for(int i=0; i<MENU_AMOUNT; i++){
-		dxg->TexturePos(0,i*16,80,16);
-		dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+i*16), true, 127-count*(128/FADETIME));
+		dxg->TexturePos(0,MENU_WORD_INDEX[i]*16,80,16);
+		dxg->Draw(image->i[WORDS_IMG], MENUX, (float)(MENUY+MENU_ROW_INDEX[i]*16), true, 127-count*(128/FADETIME));
 	}
 	OffsetMenuSprite();
 	
@@ -208,8 +208,9 @@ void Title::OutMenu(){
 	//}
 	
 	auto curPattern = (cur_count/ANIMSPEED)%10;
-	cursor[0]->set_position(cur_pos+CURSOR_OFFSET_X, (float)(MENUY+(int)(16*scene_tmp)));
-	cursor[1]->set_position(cur_pos+CURSOR_OFFSET_X+48, (float)(MENUY+(int)(16*scene_tmp)));
+	int selectedRow = scene_tmp == 2 ? MENU_ROW_INDEX[1] : MENU_ROW_INDEX[0];
+	cursor[0]->set_position(cur_pos+CURSOR_OFFSET_X, (float)(MENUY+(int)(16*selectedRow)));
+	cursor[1]->set_position(cur_pos+CURSOR_OFFSET_X+48, (float)(MENUY+(int)(16*selectedRow)));
 	cursor[0]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + curPattern * 256 / 32);
 	cursor[1]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + 1 + curPattern * 256 / 32);
 }

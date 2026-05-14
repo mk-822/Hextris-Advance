@@ -15,7 +15,7 @@ private:
 		CURSOR_OFFSET_X = 0,
 		MENUX = 32,
 		MENUY = 6,
-		MENU_AMOUNT = 4,
+		MENU_AMOUNT = 2,
 		ANIMSPEED = 3,
 		MOVESPEED = 4,
 
@@ -32,7 +32,7 @@ private:
 	int scene_tmp;
 	bn::optional<bn::regular_bg_ptr> bg;
 	bn::optional<bn::sprite_ptr> cursor[2];
-	bn::optional<bn::sprite_ptr> menu[3*4];
+	bn::optional<bn::sprite_ptr> menu[3*MENU_AMOUNT];
 
 public:
 	Title(){};
