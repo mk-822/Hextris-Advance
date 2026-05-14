@@ -22,7 +22,6 @@
 #include "bn_direct_bitmap_items_bg11_dbmp.h"
 #include "bn_direct_bitmap_items_block_cell_dbmp.h"
 #include "bn_direct_bitmap_items_font_dbmp.h"
-#include "bn_direct_bitmap_items_frame_dbmp.h"
 #include "bn_blending.h"
 #include "bn_backdrop.h"
 #include "bn_sprites.h"
@@ -35,10 +34,6 @@ namespace
 	constexpr int VIRTUAL_OFFSET_X = 40;
 	constexpr int VIRTUAL_OFFSET_Y = 40;
 	constexpr int BLOCK_PIXEL_SIZE = 8;
-	constexpr int FRAME_SRC_X = 0;
-	constexpr int FRAME_SRC_Y = 0;
-	constexpr int FRAME_WIDTH = 96;
-	constexpr int FRAME_HEIGHT = 160;
 	constexpr int FIELD_BLOCK_COLS = 11;
 	constexpr int FIELD_LOGICAL_ROWS = 18;
 	constexpr int FIELD_DRAW_ROWS = FIELD_LOGICAL_ROWS * 2;
@@ -233,42 +228,6 @@ namespace
 		}
 	}
 
-	void draw_frame_overlay(
-			bn::sp_direct_bitmap_bg_painter& painter,
-			int frame_screen_x,
-			int frame_screen_y,
-			int clip_left,
-			int clip_top,
-			int clip_right,
-			int clip_bottom)
-	{
-		const bn::direct_bitmap_item& frame_item = bn::direct_bitmap_items::frame_dbmp;
-		const bn::color transparent_key = frame_item.color(FRAME_SRC_X, FRAME_SRC_Y);
-
-		const int draw_left = frame_screen_x > clip_left ? frame_screen_x : clip_left;
-		const int draw_top = frame_screen_y > clip_top ? frame_screen_y : clip_top;
-		const int draw_right = frame_screen_x + FRAME_WIDTH < clip_right ? frame_screen_x + FRAME_WIDTH : clip_right;
-		const int draw_bottom = frame_screen_y + FRAME_HEIGHT < clip_bottom ? frame_screen_y + FRAME_HEIGHT : clip_bottom;
-		if(draw_left >= draw_right || draw_top >= draw_bottom)
-		{
-			return;
-		}
-
-		for(int sy = draw_top; sy < draw_bottom; ++sy)
-		{
-			const int src_y = FRAME_SRC_Y + (sy - frame_screen_y);
-			for(int sx = draw_left; sx < draw_right; ++sx)
-			{
-				const int src_x = FRAME_SRC_X + (sx - frame_screen_x);
-				const bn::color src_color = frame_item.color(src_x, src_y);
-				if(src_color != transparent_key)
-				{
-					painter.unsafe_plot(sx, sy, src_color);
-				}
-			}
-		}
-	}
-
 	void draw_hud_glyph(
 			bn::sp_direct_bitmap_bg_painter& painter,
 			int screen_x,
@@ -305,36 +264,6 @@ namespace
 				{
 					painter.unsafe_plot(sx, sy, src_color);
 				}
-			}
-		}
-	}
-
-	void fill_rect(
-			bn::sp_direct_bitmap_bg_painter& painter,
-			int left,
-			int top,
-			int width,
-			int height,
-			int clip_left,
-			int clip_top,
-			int clip_right,
-			int clip_bottom,
-			bn::color color)
-	{
-		const int draw_left = left > clip_left ? left : clip_left;
-		const int draw_top = top > clip_top ? top : clip_top;
-		const int draw_right = left + width < clip_right ? left + width : clip_right;
-		const int draw_bottom = top + height < clip_bottom ? top + height : clip_bottom;
-		if(draw_left >= draw_right || draw_top >= draw_bottom)
-		{
-			return;
-		}
-
-		for(int y = draw_top; y < draw_bottom; ++y)
-		{
-			for(int x = draw_left; x < draw_right; ++x)
-			{
-				painter.unsafe_plot(x, y, color);
 			}
 		}
 	}
@@ -800,23 +729,6 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
 	draw_background(painter, fieldBackgroundIndex, clip_left, clip_top, clip_right, clip_bottom);
 
-	// Keep the next-piece panel readable regardless of the current background.
-	const int next_panel_x = virtual_to_screen_x(drawData->game_pos_x + NEXT_OFFSET_X + 16);
-	const int next_panel_y = 8;
-	const int next_panel_width = NEXT_SIZE_X + 10;
-	const int next_panel_height = NEXT_SIZE_Y + 10;
-	fill_rect(
-			painter,
-			next_panel_x,
-			next_panel_y,
-			next_panel_width,
-			next_panel_height,
-			clip_left,
-			clip_top,
-			clip_right,
-			clip_bottom,
-			UI_BG_COLOR);
-
 	for(int i = row_begin; i <= row_end; ++i)
 	{
 		for(int j = col_begin; j <= col_end; ++j)
@@ -837,10 +749,6 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			}
 		}
 	}
-
-	const int frame_x = virtual_to_screen_x(drawData->game_pos_x + 8);
-	const int frame_y = virtual_to_screen_y(drawData->game_pos_y + 40);
-	draw_frame_overlay(painter, frame_x, frame_y, clip_left, clip_top, clip_right, clip_bottom);
 
 	// Full background redraw can overwrite HUD text drawn in a previous phase/frame.
 	// Repaint cached HUD strings immediately so they never remain erased.
