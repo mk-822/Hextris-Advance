@@ -18,6 +18,9 @@ Mode::Mode(){
 	phase = 0;
 }
 
+Mode::~Mode(){
+}
+
 void Mode::Initialize(int* Scene,draw* Dxg,Image* Image,JoyPadCtrl* Input){
 	dxg = Dxg;
 	scene = Scene;

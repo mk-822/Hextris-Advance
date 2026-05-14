@@ -23,6 +23,7 @@ protected:
 public:
 	int phase;
 	Mode();
+	virtual ~Mode();
 	void Initialize(int* Scene,draw* Dxg,Image* Image,JoyPadCtrl* Input);
 	virtual void Main();
 	virtual void Draw();

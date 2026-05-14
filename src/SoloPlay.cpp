@@ -91,6 +91,7 @@ void SoloPlay::Main(){
 		for(int i = 0; i < 3; ++i){
 			imgErase[i].reset();
 		}
+		imgCountdown.reset();
 	case 3: // Difficulty selection
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){
@@ -150,14 +151,16 @@ void SoloPlay::Main(){
 			}
 			cur_pos /= 1.25;
 
-			DrawImageFont(
-				drawData.game_pos_x + 40,
-				drawData.game_pos_y + 128 - (int)cur_pos,
-				dxg,
-				image->i[BIGINT_IMG],
-				16,16,-4,
-				"%d",3-count/30
-			);
+			const int countdown_pattern = COUNTDOWN_PAT_INDEX + (count / 30) * 8;
+			const int countdown_x = drawData.game_pos_x + 32 + 16 - WINDOW_WIDE / 2;
+			const int countdown_y = drawData.game_pos_y + 128 - (int)cur_pos + 8 - WINDOW_HEIGHT / 2;
+			if(! imgCountdown){
+				imgCountdown = bn::sprite_items::words.create_sprite(countdown_x, countdown_y, countdown_pattern);
+			}else{
+				imgCountdown->set_position(countdown_x, countdown_y);
+				imgCountdown->set_tiles(bn::sprite_items::words.tiles_item(), countdown_pattern);
+				imgCountdown->set_visible(true);
+			}
 		}
 		if(count >= 90){
 			if(count == 90){
@@ -167,6 +170,7 @@ void SoloPlay::Main(){
 				// Readyrelease
 				imgReady[1].reset();
 				imgReady[2].reset();
+				imgCountdown.reset();
 			}
 			cur_pos *= 1.25;
 			int flash = (count%4) ? 0 : 1;
@@ -175,6 +179,7 @@ void SoloPlay::Main(){
 		}
 		if(count == 120){
 			imgReady[0].reset();
+			imgCountdown.reset();
 			phase++;
 			Sound::ChangeBgm(2);
 		}
@@ -506,9 +511,10 @@ void SoloPlay::ComboEffect()
 
 void SoloPlay::GradeupEffect()
 {
-	if(effect.gradeup/2%2){
-		dxg->TexturePos(0,0,32,32);
-		dxg->Draw(image->i[RANK_IMG],224,48);
+	if(imgRank){
+		const int rank_index = (effect.gradeup / 2) % 2 ? 0 : grade + 1;
+		imgRank->set_tiles(bn::sprite_items::rank.tiles_item(), rank_index);
+		imgRank->set_visible(true);
 	}
 
 	if(effect.gradeup>32){

@@ -44,6 +44,7 @@ private:
 	int startTime;
 	enum {
 		READY_PAT_INDEX = 8 * 8,
+		COUNTDOWN_PAT_INDEX = 6 + 8 * 11,
 		DIFFICULTY_MENU_PAT_INDEX = 4 * 8,
 		DIFFICULTY_SELECTED_PAT_INDEX = 8 * 8,
 		ERASE_PAT_INDEX = 12 * 8,
@@ -54,6 +55,7 @@ private:
 	DataFileLoader gameData;
 	
 	bn::optional<bn::sprite_ptr> imgReady[3];
+	bn::optional<bn::sprite_ptr> imgCountdown;
 	bn::optional<bn::sprite_ptr> imgRank;
 	bn::optional<bn::sprite_ptr> imgDifficulty[3 * 4];
 	bn::optional<bn::sprite_ptr> imgErase[3];

@@ -13,7 +13,7 @@ int main()
 {
     bn::core::init();
     GameCtrl gctrl;
-    //Sound::Initialize();
+    Sound::Initialize();
     //auto spr = bn::sprite_items::logo.create_sprite(0, 0);
     while(true)
     {
