@@ -8,6 +8,16 @@ namespace{
 	const int MENU_ROW_INDEX[] = {1, 2};
 }
 
+Title::Title(){
+	cur_pos = MENU_ROW_INDEX[0];
+	menu_pos = 320;
+	cur_move = 0;
+	cur_movemove = 0;
+	cur_count = 0;
+	current = 0;
+	scene_tmp = -1;
+}
+
 void Title::Main(){
 	switch(phase){
 	case 0:	//when leaving
@@ -15,6 +25,8 @@ void Title::Main(){
 			menu_pos = 320;
 			cur_pos = 240;
 			cur_count = 0;
+			current = 0;
+			scene_tmp = -1;
 			bg = bn::regular_bg_items::title.create_bg(8, 48);
 			bg->set_blending_enabled(true);
 
@@ -48,6 +60,7 @@ void Title::Main(){
 			count = 0;
 			current = 0;
 			cur_pos = MENU_ROW_INDEX[current];
+			HighlightMenu();
 		}
 		break;
 	case 1:	//when choosing

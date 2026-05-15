@@ -32,7 +32,7 @@ private:
 	bn::optional<bn::sprite_ptr> menu[3*MENU_AMOUNT];
 
 public:
-	Title(){};
+	Title();
 	void Main();
 	int Select();
 	void InMenu();
