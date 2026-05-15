@@ -745,11 +745,11 @@ void SoloPlay::DrawScore(bool updateEffects)
 
 int SoloPlay::NameEntry()
 {
-	DrawImageFont(136,120,dxg,image->i[BIGFONT_IMG],16,16,0,"%s",name.name);
+	DrawImageFont(136,120,dxg,image->i[BIGINT_IMG],16,16,0,"%s",name.name);
 	if(count/15%2){
-		DrawImageFont(136+name.cur_pos*16,120,dxg,image->i[BIGFONT_IMG],16,16,0,"~");
+		DrawImageFont(136+name.cur_pos*16,120,dxg,image->i[BIGINT_IMG],16,16,0,"~");
 	}else{
-		DrawImageFont(136+name.cur_pos*16,120,dxg,image->i[BIGFONT_IMG],16,16,0,"%c",name.cur_word);
+		DrawImageFont(136+name.cur_pos*16,120,dxg,image->i[BIGINT_IMG],16,16,0,"%c",name.cur_word);
 	}
 
 	if(name.cur_word < 32){
@@ -772,7 +772,7 @@ int SoloPlay::NameEntry()
 	}
 	if(!(count%4)){
 		DrawImageFont(156,152,dxg,image->i[WHITEFONT_IMG],"%c",name.cur_word);
-		DrawImageFont(152,148,dxg,image->i[BIGFONT_IMG],16,16,0,"}");
+		DrawImageFont(152,148,dxg,image->i[BIGINT_IMG],16,16,0,"}");
 	}
 
 	if(input->GetKeyState(0,1) & LEFT){
