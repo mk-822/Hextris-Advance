@@ -9,6 +9,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int 
 void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* format, ...);
 void DrawString(int x, int y, draw* dxg, int font, const char* format, ...);
 void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int sizey, int offsetx, const char* format, ...);
+void ReleaseFontSpriteResources();
 char* FrameCountToStr(int count,char* timestr);
 
 // Please inherit and use

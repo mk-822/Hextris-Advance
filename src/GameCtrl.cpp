@@ -526,6 +526,10 @@ void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int siz
 	_draw_sprite_font_impl(x, y, font, sizex, sizey, offsetx, buffer);
 }
 
+void ReleaseFontSpriteResources(){
+	release_font_sprite_resources();
+}
+
 int CalcuFps(){
 	static int fps = 0;
 	static int fpscount = 0;

@@ -113,10 +113,14 @@ void SoloPlay::Main(){
 		backToBackReady = false;
 		paused = false;
 		phase++;
+		ReleaseFontSpriteResources();
 
 		// Dare break not included
 		cur_diffic = 0;
 		difficulty = -1;
+		for(int i = 0; i < 3; ++i){
+			imgReady[i].reset();
+		}
 		for(int i = 0; i < 3 * 4; ++i){
 			imgDifficulty[i].reset();
 		}
@@ -124,6 +128,7 @@ void SoloPlay::Main(){
 			imgErase[i].reset();
 		}
 		imgCountdown.reset();
+		imgRank.reset();
 		[[fallthrough]];
 	case 3: // Difficulty selection
 		// background drawing
@@ -466,7 +471,6 @@ void SoloPlay::Main(){
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40);
 		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
-		hCtrl.ClearBitmapRect(40, 80, 240, 64);
 
 		{
 			int y=88;
