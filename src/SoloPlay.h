@@ -13,12 +13,13 @@ private:
 	int getscore;
 	void EraceEffect();
 	ScoreManager ScoreData;
-	void DrawScore();
+	void DrawScore(bool updateEffects=true);
 	int cur_diffic;
 	float cur_pos;
 	int SelectDifficulty();
 	BackGroundImageCtrl BGImage;
 	int difficulty;
+	bool paused;
 	void LevelupEffect();
 	void GradeupEffect();
 	void ComboEffect();
@@ -59,6 +60,7 @@ private:
 	bn::optional<bn::sprite_ptr> imgRank;
 	bn::optional<bn::sprite_ptr> imgDifficulty[3 * 4];
 	bn::optional<bn::sprite_ptr> imgErase[3];
+	void DrawPauseOverlay();
 
 public:
 	int NameEntry();

@@ -603,13 +603,16 @@ int HextrisCtrl::Main(int player){
 // Main draw entry
 
 
-void HextrisCtrl::Draw(HexFieldDrawData* drawData)
+void HextrisCtrl::Draw(HexFieldDrawData* drawData, bool updateEraseEffects)
 {
 	DrawBitmapField(drawData);
 	UpdateNextBlockSprites(drawData);
 	UpdateGhostBlockSprites(drawData);
 	UpdateCurrentBlockSprites(drawData);
-	UpdateEraseEffectSprites(drawData);
+	if(updateEraseEffects)
+	{
+		UpdateEraseEffectSprites(drawData);
+	}
 
 	// Fixed block flash is now rendered in the bitmap field.
 	effectFlag &= ~BLOCK_FIX_EFFECT;

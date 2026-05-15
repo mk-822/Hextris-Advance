@@ -99,6 +99,18 @@ void Sound::ChangeBgm(int no){
 #endif
 }
 
+void Sound::PauseBgm(){
+#if HEXTRIS_HAS_BN_MUSIC_ITEMS
+	bn::music::pause();
+#endif
+}
+
+void Sound::ResumeBgm(){
+#if HEXTRIS_HAS_BN_MUSIC_ITEMS
+	bn::music::resume();
+#endif
+}
+
 void Sound::PlaySe(int no){
 #if HEXTRIS_HAS_BN_SOUND_ITEMS
 	switch(no){

@@ -16,5 +16,6 @@ static const int DOWN = 2;							// did
 static const int LEFT = 4;							// Hidari
 static const int RIGHT = 8;							// right
 static const int BUTTON[] = {16,32,64,128};			// Peony
+static const int START = 256;						// start
 
 #endif

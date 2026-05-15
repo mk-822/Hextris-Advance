@@ -10,6 +10,8 @@ public:
 	static int se_no[SE_MAX];
 	static void Initialize();
 	static void ChangeBgm(int no);
+	static void PauseBgm();
+	static void ResumeBgm();
 	static void PlaySe(int no);
 	static int bgm_mode;
 };

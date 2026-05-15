@@ -50,6 +50,11 @@ namespace
             input |= BUTTON[3];
         }
 
+        if(bn::keypad::start_held())
+        {
+            input |= START;
+        }
+
         return input;
     }
 }

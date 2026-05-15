@@ -158,7 +158,7 @@ public:
 	void Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLoader* BlockData);
 	int Main(int player);
 	virtual void DrawField(HexFieldDrawData* drawData, int trans, bool shadow=true);
-	virtual void Draw(HexFieldDrawData* drawData);
+	virtual void Draw(HexFieldDrawData* drawData, bool updateEraseEffects=true);
 	void DrawScoreHudLine(int line_index, const char* text);
 	void DrawScoreTime(const char* text);
 };

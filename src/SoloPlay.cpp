@@ -80,6 +80,7 @@ void SoloPlay::Main(){
 		cntFall = 0;
 		cntTime = 0;
 		cntLevel = 0;
+		paused = false;
 		phase++;
 
 		// Dare break not included
@@ -186,9 +187,26 @@ void SoloPlay::Main(){
 
 		break;
 	case 5:	// in game
+		if(input->GetKeyState(0,2) & START){
+			paused = !paused;
+			if(paused){
+				Sound::PauseBgm();
+			}else{
+				Sound::ResumeBgm();
+			}
+			Sound::PlaySe(1);
+		}
+
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){
 			BGImage.Draw(dxg);
+		}
+
+		if(paused){
+			hCtrl.Draw(&drawData, false);
+			DrawScore(false);
+			DrawPauseOverlay();
+			break;
 		}
 
 		// main game drawing
@@ -196,6 +214,7 @@ void SoloPlay::Main(){
 			hCtrl.StartGameOverPetrify(GAMEOVER_STONE_TILE);
 			cur_pos = 120;
 			Sound::ChangeBgm(-1);
+			paused = false;
 			phase++;
 		}
 		hCtrl.Draw(&drawData);
@@ -281,7 +300,7 @@ void SoloPlay::Main(){
 		}
 
 		// Drawing scores etc.
-		DrawScore();
+		DrawScore(true);
 
 		break;
 	case 6:	// death
@@ -629,7 +648,19 @@ int SoloPlay::SelectDifficulty()
 	return -1;
 }
 
-void SoloPlay::DrawScore()
+void SoloPlay::DrawPauseOverlay()
+{
+	int font = image->i[WHITEFONT_IMG];
+	if(count % 32 >= 16){
+		font = image->i[FONT_IMG];
+	}
+
+	dxg->TexturePos(0,0,96,24);
+	dxg->Draw(image->i[BLANK_IMG],112,104,true,160);
+	DrawImageFont(136,112,dxg,font,"PAUSED");
+}
+
+void SoloPlay::DrawScore(bool updateEffects)
 {
 	// Preparing the score display string
 	char time[9];
@@ -679,6 +710,10 @@ void SoloPlay::DrawScore()
 	hCtrl.DrawScoreHudLine(3, line3);
 	hCtrl.DrawScoreHudLine(4, line4);
 	hCtrl.DrawScoreHudLine(5, line5);
+
+	if(! updateEffects){
+		return;
+	}
 
 	if(effect.combo){
 		ComboEffect();
