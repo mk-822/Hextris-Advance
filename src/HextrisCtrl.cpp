@@ -1456,14 +1456,12 @@ int HextrisCtrl::BlockErase()
 	}
 
 	for(int i = FIELD_LOGICAL_ROWS - 1 ; i >= 0 && erasecount < 4 ; i--){
-		for(int shape = 0 ; shape < 3 && erasecount < 4 ; shape++){
+		for(int shape = 0 ; shape < 2 && erasecount < 4 ; shape++){
 			int line_rows[FIELD_BLOCK_COLS];
 			bool complete_line = true;
 			for(int j = 0 ; j < FIELD_BLOCK_COLS ; j++){
 				int row = i;
 				if(shape == 1 && (j & 1)){
-					row = i - 1;
-				}else if(shape == 2 && ! (j & 1)){
 					row = i - 1;
 				}
 
