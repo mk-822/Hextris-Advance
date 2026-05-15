@@ -43,7 +43,7 @@ namespace
 
 	constexpr int BG_SRC_OFFSET_X = 0;
 	constexpr int BG_SRC_OFFSET_Y = 0;
-	constexpr int HUD_BASE_X = 208;
+	constexpr int HUD_BASE_X = 207;
 	constexpr int HUD_BASE_Y = 88;
 	constexpr int HUD_TIME_X = 56;
 	constexpr int HUD_TIME_Y = 96;
@@ -52,9 +52,14 @@ namespace
 	constexpr int HUD_CHAR_WIDTH = 7;
 	constexpr int HUD_CHAR_HEIGHT = 8;
 	constexpr int HUD_LINE_COUNT = 6;
-	constexpr int HUD_CACHE_SLOTS = 7;
-	constexpr int HUD_TEXT_MAX_CHARS = 24;
+	constexpr int HUD_TIME_CACHE_INDEX = HUD_LINE_COUNT;
+	constexpr int HUD_BGM_CACHE_INDEX = HUD_TIME_CACHE_INDEX + 1;
+	constexpr int HUD_CACHE_SLOTS = HUD_BGM_CACHE_INDEX + 1;
+	constexpr int HUD_TEXT_MAX_CHARS = 36;
 	constexpr int HUD_TIME_MAX_CHARS = 8;
+	constexpr int HUD_BGM_X = 40;
+	constexpr int HUD_BGM_Y = 192;
+	constexpr int HUD_BGM_MAX_CHARS = 36;
 	constexpr int NEXT_LABEL_BACKING_OFFSET_X = 20;
 	constexpr int NEXT_LABEL_BACKING_OFFSET_Y = 0;
 	constexpr int NEXT_LABEL_BACKING_WIDTH = 42;
@@ -835,11 +840,17 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			int virtual_x = HUD_BASE_X;
 			int virtual_y = HUD_BASE_Y + cache_index * HUD_LINE_STEP;
 			int max_chars = HUD_TEXT_MAX_CHARS;
-			if(cache_index == HUD_LINE_COUNT)
+			if(cache_index == HUD_TIME_CACHE_INDEX)
 			{
 				virtual_x = HUD_TIME_X;
 				virtual_y = HUD_TIME_Y;
 				max_chars = HUD_TIME_MAX_CHARS;
+			}
+			else if(cache_index == HUD_BGM_CACHE_INDEX)
+			{
+				virtual_x = HUD_BGM_X;
+				virtual_y = HUD_BGM_Y;
+				max_chars = HUD_BGM_MAX_CHARS;
 			}
 
 			const int screen_y = virtual_to_screen_y(virtual_y);
@@ -1735,7 +1746,12 @@ void HextrisCtrl::DrawScoreHudLine(int line_index, const char* text)
 
 void HextrisCtrl::DrawScoreTime(const char* text)
 {
-	DrawCachedHudText(HUD_LINE_COUNT, HUD_TIME_X, HUD_TIME_Y, text, HUD_TIME_MAX_CHARS);
+	DrawCachedHudText(HUD_TIME_CACHE_INDEX, HUD_TIME_X, HUD_TIME_Y, text, HUD_TIME_MAX_CHARS);
+}
+
+void HextrisCtrl::DrawBgmName(const char* text)
+{
+	DrawCachedHudText(HUD_BGM_CACHE_INDEX, HUD_BGM_X, HUD_BGM_Y, text, HUD_BGM_MAX_CHARS);
 }
 
 

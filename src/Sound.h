@@ -13,5 +13,7 @@ public:
 	static void PauseBgm();
 	static void ResumeBgm();
 	static void PlaySe(int no);
+	static const char* CurrentBgmName();
 	static int bgm_mode;
+	static const char* current_bgm_name;
 };

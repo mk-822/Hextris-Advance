@@ -143,7 +143,7 @@ private:
 	void ReleaseBlockSprites();
 	void DrawCachedHudText(int cache_index, int virtual_x, int virtual_y, const char* text, int max_chars);
 	bool scoreHudCacheValid;
-	bn::array<bn::array<char, 25>, 7> scoreHudLines;
+	bn::array<bn::array<char, 37>, 8> scoreHudLines;
 
 public:
 	void StartGameOverPetrify(int stone_color);
@@ -163,6 +163,7 @@ public:
 	void Draw(HexFieldDrawData* drawData, bool updateEraseEffects=true);
 	void DrawScoreHudLine(int line_index, const char* text);
 	void DrawScoreTime(const char* text);
+	void DrawBgmName(const char* text);
 };
 
 #endif // !defined(AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_)

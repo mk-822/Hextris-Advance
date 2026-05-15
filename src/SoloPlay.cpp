@@ -5,6 +5,7 @@
 #include <bn_sprite_items_words.h>
 #include <bn_sprite_items_font_big.h>
 #include <bn_sprite_items_rank.h>
+#include "Sound.h"
 
 static const char* difficname[]={
 	"EASY",
@@ -12,6 +13,25 @@ static const char* difficname[]={
 	"MASTER",
 	"DEATH"
 };
+
+static void build_mode_line(char* destination, const char* mode_name)
+{
+	compat_strcpy(destination, "MODE :");
+
+	int mode_len = compat_strlen(mode_name);
+	if(mode_len > 6){
+		mode_len = 6;
+	}
+
+	int index = 6;
+	for(int i = mode_len; i < 6; ++i){
+		destination[index++] = ' ';
+	}
+	for(int i = 0; i < mode_len; ++i){
+		destination[index++] = mode_name[i];
+	}
+	destination[index] = '\0';
+}
 
 static const char* rankname[]={
 	"1st",
@@ -681,7 +701,7 @@ void SoloPlay::DrawPauseOverlay()
 
 	dxg->TexturePos(0,0,96,24);
 	dxg->Draw(image->i[BLANK_IMG],112,104,true,160);
-	DrawImageFont(136,112,dxg,font,"PAUSED");
+	DrawImageFont(142,112,dxg,font,"PAUSED");
 }
 
 void SoloPlay::DrawScore(bool updateEffects)
@@ -695,10 +715,10 @@ void SoloPlay::DrawScore(bool updateEffects)
 	char line4[32];
 	char line5[32];
 
-	compat_sprintf(line0, "SCORE:%5d", score);
-	compat_sprintf(line1, "NEXT :%5d", gameData.borderScore[grade]);
-	compat_sprintf(line2, "ERASE:%5d", cntErace);
-	compat_sprintf(line3, "FALL :%5d", cntFall);
+	compat_sprintf(line0, "SCORE:%6d", score);
+	compat_sprintf(line1, "NEXT :%6d", gameData.borderScore[grade]);
+	compat_sprintf(line2, "ERASE:%6d", cntErace);
+	compat_sprintf(line3, "FALL :%6d", cntFall);
 
 	// Rank drawing
 	const int rank_x = 224 + 16 - WINDOW_WIDE / 2;
@@ -712,22 +732,16 @@ void SoloPlay::DrawScore(bool updateEffects)
 		imgRank->set_visible(true);
 	}
 	// Drawing scores etc.
-	int nextlevel = cntLevel-cntLevel%100+99;
-	if(nextlevel > 1000){
-		nextlevel = 1000;
-	}
-	if((nextlevel > 300)&&(difficulty == 0)){
-		nextlevel = 300;
-	}
-	compat_sprintf(line4, "LEVEL:%d/%d", cntLevel, nextlevel);
+	compat_sprintf(line4, "LEVEL:%6d", cntLevel);
 	if(difficulty == -1){
-		compat_sprintf(line5, "MODE :SELECTING");
+		build_mode_line(line5, "SELECTING");
 	}else{
-		compat_sprintf(line5, "MODE :%s", difficname[difficulty]);
+		build_mode_line(line5, difficname[difficulty]);
 	}
 
 	// Draw effects etc.
 	hCtrl.DrawScoreTime(FrameCountToStr(cntTime, time));
+	hCtrl.DrawBgmName(Sound::CurrentBgmName());
 	hCtrl.DrawScoreHudLine(0, line0);
 	hCtrl.DrawScoreHudLine(1, line1);
 	hCtrl.DrawScoreHudLine(2, line2);
