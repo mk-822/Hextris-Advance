@@ -1415,6 +1415,7 @@ int HextrisCtrl::BlockErase()
 					eraseEffectData[erasecount].y[k] = (float)(GAME_POS_OFFSET_Y + row*BLOCK_OFFSET_Y*2 + (k % 2 ? BLOCK_OFFSET_Y : 0));
 			///////////////////////////////////////////
 					erased_cells[k][row] = true;
+					hField.SetField(k,row,0);
 					if(row < erased_min_line){
 						erased_min_line = row;
 					}
