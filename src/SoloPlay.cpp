@@ -103,12 +103,14 @@ void SoloPlay::Main(){
 		effect.gradeup = 0;
 		effect.levelup = 0;
 		effect.erace = 0;
+		effect.backToBack = 0;
 
 		cntCombo = 0;
 		cntErace = 0;
 		cntFall = 0;
 		cntTime = 0;
 		cntLevel = 0;
+		backToBackReady = false;
 		paused = false;
 		phase++;
 
@@ -262,6 +264,7 @@ void SoloPlay::Main(){
 			}
 			if(hCtrl.queErace){	// Score addition rate when erasing combo is the score increase rate when erasing consecutively
 				effect.erace = 1;
+				effect.backToBack = 0;
 				switch(hCtrl.queErace){
 				case 1:
 					getscore = 100 + cntCombo*300;
@@ -278,6 +281,15 @@ void SoloPlay::Main(){
 				default:
 					getscore = 0;
 					break;
+				}
+				if(hCtrl.queErace == 4){
+					if(backToBackReady){
+						getscore += 1000;
+						effect.backToBack = 1;
+					}
+					backToBackReady = true;
+				}else{
+					backToBackReady = false;
 				}
 				score += getscore;
 				cntErace += hCtrl.queErace;
@@ -636,9 +648,19 @@ void SoloPlay::EraceEffect()
 		font = image->i[FONT_IMG];
 	}
 	DrawImageFont(72-tmp,120,dxg,font,"%d pts",getscore);
+	int bonus_y = 132;
+	if(cntCombo >= 2){
+		DrawImageFont(56-tmp,bonus_y,dxg,font,"%d COMBO!!",cntCombo);
+		bonus_y += 12;
+	}
+	if(effect.backToBack){
+		DrawImageFont(40-tmp,bonus_y,dxg,font,"BACK-TO-BACK");
+	}
 
 	if(effect.erace>64){
 		effect.erace = 0;
+		effect.combo = 0;
+		effect.backToBack = 0;
 		for(int i = 0; i < 3; ++i){
 			imgErase[i].reset();
 		}
@@ -753,7 +775,7 @@ void SoloPlay::DrawScore(bool updateEffects)
 		return;
 	}
 
-	if(effect.combo){
+	if(effect.combo && ! effect.erace){
 		ComboEffect();
 	}
 	if(effect.gradeup){

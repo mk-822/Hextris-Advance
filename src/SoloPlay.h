@@ -29,6 +29,7 @@ private:
 		int combo;
 		int erace;
 		int line;
+		int backToBack;
 	}effect;
 	struct NameEntryData{
 		char name[4];
@@ -42,6 +43,7 @@ private:
 	int cntFall;
 	int cntCombo;
 	int cntErace;
+	bool backToBackReady;
 	int startTime;
 	enum {
 		READY_PAT_INDEX = 8 * 8,
