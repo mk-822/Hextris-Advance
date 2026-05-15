@@ -424,7 +424,7 @@ void SoloPlay::Main(){
 			y += 16;
 			DrawImageFont(x,y,dxg,font,		"          Thank you for playing.");
 		}else{
-			int x=128,y=88,font =  image->i[WHITEFONT_IMG],count2 = (int)cur_pos;
+			int x=134,y=112,font =  image->i[WHITEFONT_IMG],count2 = (int)cur_pos;
 			if(count2%4){
 				font = image->i[FONT_IMG];
 			}

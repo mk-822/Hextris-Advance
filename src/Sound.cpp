@@ -34,7 +34,7 @@ namespace
 
 #if HEXTRIS_HAS_BN_MUSIC_ITEMS
 	constexpr bn::fixed BGM_VOLUME = 0.3;
-	constexpr int MAIN_GAME_BGM_COUNT = 15;
+	constexpr int MAIN_GAME_BGM_COUNT = 14;
 
 	const char* play_main_game_bgm()
 	{
@@ -47,12 +47,11 @@ namespace
 		case 5: bn::music_items::cabin_fever.play(BGM_VOLUME); return "cabin_fever.xm";
 		case 6: bn::music_items::chip_overture.play(BGM_VOLUME); return "chip_overture.xm";
 		case 7: bn::music_items::dreamline.play(BGM_VOLUME); return "dreamline.it";
-		case 8: bn::music_items::drozerix_dream_candy.play(BGM_VOLUME); return "drozerix_dream_candy.xm";
-		case 9: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
-		case 10: bn::music_items::falling_raindrops.play(BGM_VOLUME); return "falling_raindrops.xm";
-		case 11: bn::music_items::simple_chip_tune.play(BGM_VOLUME); return "simple_chip_tune.xm";
-		case 12: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
-		case 13: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
+		case 8: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
+		case 9: bn::music_items::falling_raindrops.play(BGM_VOLUME); return "falling_raindrops.xm";
+		case 10: bn::music_items::simple_chip_tune.play(BGM_VOLUME); return "simple_chip_tune.xm";
+		case 11: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
+		case 12: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
 		default: bn::music_items::twinkle_and_twinkle_rmx.play(BGM_VOLUME); return "twinkle_and_twinkle_rmx.it";
 		}
 	}
