@@ -30,6 +30,15 @@ namespace
 {
 	constexpr bool SOLO_USE_REGULAR_BG = false;
 	constexpr int GAMEOVER_STONE_TILE = 21;
+
+	unsigned BuildGameStartRandomSeed(int count, int difficulty, INPUT input_state)
+	{
+		unsigned seed = static_cast<unsigned>(GetTickCount());
+		seed ^= static_cast<unsigned>(count) << 16;
+		seed ^= static_cast<unsigned>(difficulty + 1) << 24;
+		seed ^= static_cast<unsigned>(input_state) * 2654435761u;
+		return seed ? seed : 1u;
+	}
 }
 
 void SoloPlay::Main(){
@@ -65,7 +74,6 @@ void SoloPlay::Main(){
 		break;
 	case 2:	// Initialization
 		Sound::ChangeBgm(1);
-		SeedGameRandom(GetTickCount());
 
 		score = 0;
 		grade = 0;
@@ -105,6 +113,8 @@ void SoloPlay::Main(){
 
 		difficulty = SelectDifficulty();
 		if(difficulty != -1){
+			SeedGameRandom(BuildGameStartRandomSeed(count, difficulty, input->GetKeyState(0,0)));
+			hCtrl.Initialize(dxg,image,input,&gameData);
 			for(int i = 0; i < 3 * 4; ++i){
 				imgDifficulty[i].reset();
 			}

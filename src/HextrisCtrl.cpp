@@ -55,6 +55,12 @@ namespace
 	constexpr int HUD_CACHE_SLOTS = 7;
 	constexpr int HUD_TEXT_MAX_CHARS = 24;
 	constexpr int HUD_TIME_MAX_CHARS = 8;
+	constexpr int NEXT_LABEL_BACKING_OFFSET_X = 20;
+	constexpr int NEXT_LABEL_BACKING_OFFSET_Y = 0;
+	constexpr int NEXT_LABEL_BACKING_WIDTH = 42;
+	constexpr int NEXT_LABEL_BACKING_HEIGHT = 12;
+	constexpr int NEXT_LABEL_TEXT_OFFSET_X = 25;
+	constexpr int NEXT_LABEL_TEXT_OFFSET_Y = 3;
 	constexpr bn::color UI_BG_COLOR(1, 1, 1);
 
 	inline int virtual_to_screen_x(int value)
@@ -264,6 +270,50 @@ namespace
 				{
 					painter.unsafe_plot(sx, sy, src_color);
 				}
+			}
+		}
+	}
+
+	void draw_solid_rect(
+			bn::sp_direct_bitmap_bg_painter& painter,
+			int left,
+			int top,
+			int width,
+			int height,
+			bn::color color)
+	{
+		const int right = left + width;
+		const int bottom = top + height;
+		for(int y = top; y < bottom; ++y)
+		{
+			if(y < 0 || y >= SCREEN_HEIGHT)
+			{
+				continue;
+			}
+
+			for(int x = left; x < right; ++x)
+			{
+				if(x < 0 || x >= SCREEN_WIDTH)
+				{
+					continue;
+				}
+
+				painter.unsafe_plot(x, y, color);
+			}
+		}
+	}
+
+	void draw_hud_text(
+			bn::sp_direct_bitmap_bg_painter& painter,
+			int screen_x,
+			int screen_y,
+			const char* text)
+	{
+		for(int i = 0; text[i]; ++i)
+		{
+			if(text[i] != ' ')
+			{
+				draw_hud_glyph(painter, screen_x + i * HUD_CHAR_ADVANCE, screen_y, text[i]);
 			}
 		}
 	}
@@ -733,6 +783,25 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 
 	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
 	draw_background(painter, fieldBackgroundIndex, clip_left, clip_top, clip_right, clip_bottom);
+	if(fieldBitmapFullRedraw)
+	{
+		const int label_backing_x = virtual_to_screen_x(
+				drawData->game_pos_x + NEXT_OFFSET_X + NEXT_LABEL_BACKING_OFFSET_X);
+		const int label_backing_y = virtual_to_screen_y(
+				drawData->game_pos_y + NEXT_OFFSET_Y + NEXT_LABEL_BACKING_OFFSET_Y);
+		const int label_text_x = virtual_to_screen_x(
+				drawData->game_pos_x + NEXT_OFFSET_X + NEXT_LABEL_TEXT_OFFSET_X);
+		const int label_text_y = virtual_to_screen_y(
+				drawData->game_pos_y + NEXT_OFFSET_Y + NEXT_LABEL_TEXT_OFFSET_Y);
+		draw_solid_rect(
+				painter,
+				label_backing_x,
+				label_backing_y,
+				NEXT_LABEL_BACKING_WIDTH,
+				NEXT_LABEL_BACKING_HEIGHT,
+				UI_BG_COLOR);
+		draw_hud_text(painter, label_text_x, label_text_y, "NEXT");
+	}
 
 	for(int i = row_begin; i <= row_end; ++i)
 	{
