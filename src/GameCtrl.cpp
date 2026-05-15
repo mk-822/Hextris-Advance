@@ -17,6 +17,7 @@
 #include "bn_regular_bg_map_ptr.h"
 #include "bn_regular_bg_tiles_ptr.h"
 #include "bn_bg_palette_ptr.h"
+#include "bn_blending.h"
 
 namespace
 {
@@ -430,6 +431,7 @@ void GameCtrl::Main(){
 void GameCtrl::ChangeScene(){
 	release_image_font_resources();
 	release_font_sprite_resources();
+	bn::blending::restore();
 	delete mode;
 	switch(scene){
 	case LOGO_SCENE:
@@ -450,6 +452,9 @@ void GameCtrl::ChangeScene(){
 	// case OPTION_SCENE://Clockadded
 	// 	mode = new Option();
 	// 	break;
+	default:
+		mode = new Title();
+		break;
 	}
 	mode->Initialize(&scene,&dxg,&image,&input);
 }

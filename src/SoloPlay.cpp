@@ -59,6 +59,7 @@ void SoloPlay::Main(){
 
 		phase++; count = 0;
 		// Darebreak not included
+		[[fallthrough]];
 	case 1:	// fade in
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){
@@ -101,6 +102,7 @@ void SoloPlay::Main(){
 			imgErase[i].reset();
 		}
 		imgCountdown.reset();
+		[[fallthrough]];
 	case 3: // Difficulty selection
 		// background drawing
 		if(SOLO_USE_REGULAR_BG){
@@ -253,6 +255,9 @@ void SoloPlay::Main(){
 				case 4:
 					getscore = 2000 + cntCombo*750;
 					break;
+				default:
+					getscore = 0;
+					break;
 				}
 				score += getscore;
 				cntErace += hCtrl.queErace;
@@ -381,6 +386,8 @@ void SoloPlay::Main(){
 			case 3:
 				DrawImageFont(x,y,dxg,font,	"        You are a perfect player!!!");
 				break;
+			default:
+				break;
 			}
 			y += 16;
 			DrawImageFont(x,y,dxg,font,		"          Thank you for playing.");
@@ -429,7 +436,7 @@ void SoloPlay::Main(){
 		hCtrl.DrawField(&drawData,255,false);
 
 		{
-			int x=32,y=88;
+			int y=88;
 			dxg->TexturePos(0,0,320,96-(int)cur_pos);
 			dxg->Draw(image->i[BLANK_IMG],0,(float)y-8,true,192);
 		}
@@ -510,8 +517,15 @@ void SoloPlay::Main(){
 		hCtrl.DrawField(&drawData,255-count*8);
 
 		if(count == 32){
+			imgRank.reset();
+			for(int i = 0; i < 3; ++i){
+				imgErase[i].reset();
+			}
+			hCtrl.ReleaseGraphics();
 			*scene = SCORE_SCENE;
 		}
+		break;
+	default:
 		break;
 	}
 	count++;

@@ -344,6 +344,7 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 	image = Image;
 	input = Input;
 	blockData = BlockData;
+	ReleaseBlockSprites();
 	count = 0;
 	phase = 0;
 	eraseData.Clear();
@@ -605,7 +606,7 @@ int HextrisCtrl::Main(int player){
 			Sound::PlaySe(5);
 			effectFlag |= BLOCK_FIX_EFFECT;
 			queFix = 1;
-			if(queErace = BlockErase()){
+			if((queErace = BlockErase())){
 				ShiftPhase(1);
 				if(queErace==4){
 					Sound::PlaySe(3);
@@ -644,6 +645,8 @@ int HextrisCtrl::Main(int player){
 				eraseData.Clear();
 				ShiftPhase(1);
 			}
+			break;
+		default:
 			break;
 		}
 	}
@@ -1182,6 +1185,30 @@ void HextrisCtrl::HideEraseEffectSprites()
 	}
 }
 
+void HextrisCtrl::ReleaseBlockSprites()
+{
+	for(int i = 0; i < 4; ++i)
+	{
+		currentBlockSprites[i].reset();
+		ghostBlockSprites[i].reset();
+		nextBlockSprites[i].reset();
+
+		for(int j = 0; j < FIELD_BLOCK_COLS; ++j)
+		{
+			eraseEffectSprites[i][j].reset();
+		}
+	}
+}
+
+void HextrisCtrl::ReleaseGraphics()
+{
+	ReleaseBlockSprites();
+	fieldBitmapBg.reset();
+	scoreHudCacheValid = false;
+	ghostTransparencyConfigured = false;
+	bn::blending::restore();
+}
+
 void HextrisCtrl::UpdateEraseEffectSprites(HexFieldDrawData* drawData)
 {
 	const int animation_frame = (count / 2) % 7;
@@ -1278,6 +1305,7 @@ int HextrisCtrl::NextToCurrent(int rotation)
 
 int HextrisCtrl::GenerateNext(int max)
 {
+	(void) max;
 	return rand.Decision();
 }
 
@@ -1377,6 +1405,9 @@ int HextrisCtrl::BlockSpin(int spin)
 				break;
 			case 7: // up (last-resort kick)
 				adjust_x = 0; adjust_y = -2;
+				break;
+			default:
+				adjust_x = 0; adjust_y = 0;
 				break;
 			}
 			if(spincount){
@@ -1513,6 +1544,8 @@ int HextrisCtrl::ShiftPhase(int diff)
 		break;
 	case PHASE_ERASED:
 		wait = delayData.erase;
+		break;
+	default:
 		break;
 	}
 	return phase;

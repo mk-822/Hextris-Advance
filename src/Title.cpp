@@ -92,6 +92,8 @@ void Title::Main(){
 			}
 		}
 		break;
+	default:
+		break;
 	}
 	count++;
 	cur_count++;
@@ -209,8 +211,8 @@ void Title::OutMenu(){
 	
 	auto curPattern = (cur_count/ANIMSPEED)%10;
 	int selectedRow = scene_tmp == 2 ? MENU_ROW_INDEX[1] : MENU_ROW_INDEX[0];
-	cursor[0]->set_position(cur_pos+CURSOR_OFFSET_X, (float)(MENUY+(int)(16*selectedRow)));
-	cursor[1]->set_position(cur_pos+CURSOR_OFFSET_X+48, (float)(MENUY+(int)(16*selectedRow)));
+	cursor[0]->set_position(cur_pos + float(CURSOR_OFFSET_X), float(MENUY + 16 * selectedRow));
+	cursor[1]->set_position(cur_pos + float(CURSOR_OFFSET_X + 48), float(MENUY + 16 * selectedRow));
 	cursor[0]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + curPattern * 256 / 32);
 	cursor[1]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + 1 + curPattern * 256 / 32);
 }

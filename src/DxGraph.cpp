@@ -21,21 +21,33 @@ draw::~draw()//open in destructor
 
 
 ////////Resolution specification//////////////////////////////////////////////////////////
-bool draw :: Initialize(bool full , int zoom , int X , int Y)
+bool draw :: Initialize(bool full , int zoom , int width , int height)
 {
+	(void) full;
+	(void) zoom;
+	(void) width;
+	(void) height;
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////loading//////////////////////////////////////////////////////////////////////////
-int draw :: LoadImage(char* FileName,int mode , int r , int g , int b)
+int draw :: LoadImage(const char* FileName,int image_mode , int r , int g , int b)
 {
+	(void) FileName;
+	(void) image_mode;
+	(void) r;
+	(void) g;
+	(void) b;
 	return 0;
 }
 
 //////////////////////////////Composition of background and foreground////////////////////////////////////////
 void draw::ColorChange(int num,bool flag)
 {
+	(void) num;
+	(void) flag;
 }
 //Blend typeINVSRCALPHA INVDESTALPHA ONE ZERO SRCCOLOR DESTCOLOR INVSRCCOLOR INVDESTCOLOR SRCALPHA DESTALPHA
 //DESTis the background,SRCis the image to draw
@@ -46,6 +58,7 @@ void draw::ColorChange(int num,bool flag)
 //////////////////////////////////////////////////Initializing drawing////////////////////////////////////////////////////
 void draw::DrawBegin(bool Clear)
 {
+	(void) Clear;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -62,6 +75,10 @@ void draw :: DrawEnd()
 ///////////////////////////////////////Specifying the drawing range///////////////////////////////////////////////////////////////////
 void draw :: TexturePos(int x, int y, int w, int h)
 {
+	(void) x;
+	(void) y;
+	(void) w;
+	(void) h;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -73,6 +90,14 @@ void draw :: TexturePos(int x, int y, int w, int h)
 
 void draw :: Draw(int num , float transX , float transY , bool flag, int tr_all, int r , int g , int b)
 {
+	(void) num;
+	(void) transX;
+	(void) transY;
+	(void) flag;
+	(void) tr_all;
+	(void) r;
+	(void) g;
+	(void) b;
 }
 
 
@@ -80,12 +105,20 @@ void draw :: Draw(int num , float transX , float transY , bool flag, int tr_all,
 
 void draw::ChangeEFXState(float scaleX, float scaleY, SPIN Spin, float SPCX, float SPCY)
 {
+	(void) scaleX;
+	(void) scaleY;
+	(void) Spin;
+	(void) SPCX;
+	(void) SPCY;
 }
 
 void draw::ShiftDrawPosition(int x, int y)
 {
+	(void) x;
+	(void) y;
 }
 
 void draw::MatchVirtualPosition(bool flag)
 {
+	(void) flag;
 }

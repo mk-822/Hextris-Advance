@@ -21,7 +21,7 @@ public:
 	void TexturePos(int x = 0 , int y = 0 , int w = 320 , int h = 240);
 	bool Initialize(bool,int,int,int);//Full or not?bool , resolutionX , resolutionY)
 	void releaseDXG();
-	int LoadImage(char*,int,int R, int G, int B);
+	int LoadImage(const char*,int,int R, int G, int B);
 	void Draw(int NUM, float transX, float transY, bool flag = true, int tr_all = 255, int r = 255 , int g = 255 , int b = 255);//rgb、tr_allIf there is no factor in255become
 	void ColorChange(int,bool flag=false);	// Change blending method. If the flag is omitted, it will be called from outside.
 	//RGBspecifytranscan also be specified//RGBdo not specifytranscannot be specified

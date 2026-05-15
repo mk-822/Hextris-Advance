@@ -31,7 +31,7 @@ private:
 		int line;
 	}effect;
 	struct NameEntryData{
-		char name[3];
+		char name[4];
 		int cur_word;
 		int cur_pos;
 	}name;

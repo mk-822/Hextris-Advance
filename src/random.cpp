@@ -103,6 +103,8 @@ int random::Decision(){
 				return cnt[num].num;
 			}
 			break;
+		default:
+			break;
 		}
 	}while(true);
 }

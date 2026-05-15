@@ -48,6 +48,8 @@ void Logo::Main(){
 			spr.reset();
 		}
 		break;
+	default:
+		break;
 	}
 	count++;
 }

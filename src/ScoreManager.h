@@ -5,13 +5,13 @@
 #if !defined(AFX_SCOREMANAGER_H__F3758F90_794E_48A0_A70C_589E2B054CBB__INCLUDED_)
 #define AFX_SCOREMANAGER_H__F3758F90_794E_48A0_A70C_589E2B054CBB__INCLUDED_
 
-#if _MSC_VER > 1000
+#if defined(_MSC_VER) && _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
 #include "common.h"
 
-static const char* gradename[]={
+[[maybe_unused]] static const char* gradename[]={
 	"F",
 	"E",
 	"D",

@@ -84,6 +84,7 @@ void BackGroundImageCtrl::Change(int image, int sp)
 
 void BackGroundImageCtrl::Draw(draw* dxg)
 {
+	(void) dxg;
 	count++;
 	float blend = (float)count * speed / 255;
 	if(blend > 1){

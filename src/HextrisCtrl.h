@@ -6,7 +6,7 @@
 #define AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_
 
 #include "EraseData.h"	// Included for ClassView and erase effect data
-#if _MSC_VER > 1000
+#if defined(_MSC_VER) && _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
@@ -140,6 +140,7 @@ private:
 	void HideCurrentBlockSprites();
 	void HideNextBlockSprites();
 	void HideEraseEffectSprites();
+	void ReleaseBlockSprites();
 	void DrawCachedHudText(int cache_index, int virtual_x, int virtual_y, const char* text, int max_chars);
 	bool scoreHudCacheValid;
 	bn::array<bn::array<char, 25>, 7> scoreHudLines;
@@ -153,12 +154,13 @@ public:
 	int queFix;
 	int queErace;
 	void SetBitmapBackground(int image_id);
+	void ReleaseGraphics();
 	void ChangeLevel(DelayData* newLevel);
 	HextrisCtrl();
 	void Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLoader* BlockData);
 	int Main(int player);
-	virtual void DrawField(HexFieldDrawData* drawData, int trans, bool shadow=true);
-	virtual void Draw(HexFieldDrawData* drawData, bool updateEraseEffects=true);
+	void DrawField(HexFieldDrawData* drawData, int trans, bool shadow=true);
+	void Draw(HexFieldDrawData* drawData, bool updateEraseEffects=true);
 	void DrawScoreHudLine(int line_index, const char* text);
 	void DrawScoreTime(const char* text);
 };

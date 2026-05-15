@@ -201,6 +201,7 @@ int ScoreDisplay::Fade_Out()
 	dxg->Draw(image->i[BLANK_IMG],0,0,true,255-FadeLevel);
 	FadeLevel-=5;
 	if(FadeLevel <= 0){
+		scoreBg.reset();
 		*scene = TITLE_SCENE;
 	}
 	return ++count;
