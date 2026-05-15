@@ -572,12 +572,14 @@ int HextrisCtrl::Main(int player){
 				const int erase_freq = eraseData.GetFreq();
 				int dirty_max_line = 0;
 				for(int i=erase_freq ; i>0 ; i--){
-					const int erased_line = eraseData.GetLine();
-					if(erased_line > dirty_max_line){
-						dirty_max_line = erased_line;
-					}
-					for(int j=erased_line ; j>=0 ; j--){
-						for(int k=0 ; k<FIELD_BLOCK_COLS ; k++){
+					int erased_rows[FIELD_BLOCK_COLS];
+					eraseData.GetLineRows(erased_rows, FIELD_BLOCK_COLS);
+					for(int k=0 ; k<FIELD_BLOCK_COLS ; k++){
+						const int erased_line = erased_rows[k];
+						if(erased_line > dirty_max_line){
+							dirty_max_line = erased_line;
+						}
+						for(int j=erased_line ; j>=0 ; j--){
 							if(j==0){
 								hField.SetField(k,j,0);
 							}else{
@@ -736,16 +738,9 @@ void HextrisCtrl::DrawBitmapField(HexFieldDrawData* drawData)
 			const int color = hField.Get(j, i);
 			if(color)
 			{
-				int draw_color = color;
-				const int logical_row = logical_row_from_draw_row(j, i);
-				if(draw_color != 21 && logical_row >= 0 && (logical_row & 1))
-				{
-					draw_color += 10;
-				}
-
 				const int x = field_left + j * BLOCK_OFFSET_X;
 				const int y = field_top + i * BLOCK_OFFSET_Y;
-				draw_block_bitmap(painter, x, y, draw_color, clip_left, clip_top, clip_right, clip_bottom);
+				draw_block_bitmap(painter, x, y, color, clip_left, clip_top, clip_right, clip_bottom);
 			}
 		}
 	}
@@ -1381,30 +1376,51 @@ int HextrisCtrl::BlockErase()
 	int erasecount = 0;
 	int erased_min_line = FIELD_LOGICAL_ROWS - 1;
 	int erased_max_line = 0;
-	for(int i = FIELD_LOGICAL_ROWS - 1 ; i >= 0 ; i--){
-		for(int j = 0 ; j <= FIELD_BLOCK_COLS ; j++){
-			if(j == FIELD_BLOCK_COLS){
+	bool erased_cells[FIELD_BLOCK_COLS][FIELD_LOGICAL_ROWS];
+	for(int x = 0 ; x < FIELD_BLOCK_COLS ; x++){
+		for(int y = 0 ; y < FIELD_LOGICAL_ROWS ; y++){
+			erased_cells[x][y] = false;
+		}
+	}
+
+	for(int i = FIELD_LOGICAL_ROWS - 1 ; i >= 0 && erasecount < 4 ; i--){
+		for(int shape = 0 ; shape < 3 && erasecount < 4 ; shape++){
+			int line_rows[FIELD_BLOCK_COLS];
+			bool complete_line = true;
+			for(int j = 0 ; j < FIELD_BLOCK_COLS ; j++){
+				int row = i;
+				if(shape == 1 && (j & 1)){
+					row = i - 1;
+				}else if(shape == 2 && ! (j & 1)){
+					row = i - 1;
+				}
+
+				line_rows[j] = row;
+				if(row < 0 || row >= FIELD_LOGICAL_ROWS || erased_cells[j][row] || ! hField.GetField(j,row)){
+					complete_line = false;
+					break;
+				}
+			}
+
+			if(complete_line){
+				eraseEffectData[erasecount].GenerateMove();
 				for(int k = 0 ; k < FIELD_BLOCK_COLS ; k++){
+					const int row = line_rows[k];
 			// Build erase effect data for this cleared line //////////////////
-					eraseEffectData[erasecount].GenerateMove();
-					eraseEffectData[erasecount].color[k] = hField.GetField(k,i);
+					eraseEffectData[erasecount].color[k] = hField.GetField(k,row);
 					eraseEffectData[erasecount].x[k] = (float)(GAME_POS_OFFSET_X + k*BLOCK_OFFSET_X);
-					eraseEffectData[erasecount].y[k] = (float)(GAME_POS_OFFSET_Y + i*BLOCK_OFFSET_Y*2 + (k % 2 ? BLOCK_OFFSET_Y : 0));
+					eraseEffectData[erasecount].y[k] = (float)(GAME_POS_OFFSET_Y + row*BLOCK_OFFSET_Y*2 + (k % 2 ? BLOCK_OFFSET_Y : 0));
 			///////////////////////////////////////////
-					hField.SetField(k,i,0);
+					erased_cells[k][row] = true;
+					if(row < erased_min_line){
+						erased_min_line = row;
+					}
+					if(row > erased_max_line){
+						erased_max_line = row;
+					}
 				}
 				erasecount++;
-				if(i < erased_min_line){
-					erased_min_line = i;
-				}
-				if(i > erased_max_line){
-					erased_max_line = i;
-				}
-				eraseData.SetLine(i);
-				break;
-			}
-			if(!hField.GetField(j,i)){
-				break;
+				eraseData.SetLineRows(line_rows, FIELD_BLOCK_COLS);
 			}
 		}
 	}

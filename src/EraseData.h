@@ -14,11 +14,14 @@ class EraseData
 public:
 	int GetFreq();
 	int GetLine();
+	void GetLineRows(int* rows, int rows_count);
 	void SetLine(int ln);
+	void SetLineRows(const int* rows, int rows_count);
 	void Clear();
 	EraseData();
 private:
 	int linenum[4];
+	int line_rows[4][11];
 	int line;
 };
 
