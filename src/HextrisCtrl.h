@@ -164,6 +164,8 @@ public:
 	void DrawScoreHudLine(int line_index, const char* text);
 	void DrawScoreTime(const char* text);
 	void DrawBgmName(const char* text);
+	void DrawBitmapText(int virtual_x, int virtual_y, const char* text);
+	void ClearBitmapRect(int virtual_x, int virtual_y, int width, int height);
 };
 
 #endif // !defined(AFX_HEXTRISCTRL_H__CC5D3365_B033_432D_9265_CF7269D35F38__INCLUDED_)

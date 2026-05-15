@@ -397,32 +397,29 @@ void SoloPlay::Main(){
 		hCtrl.DrawField(&drawData,255,false);
 		
 		if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
-			int x=32,y=88,font =  image->i[WHITEFONT_IMG],count2 = (int)cur_pos;
-			if(count2%4){
-				font = image->i[FONT_IMG];
-			}
+			int y=88;
 			dxg->TexturePos(0,0,320,56);
 			dxg->Draw(image->i[BLANK_IMG],0,(float)y-8,true,192);
-			DrawImageFont(x,y,dxg,font,		"              Congratulations!!");
+			hCtrl.DrawBitmapText(109,y,	"Congratulations!!");
 			y += 16;
 			switch(difficulty){
 			case 0:
-				DrawImageFont(x,y,dxg,font,	"Please challenge a normal mode next time!");
+				hCtrl.DrawBitmapText(97,y,	"Try NORMAL mode next!");
 				break;
 			case 1:
-				DrawImageFont(x,y,dxg,font,	"Please challenge a master mode next time!");
+				hCtrl.DrawBitmapText(97,y,	"Try MASTER mode next!");
 				break;
 			case 2:
-				DrawImageFont(x,y,dxg,font,	"          You are a super player!");
+				hCtrl.DrawBitmapText(94,y,	"You are a super player!");
 				break;
 			case 3:
-				DrawImageFont(x,y,dxg,font,	"        You are a perfect player!!!");
+				hCtrl.DrawBitmapText(88,y,	"You are a perfect player!");
 				break;
 			default:
 				break;
 			}
 			y += 16;
-			DrawImageFont(x,y,dxg,font,		"          Thank you for playing.");
+			hCtrl.DrawBitmapText(103,y,	"Thanks for playing.");
 		}else{
 			int x=134,y=112,font =  image->i[WHITEFONT_IMG],count2 = (int)cur_pos;
 			if(count2%4){
@@ -436,6 +433,9 @@ void SoloPlay::Main(){
 		cur_pos--;
 		if(cur_pos <= 0){
 			if(ScoreData.JudgeOrder(score,difficulty) != -1){
+				if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
+					hCtrl.ClearBitmapRect(32, 80, 256, 64);
+				}
 				phase += 1;
 					// Name processing
 				compat_strcpy(name.name,"   ");
@@ -466,6 +466,7 @@ void SoloPlay::Main(){
 		dxg->Draw(image->i[FRAME_IMG],(float)drawData.game_pos_x + 8,(float)drawData.game_pos_y+40);
 		// main game drawing
 		hCtrl.DrawField(&drawData,255,false);
+		hCtrl.ClearBitmapRect(40, 80, 240, 64);
 
 		{
 			int y=88;

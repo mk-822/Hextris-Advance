@@ -1754,4 +1754,71 @@ void HextrisCtrl::DrawBgmName(const char* text)
 	DrawCachedHudText(HUD_BGM_CACHE_INDEX, HUD_BGM_X, HUD_BGM_Y, text, HUD_BGM_MAX_CHARS);
 }
 
+void HextrisCtrl::DrawBitmapText(int virtual_x, int virtual_y, const char* text)
+{
+	if(! text)
+	{
+		return;
+	}
 
+	if(! fieldBitmapBg)
+	{
+		fieldBitmapBg = bn::sp_direct_bitmap_bg_ptr::create();
+		fieldBitmapBg->set_priority(3);
+		fieldBitmapBg->set_blending_enabled(false);
+		fieldBitmapBg->set_blending_bottom_enabled(true);
+		scoreHudCacheValid = false;
+	}
+
+	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
+	const int text_len = compat_strlen(text);
+
+	const int screen_x = virtual_to_screen_x(virtual_x);
+	const int screen_y = virtual_to_screen_y(virtual_y);
+	draw_solid_rect(
+			painter,
+			screen_x - 2,
+			screen_y - 2,
+			text_len * HUD_CHAR_ADVANCE + 4,
+			HUD_CHAR_HEIGHT + 4,
+			bn::colors::black);
+	draw_hud_text(painter, screen_x, screen_y, text);
+}
+
+void HextrisCtrl::ClearBitmapRect(int virtual_x, int virtual_y, int width, int height)
+{
+	if(! fieldBitmapBg || width <= 0 || height <= 0)
+	{
+		return;
+	}
+
+	bn::sp_direct_bitmap_bg_painter painter(*fieldBitmapBg);
+	int left = virtual_to_screen_x(virtual_x);
+	int top = virtual_to_screen_y(virtual_y);
+	int right = left + width;
+	int bottom = top + height;
+	if(left < 0)
+	{
+		left = 0;
+	}
+	if(top < 0)
+	{
+		top = 0;
+	}
+	if(right > SCREEN_WIDTH)
+	{
+		right = SCREEN_WIDTH;
+	}
+	if(bottom > SCREEN_HEIGHT)
+	{
+		bottom = SCREEN_HEIGHT;
+	}
+
+	draw_background(
+			painter,
+			fieldBackgroundIndex,
+			left,
+			top,
+			right,
+			bottom);
+}
