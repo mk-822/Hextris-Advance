@@ -39,6 +39,9 @@ public:
 	ScoreManager();
 	~ScoreManager();
 	Scorelist scoreList[4];
+private:
+	void LoadSavedScores();
+	void SaveScores();
 };
 
 #endif // !defined(AFX_SCOREMANAGER_H__F3758F90_794E_48A0_A70C_589E2B054CBB__INCLUDED_)

@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "ScoreManager.h"
 #include <string.h>
+#include "bn_sram.h"
 #include "common.h"
 #include "easyscore_bin.h"
 #include "normalscore_bin.h"
@@ -13,6 +14,17 @@
 
 namespace
 {
+
+static const unsigned int SCORE_SAVE_MAGIC = 0x48585341; // HXSA
+static const unsigned int SCORE_SAVE_VERSION = 1;
+
+struct ScoreSaveData
+{
+    unsigned int magic;
+    unsigned int version;
+    ScoreManager::Scorelist score_list[4];
+    unsigned int checksum;
+};
 
 class data_parser
 {
@@ -118,6 +130,21 @@ void _load_score_list(const unsigned char* data, const int size, ScoreManager::S
     }
 }
 
+unsigned int _checksum_score_save_data(const ScoreSaveData& save_data)
+{
+    const unsigned char* bytes = reinterpret_cast<const unsigned char*>(&save_data);
+    const int checksum_offset = reinterpret_cast<const unsigned char*>(&save_data.checksum) - bytes;
+    unsigned int checksum = 2166136261u;
+
+    for(int i = 0; i < checksum_offset; ++i)
+    {
+        checksum ^= bytes[i];
+        checksum *= 16777619u;
+    }
+
+    return checksum;
+}
+
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -130,6 +157,7 @@ ScoreManager::ScoreManager()
     _load_score_list(normalscore_bin, normalscore_bin_size, scoreList[1]);
     _load_score_list(masterscore_bin, masterscore_bin_size, scoreList[2]);
     _load_score_list(deathscore_bin, deathscore_bin_size, scoreList[3]);
+    LoadSavedScores();
 }
 
 ScoreManager::~ScoreManager()
@@ -156,5 +184,41 @@ void ScoreManager::EntryScore(int order, int difficulty, int score, int level, i
 	scoreList[difficulty].record[order].time = time;
 	compat_strcpy(scoreList[difficulty].record[order].name,name);
 
-	// ROM above bin Since the data cannot be rewritten, it is not saved.
+	SaveScores();
+}
+
+void ScoreManager::LoadSavedScores()
+{
+    ScoreSaveData save_data;
+    bn::sram::read(save_data);
+
+    if(save_data.magic != SCORE_SAVE_MAGIC || save_data.version != SCORE_SAVE_VERSION)
+    {
+        return;
+    }
+
+    if(save_data.checksum != _checksum_score_save_data(save_data))
+    {
+        return;
+    }
+
+    for(int difficulty = 0; difficulty < 4; ++difficulty)
+    {
+        scoreList[difficulty] = save_data.score_list[difficulty];
+    }
+}
+
+void ScoreManager::SaveScores()
+{
+    ScoreSaveData save_data;
+    save_data.magic = SCORE_SAVE_MAGIC;
+    save_data.version = SCORE_SAVE_VERSION;
+
+    for(int difficulty = 0; difficulty < 4; ++difficulty)
+    {
+        save_data.score_list[difficulty] = scoreList[difficulty];
+    }
+
+    save_data.checksum = _checksum_score_save_data(save_data);
+    bn::sram::write(save_data);
 }
