@@ -4,6 +4,10 @@ Hextris Advance is an unofficial Game Boy Advance port / remake project of the h
 
 The current build focuses on a single-player GBA experience with multiple difficulty modes, score ranking saved to SRAM, bitmap-style presentation, sound effects, and tracker-module BGM.
 
+## Screenshot
+
+![Hextris Advance screenshot](https://github.com/user-attachments/assets/d09a55a3-fac6-4d76-b882-78a66b4ab782)
+
 ## Features
 
 - Game Boy Advance ROM output (`Hextris-Advance.gba`)
