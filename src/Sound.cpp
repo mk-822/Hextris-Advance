@@ -34,25 +34,57 @@ namespace
 
 #if HEXTRIS_HAS_BN_MUSIC_ITEMS
 	constexpr bn::fixed BGM_VOLUME = 0.3;
-	constexpr int MAIN_GAME_BGM_COUNT = 14;
+	constexpr int MAIN_GAME_BGM_COUNT = 21;
+	int main_game_bgm_order[MAIN_GAME_BGM_COUNT];
+	int main_game_bgm_index = MAIN_GAME_BGM_COUNT;
+
+	void shuffle_main_game_bgms()
+	{
+		for(int index = 0; index < MAIN_GAME_BGM_COUNT; ++index){
+			main_game_bgm_order[index] = index;
+		}
+
+		for(int index = MAIN_GAME_BGM_COUNT - 1; index > 0; --index){
+			const int swap_index = GameRandomInt(index + 1);
+			std::swap(main_game_bgm_order[index], main_game_bgm_order[swap_index]);
+		}
+
+		main_game_bgm_index = 0;
+	}
+
+	void reset_main_game_bgm_selection()
+	{
+		main_game_bgm_index = MAIN_GAME_BGM_COUNT;
+	}
 
 	const char* play_main_game_bgm()
 	{
-		switch(GameRandomInt(MAIN_GAME_BGM_COUNT)){
+		if(main_game_bgm_index >= MAIN_GAME_BGM_COUNT){
+			shuffle_main_game_bgms();
+		}
+
+		switch(main_game_bgm_order[main_game_bgm_index++]){
 		case 0: bn::music_items::a_winter_kiss.play(BGM_VOLUME); return "a_winter_kiss.xm";
 		case 1: bn::music_items::absolute_xtc.play(BGM_VOLUME); return "absolute_xtc.mod";
 		case 2: bn::music_items::ambient_starfield.play(BGM_VOLUME); return "ambient_starfield.xm";
 		case 3: bn::music_items::amanita_dream.play(BGM_VOLUME); return "amanita_dream.xm";
 		case 4: bn::music_items::bionic_girl.play(BGM_VOLUME); return "bionic_girl.xm";
 		case 5: bn::music_items::cabin_fever.play(BGM_VOLUME); return "cabin_fever.xm";
-		case 6: bn::music_items::chip_overture.play(BGM_VOLUME); return "chip_overture.xm";
-		case 7: bn::music_items::dreamline.play(BGM_VOLUME); return "dreamline.it";
-		case 8: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
-		case 9: bn::music_items::falling_raindrops.play(BGM_VOLUME); return "falling_raindrops.xm";
-		case 10: bn::music_items::simple_chip_tune.play(BGM_VOLUME); return "simple_chip_tune.xm";
-		case 11: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
-		case 12: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
-		default: bn::music_items::twinkle_and_twinkle_rmx.play(BGM_VOLUME); return "twinkle_and_twinkle_rmx.it";
+		case 6: bn::music_items::dreamline.play(BGM_VOLUME); return "dreamline.it";
+		case 7: bn::music_items::drozerix_alone.play(BGM_VOLUME); return "drozerix_alone.xm";
+		case 8: bn::music_items::drozerix_bubble_machine.play(BGM_VOLUME); return "drozerix_bubble_machine.xm";
+		case 9: bn::music_items::drozerix_dream_candy.play(BGM_VOLUME); return "drozerix_dream_candy.xm";
+		case 10: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
+		case 11: bn::music_items::drozerix_lost_without.play(BGM_VOLUME); return "drozerix_lost_without.xm";
+		case 12: bn::music_items::drozerix_master_select.play(BGM_VOLUME); return "drozerix_master_select.xm";
+		case 13: bn::music_items::drozerix_my_dearest.play(BGM_VOLUME); return "drozerix_my_dearest.xm";
+		case 14: bn::music_items::nerve_intro.play(BGM_VOLUME); return "nerve_intro.xm";
+		case 15: bn::music_items::nerve_intro2.play(BGM_VOLUME); return "nerve_intro2.xm";
+		case 16: bn::music_items::october_chip.play(BGM_VOLUME); return "october_chip.xm";
+		case 17: bn::music_items::spc.play(BGM_VOLUME); return "spc.xm";
+		case 18: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
+		case 19: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
+		default: bn::music_items::the_dim_dungeon.play(BGM_VOLUME); return "the_dim_dungeon.xm";
 		}
 	}
 #endif
@@ -67,6 +99,9 @@ void Sound::Initialize(){
 	// Initialize only the array to maintain compatibility.
 	std::fill_n(bgm, BGM_MAX, -1);
 	std::fill_n(se_no, SE_MAX, -1);
+#if HEXTRIS_HAS_BN_MUSIC_ITEMS
+	reset_main_game_bgm_selection();
+#endif
 }
 
 void Sound::ChangeBgm(int no){
@@ -83,15 +118,26 @@ void Sound::ChangeBgm(int no){
 		current_bgm_name = "none";
 		break;
 	case 0:
-		bn::music_items::you_would_be_here.play(BGM_VOLUME);
-		current_bgm_name = "you_would_be_here.xm";
+		bn::music_items::falling_raindrops.play(BGM_VOLUME);
+		current_bgm_name = "falling_raindrops.xm";
 		break;
 	case 1:
 		bn::music_items::past_never_come_back.play(BGM_VOLUME);
 		current_bgm_name = "past_never_come_back.xm";
 		break;
+	case 7:
+		bn::music_items::you_would_be_here.play(BGM_VOLUME);
+		current_bgm_name = "you_would_be_here.xm";
+		break;
+	case 8:
+		bn::music_items::twinkle_and_twinkle_rmx.play(BGM_VOLUME);
+		current_bgm_name = "twinkle_and_twinkle_rmx.it";
+		break;
 	default:
 		if(is_main_game_bgm(no)){
+			if(no == 2){
+				reset_main_game_bgm_selection();
+			}
 			current_bgm_name = play_main_game_bgm();
 		}else{
 			bn::music::stop();
