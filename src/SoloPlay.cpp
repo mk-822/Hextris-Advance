@@ -402,29 +402,31 @@ void SoloPlay::Main(){
 		hCtrl.DrawField(&drawData,255,false);
 		
 		if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
-			int y=88;
-			dxg->TexturePos(0,0,320,56);
-			dxg->Draw(image->i[BLANK_IMG],0,(float)y-8,true,192);
-			hCtrl.DrawBitmapText(109,y,	"Congratulations!!");
-			y += 16;
-			switch(difficulty){
-			case 0:
-				hCtrl.DrawBitmapText(97,y,	"Try NORMAL mode next!");
-				break;
-			case 1:
-				hCtrl.DrawBitmapText(97,y,	"Try MASTER mode next!");
-				break;
-			case 2:
-				hCtrl.DrawBitmapText(94,y,	"You are a super player!");
-				break;
-			case 3:
-				hCtrl.DrawBitmapText(88,y,	"You are a perfect player!");
-				break;
-			default:
-				break;
+			if(cur_pos == 360){
+				int y=88;
+				dxg->TexturePos(0,0,320,56);
+				dxg->Draw(image->i[BLANK_IMG],0,(float)y-8,true,192);
+				hCtrl.DrawBitmapText(109,y,	"Congratulations!!");
+				y += 16;
+				switch(difficulty){
+				case 0:
+					hCtrl.DrawBitmapText(97,y,	"Try NORMAL mode next!");
+					break;
+				case 1:
+					hCtrl.DrawBitmapText(97,y,	"Try MASTER mode next!");
+					break;
+				case 2:
+					hCtrl.DrawBitmapText(94,y,	"You are a super player!");
+					break;
+				case 3:
+					hCtrl.DrawBitmapText(88,y,	"You are a perfect player!");
+					break;
+				default:
+					break;
+				}
+				y += 16;
+				hCtrl.DrawBitmapText(103,y,	"Thanks for playing.");
 			}
-			y += 16;
-			hCtrl.DrawBitmapText(103,y,	"Thanks for playing.");
 		}else{
 			int x=134,y=112,font =  image->i[WHITEFONT_IMG],count2 = (int)cur_pos;
 			if(count2%4){

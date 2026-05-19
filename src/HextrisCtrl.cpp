@@ -1223,6 +1223,7 @@ void HextrisCtrl::ReleaseGraphics()
 void HextrisCtrl::UpdateEraseEffectSprites(HexFieldDrawData* drawData)
 {
 	const int animation_frame = (count / 2) % 7;
+	const int tile_update_line = count & 3;
 
 	for(int i = 0; i < 4; ++i)
 	{
@@ -1254,6 +1255,7 @@ void HextrisCtrl::UpdateEraseEffectSprites(HexFieldDrawData* drawData)
 			const int sprite_x = drawData->game_pos_x + int(effect.x[j]) + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
 			const int sprite_y = drawData->game_pos_y + int(effect.y[j]) + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;
 			const int tile_index = animation_frame * 16 + clamp_block_color(color);
+			const bool update_tiles = i == tile_update_line || effect.effecttime == effect.EFFECTTIME;
 
 			if(! eraseEffectSprites[i][j])
 			{
@@ -1262,7 +1264,10 @@ void HextrisCtrl::UpdateEraseEffectSprites(HexFieldDrawData* drawData)
 			else
 			{
 				eraseEffectSprites[i][j]->set_position(sprite_x, sprite_y);
-				eraseEffectSprites[i][j]->set_tiles(bn::sprite_items::block_cell_anim.tiles_item(), tile_index);
+				if(update_tiles)
+				{
+					eraseEffectSprites[i][j]->set_tiles(bn::sprite_items::block_cell_anim.tiles_item(), tile_index);
+				}
 			}
 			eraseEffectSprites[i][j]->set_visible(true);
 		}

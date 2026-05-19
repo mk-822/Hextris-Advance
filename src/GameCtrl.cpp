@@ -45,6 +45,7 @@ namespace
 	{
 		bn::optional<bn::sprite_ptr> sprite;
 		font_kind kind = font_kind::normal_8;
+		int glyph = -1;
 	};
 
 	constexpr int FONT_SPRITE_MAX = 112;
@@ -330,11 +331,16 @@ namespace
 				slot.sprite.reset();
 				slot.sprite = _create_font_sprite(kind, sprite_x, sprite_y, glyph);
 				slot.kind = kind;
+				slot.glyph = glyph;
 			}
 			else
 			{
 				slot.sprite->set_position(sprite_x, sprite_y);
-				_set_font_tiles(*slot.sprite, kind, glyph);
+				if(slot.glyph != glyph)
+				{
+					_set_font_tiles(*slot.sprite, kind, glyph);
+					slot.glyph = glyph;
+				}
 			}
 
 			slot.sprite->set_visible(true);
