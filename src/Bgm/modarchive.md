@@ -1,6 +1,6 @@
 # Mod Archive BGM Candidates
 
-Downloaded from The Mod Archive. These files were selected as public-domain licensed and suitable tracker-module candidates for Hextris Advance. Check final licensing before release if needed.
+Downloaded from The Mod Archive. These files were selected as public-domain licensed tracker modules for Hextris Advance and are stored directly in `src/Bgm/`. Keep this file with source and binary releases as the BGM attribution and traceability record.
 
 | File | Title | Mod Archive ID | Format | Size | Downloads | Favourites | Member Rating | License | Use | Source |
 | --- | --- | ---: | --- | ---: | ---: | ---: | --- | --- | --- | --- |
