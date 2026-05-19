@@ -17,7 +17,6 @@ Downloaded from The Mod Archive. These files were selected as public-domain lice
 | `dreamline.it` | Dreamline | 172460 | IT | 553KB | 2277 | 2 | Unrated | Public Domain | Main play | https://modarchive.org/index.php?query=172460&request=view_by_moduleid |
 | `drozerix_alone.xm` | Alone | 199968 | XM | 62KB | 1714 | 6 | 6 / 10 | Public Domain | Main play | https://modarchive.org/index.php?query=199968&request=view_by_moduleid |
 | `drozerix_bubble_machine.xm` | Bubble Machine | 176020 | XM | 41KB | 5788 | 12 | 9 / 10 | Public Domain | Main play | https://modarchive.org/index.php?query=176020&request=view_by_moduleid |
-| `drozerix_dream_candy.xm` | Dream Candy | 178565 | XM | 140KB | 4440 | 13 | 8 / 10 | Public Domain | Main play | https://modarchive.org/index.php?query=178565&request=view_by_moduleid |
 | `drozerix_leisurely_voice.xm` | Leisurely Voice | 183837 | XM | 96KB | 2667 | 5 | 9 / 10 | Public Domain | Main play | https://modarchive.org/index.php?query=183837&request=view_by_moduleid |
 | `drozerix_lost_without.xm` | Lost Without (Her) | 177708 | XM | 90KB | 3759 | 5 | 9 / 10 | Public Domain | Main play | https://modarchive.org/index.php?query=177708&request=view_by_moduleid |
 | `drozerix_master_select.xm` | Master Select | 190186 | XM | 64KB | 1636 | 3 | Unrated | Public Domain | Main play | https://modarchive.org/index.php?query=190186&request=view_by_moduleid |
@@ -33,5 +32,6 @@ Downloaded from The Mod Archive. These files were selected as public-domain lice
 Removed from the build:
 
 - `chip_overture.xm`: explicitly excluded from main play and not assigned elsewhere.
+- `drozerix_dream_candy.xm`: removed from main play because playback fails in the current project build/runtime.
 - `simple_chip_tune.xm`: explicitly excluded from main play and not assigned elsewhere.
 - `synthless_looped.it`, `lucky_star.it`, `digital_readout.it`: removed because they were MB-scale and unused.

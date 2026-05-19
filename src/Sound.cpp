@@ -34,7 +34,7 @@ namespace
 
 #if HEXTRIS_HAS_BN_MUSIC_ITEMS
 	constexpr bn::fixed BGM_VOLUME = 0.3;
-	constexpr int MAIN_GAME_BGM_COUNT = 21;
+	constexpr int MAIN_GAME_BGM_COUNT = 20;
 	int main_game_bgm_order[MAIN_GAME_BGM_COUNT];
 	int main_game_bgm_index = MAIN_GAME_BGM_COUNT;
 
@@ -73,17 +73,16 @@ namespace
 		case 6: bn::music_items::dreamline.play(BGM_VOLUME); return "dreamline.it";
 		case 7: bn::music_items::drozerix_alone.play(BGM_VOLUME); return "drozerix_alone.xm";
 		case 8: bn::music_items::drozerix_bubble_machine.play(BGM_VOLUME); return "drozerix_bubble_machine.xm";
-		case 9: bn::music_items::drozerix_dream_candy.play(BGM_VOLUME); return "drozerix_dream_candy.xm";
-		case 10: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
-		case 11: bn::music_items::drozerix_lost_without.play(BGM_VOLUME); return "drozerix_lost_without.xm";
-		case 12: bn::music_items::drozerix_master_select.play(BGM_VOLUME); return "drozerix_master_select.xm";
-		case 13: bn::music_items::drozerix_my_dearest.play(BGM_VOLUME); return "drozerix_my_dearest.xm";
-		case 14: bn::music_items::nerve_intro.play(BGM_VOLUME); return "nerve_intro.xm";
-		case 15: bn::music_items::nerve_intro2.play(BGM_VOLUME); return "nerve_intro2.xm";
-		case 16: bn::music_items::october_chip.play(BGM_VOLUME); return "october_chip.xm";
-		case 17: bn::music_items::spc.play(BGM_VOLUME); return "spc.xm";
-		case 18: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
-		case 19: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
+		case 9: bn::music_items::drozerix_leisurely_voice.play(BGM_VOLUME); return "drozerix_leisurely_voice.xm";
+		case 10: bn::music_items::drozerix_lost_without.play(BGM_VOLUME); return "drozerix_lost_without.xm";
+		case 11: bn::music_items::drozerix_master_select.play(BGM_VOLUME); return "drozerix_master_select.xm";
+		case 12: bn::music_items::drozerix_my_dearest.play(BGM_VOLUME); return "drozerix_my_dearest.xm";
+		case 13: bn::music_items::nerve_intro.play(BGM_VOLUME); return "nerve_intro.xm";
+		case 14: bn::music_items::nerve_intro2.play(BGM_VOLUME); return "nerve_intro2.xm";
+		case 15: bn::music_items::october_chip.play(BGM_VOLUME); return "october_chip.xm";
+		case 16: bn::music_items::spc.play(BGM_VOLUME); return "spc.xm";
+		case 17: bn::music_items::spectrum.play(BGM_VOLUME); return "spectrum.xm";
+		case 18: bn::music_items::speed_chip.play(BGM_VOLUME); return "speed_chip.s3m";
 		default: bn::music_items::the_dim_dungeon.play(BGM_VOLUME); return "the_dim_dungeon.xm";
 		}
 	}
