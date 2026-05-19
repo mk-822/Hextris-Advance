@@ -2,17 +2,63 @@
 //
 //////////////////////////////////////////////////////////////////////
 #include "ScoreDisplay.h"
-#include "bn_direct_bitmap_items_scorebg.h"
-#include "bn_sp_direct_bitmap_bg_painter.h"
+#include "bn_bg_palette_ptr.h"
+#include "bn_regular_bg_items_score_font_bg.h"
+#include "bn_regular_bg_items_scorebg.h"
+#include "bn_regular_bg_map_cell_info.h"
+#include "bn_regular_bg_tiles_ptr.h"
+#include "bn_utility.h"
 
 namespace
 {
-	constexpr int RANK_COLUMN_X = 42;
-	constexpr int NAME_COLUMN_X = 64;
-	constexpr int SCORE_COLUMN_X = 112;
-	constexpr int LEVEL_HEADER_X = 156;
-	constexpr int LEVEL_COLUMN_X = 164;
-	constexpr int TIME_COLUMN_X = 208;
+	constexpr int TEXT_MAP_COLUMNS = 32;
+	constexpr int TEXT_MAP_ROWS = 64;
+	constexpr int VISIBLE_TEXT_COLUMNS = 30;
+	constexpr int LEADING_BLANK_ROWS = 12;
+	constexpr int DIFFICULTY_ROW_COUNT = 13;
+	constexpr int SCROLL_FRAME_DIVIDER = 3;
+
+	const char* DIFFICULTY_NAMES[] = {
+		"EASY",
+		"NORMAL",
+		"MASTER",
+		"DEATH"
+	};
+
+	void _fill_score_line(char* line)
+	{
+		for(int i = 0; i < VISIBLE_TEXT_COLUMNS; ++i)
+		{
+			line[i] = ' ';
+		}
+
+		line[VISIBLE_TEXT_COLUMNS] = '\0';
+	}
+
+	void _write_text(char* line, int x, const char* text, int width)
+	{
+		for(int i = 0; i < width && text[i] != '\0'; ++i)
+		{
+			line[x + i] = text[i];
+		}
+	}
+
+	void _write_int_right(char* line, int x, int width, int value)
+	{
+		char tmp[16];
+		compat_sprintf(tmp, "%d", value);
+		int len = compat_strlen(tmp);
+		if(len > width)
+		{
+			len = width;
+		}
+
+		const int start = x + width - len;
+		for(int i = 0; i < len; ++i)
+		{
+			line[start + i] = tmp[i];
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -21,169 +67,223 @@ namespace
 char* FrameCountToStr(int,char*);
 ScoreDisplay :: ScoreDisplay()
 {
-	animateionReset();
 	count = -51;
-	num = 0;
-	Speed = 0;
-	page = 0;
 	remove = 0;
 	FadeLevel = 0;
+	spaceCell = 0;
+
+	for(int i = 0; i < 128; ++i)
+	{
+		glyphCells[i] = 0;
+	}
 }
-/*
-			&scoreList[0].record[i].score,
-			&scoreList[0].record[i].time,
-			&scoreList[0].record[i].name
-*/
+
 void ScoreDisplay :: Main()
 {
 	Sound::ChangeBgm(7);
 	DrawBackground();
-	DrawRankingFontSprite(64,10,dxg,image->i[BIGFONT_IMG],16,16,-4,"Score Ranking");
-	DrawRankingFontSprite(NAME_COLUMN_X,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Name");
-	DrawRankingFontSprite(SCORE_COLUMN_X,60,dxg,image->i[BIGFONT_IMG],16,16,-8,"Score");
-	DrawRankingFontSprite(LEVEL_HEADER_X,60,dxg,image->i[BIGFONT_IMG],16,16,-8,"Level");
-	DrawRankingFontSprite(TIME_COLUMN_X,60,dxg,image->i[BIGFONT_IMG],16,16,-6,"Time");
+	InitializeTextBg();
+
 	if(count < 0)
-		Fade_In();
-	if(count == 0)
-		FadeLevel = 254;
-	if( 0 <= count && count < 1000){
-		Rank = EASY;
-		DrawRank = "EASY";
-	}else if(count >= 1000 && count < 2000){
-		Rank = NORMAL;
-		DrawRank = "NORMAL";
-	}else if(count >= 2000 && count <3000){
-		Rank = MASTER;
-		DrawRank = "MASTER";
-	}else if(count >= 3000){
-		Rank = DEATH;
-		DrawRank = "DEATH";
-	}
-	if(count >= 0){
-		const int rank_count = count - Rank * 1000;
-		const int page_index = rank_count / SCORE_PAGE_DURATION;
-
-		page = SCORE_RECORD_COUNT - 1 - page_index * SCORE_RECORDS_PER_PAGE;
-		if(page < 0){
-			page = 0;
-		}
-
-		if(rank_count % SCORE_PAGE_DURATION == 0){
-			animateionReset();
-		}
-	}
-	if(count >= 0)
-		ScoreDraw(page);
-	if(count >= 0){
-		const int rank_count = count - Rank * 1000;
-		if(rank_count % SCORE_PAGE_DURATION > SCORE_PAGE_EXIT_START)
-			GetBackAnimateion();
-		else
-			num = animateion(num);
-	}else{
-		num = animateion(num);
-	}
-	////////////////For debugging///////////////////////////////////////////
-	//DrawImageFont(300, 10, dxg, image->i[GRAYFONT_IMG], "%d",count);
-	//DrawImageFont(300, 100, dxg, image->i[GRAYFONT_IMG], "%d",Speed);
-	//DrawImageFont(300, 200, dxg, image->i[GRAYFONT_IMG], "%d",num);
-	if(input->GetKeyState(0,2) & BUTTON[0])
-		remove = 1;
-	if(remove){
-		count = Fade_Out();
-	}else{
-		if(count >= 3900)
-			count = Fade_Out();
-		else
-			++count;
-	}
-}
-
-int ScoreDisplay ::animateion(int number)
-{
-	if(move[number].x != 0){
-		if(( 29 <= move[number].x && move[number].x <= 61) || (-61 <= move[number].x && move[number].x <= -29)){//32
-			Speed = 4;
-		}else if((13 <= move[number].x && move[number].x <= 29) || (-19 <= move[number].x && move[number].x <= -13)){//16
-			Speed = 3;
-		}else if((4 <= move[number].x && move[number].x <= 12) || (-12 <= move[number].x && move[number].x <= -4)){//8
-			Speed = 2;
-		}else if((0 < move[number].x && move[number].x <= 3) || ( -3<=move[number].x && move[number].x<0)){//4
-			Speed = 1;
-		}else{
-			Speed = 5;
-		}
-		move[number].x += (number%2 == 1)? -1*Speed : Speed;
-		move[number].y += Speed;		
-	}else{
-		Speed = 0;
-		number++;
-	}
-	if(number >= SCORE_RECORDS_PER_PAGE)
-		number = 0;
-
-	return number;
-}
-
-
-void ScoreDisplay :: GetBackAnimateion()
-{
-	if(move[0].x <8){
-		Speed = 1;
-	}else if(move[0].x < 16){
-		Speed = 2;
-	}else if(move[0].x < 32){
-		Speed = 4;
-	}else if(move[0].x < 64){
-		Speed = 8;
-	}else{
-		Speed = 16;
-	}
-	for(int i = 0 ; i < SCORE_RECORDS_PER_PAGE ; i++ )
 	{
-		move[i].x+= Speed;
+		Fade_In();
 	}
-}
 
-void ScoreDisplay ::animateionReset()
-{
-	move[0].x=S_Fixed_PosX;
-	move[0].y=Fixed_PosY;
-	move[1].x=US_Fixed_PosX+10;
-	move[1].y=Fixed_PosY+10;
-	move[2].x=S_Fixed_PosX-20;
-	move[2].y=Fixed_PosY+20;
-	num = 0;
-	Speed = 0;
+	if(count == 0)
+	{
+		FadeLevel = 254;
+	}
 
+	if(count >= 0)
+	{
+		DrawScoreText();
+	}
+
+	if(input->GetKeyState(0,2) & BUTTON[0])
+	{
+		remove = 1;
+	}
+
+	if(remove)
+	{
+		count = Fade_Out();
+	}
+	else
+	{
+		++count;
+	}
 }
 
 void ScoreDisplay ::DrawBackground()
 {
-	if(! scoreBg){
-		scoreBg = bn::sp_direct_bitmap_bg_ptr::create();
+	if(! scoreBg)
+	{
+		scoreBg = bn::regular_bg_items::scorebg.create_bg(0, 0);
 		scoreBg->set_priority(3);
-
-		bn::sp_direct_bitmap_bg_painter painter(*scoreBg);
-		painter.blit(0, 0, bn::direct_bitmap_items::scorebg);
+		scoreBg->set_z_order(1);
+		scoreBg->set_top_left_x(0);
+		scoreBg->set_top_left_y(0);
 	}
 }
 
-void ScoreDisplay ::ScoreDraw(int s)
+void ScoreDisplay ::InitializeTextBg()
 {
-	char tmp[9];
-	DrawRankingFontSprite(110 , 40 , dxg, image->i[BIGFONT_IMG],16,16,-4, "%s",DrawRank);
-	for(int i = 0 ; i < SCORE_RECORDS_PER_PAGE && s - i >= 0 ; i++){
-		const int record_index = s - i;
-		DrawRankingFontSprite(RANK_COLUMN_X+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-8,"%2d", record_index+1);
-		DrawRankingFontSprite(NAME_COLUMN_X+move[i].x, move[i].y+25, dxg, image->i[BIGFONT_IMG],16,16,-6,"%s", Score.scoreList[Rank].record[record_index].name);
-		DrawRankingFontSprite(SCORE_COLUMN_X+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-8, "%d", Score.scoreList[Rank].record[record_index].score);
-		DrawRankingFontSprite(LEVEL_COLUMN_X+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-8, "%4d", Score.scoreList[Rank].record[record_index].level);
-		DrawRankingFontSprite(TIME_COLUMN_X+move[i].x, move[i].y+25, dxg,image->i[BIGFONT_IMG],16,16,-8, "%s", FrameCountToStr(Score.scoreList[Rank].record[record_index].time,tmp));
+	if(textBg)
+	{
+		return;
+	}
+
+	bn::regular_bg_map_ptr map = bn::regular_bg_map_ptr::allocate(
+			bn::size(TEXT_MAP_COLUMNS, TEXT_MAP_ROWS),
+			bn::regular_bg_items::score_font_bg.tiles_item().create_tiles(false),
+			bn::regular_bg_items::score_font_bg.palette_item().create_palette());
+	const int font_palette_id = map.palette().id();
+
+	for(int i = 0; i < 128; ++i)
+	{
+		const int cell_x = i % 16;
+		const int cell_y = i / 16;
+		const int map_index = cell_y * TEXT_MAP_COLUMNS + cell_x;
+		bn::regular_bg_map_cell_info info(score_font_bg_bn_gfxMap[map_index]);
+		info.set_palette_id(font_palette_id);
+		glyphCells[i] = info.cell();
+	}
+
+	spaceCell = glyphCells[0];
+	bn::optional<bn::span<bn::regular_bg_map_cell>> vram = map.vram();
+	if(vram)
+	{
+		for(bn::regular_bg_map_cell& cell : *vram)
+		{
+			cell = spaceCell;
+		}
+	}
+
+	textBg = bn::regular_bg_ptr::create(0, 0, bn::move(map));
+	textBg->set_priority(0);
+	textBg->set_z_order(0);
+	textBg->set_top_left_x(0);
+	textBg->set_top_left_y(0);
+	PopulateTextMap();
+}
+
+void ScoreDisplay ::ClearTextMap()
+{
+	if(! textBg)
+	{
+		return;
+	}
+
+	bn::regular_bg_map_ptr map = textBg->map();
+	bn::optional<bn::span<bn::regular_bg_map_cell>> vram = map.vram();
+	if(! vram)
+	{
+		return;
+	}
+
+	for(bn::regular_bg_map_cell& cell : *vram)
+	{
+		cell = spaceCell;
 	}
 }
 
+void ScoreDisplay ::DrawScoreText()
+{
+	if(! textBg)
+	{
+		return;
+	}
+
+	const int scroll_units = (count / SCROLL_FRAME_DIVIDER) % (TEXT_MAP_ROWS * 8);
+	textBg->set_top_left_y(-scroll_units);
+}
+
+void ScoreDisplay ::PopulateTextMap()
+{
+	ClearTextMap();
+
+	char line[40];
+	for(int row = 0; row < TEXT_MAP_ROWS; ++row)
+	{
+		BuildScrollLine(row - LEADING_BLANK_ROWS, line);
+		DrawTextRow(row, line);
+	}
+}
+
+void ScoreDisplay ::DrawTextRow(int row, const char* text)
+{
+	if(! textBg || row < 0 || row >= TEXT_MAP_ROWS)
+	{
+		return;
+	}
+
+	bn::regular_bg_map_ptr map = textBg->map();
+	bn::optional<bn::span<bn::regular_bg_map_cell>> vram = map.vram();
+	if(! vram)
+	{
+		return;
+	}
+
+	const int len = compat_strlen(text);
+	int col = (VISIBLE_TEXT_COLUMNS - len) / 2;
+	if(col < 0)
+	{
+		col = 0;
+	}
+
+	for(int i = 0; i < len && col + i < TEXT_MAP_COLUMNS; ++i)
+	{
+		const char chr = text[i];
+		if(chr == ' ')
+		{
+			continue;
+		}
+
+		int glyph = static_cast<unsigned char>(chr) - 32;
+		if(glyph < 0 || glyph >= 128)
+		{
+			glyph = 0;
+		}
+
+		(*vram)[row * TEXT_MAP_COLUMNS + col + i] = glyphCells[glyph];
+	}
+}
+
+void ScoreDisplay ::BuildScrollLine(int contentRow, char* line)
+{
+	line[0] = '\0';
+	if(contentRow < 0)
+	{
+		return;
+	}
+
+	const int difficulty = contentRow / DIFFICULTY_ROW_COUNT;
+	if(difficulty < 0 || difficulty >= 4)
+	{
+		return;
+	}
+
+	const int row = contentRow % DIFFICULTY_ROW_COUNT;
+	if(row == 1)
+	{
+		compat_strcpy(line, DIFFICULTY_NAMES[difficulty]);
+		return;
+	}
+
+	if(row >= 3 && row < 3 + SCORE_RECORD_COUNT)
+	{
+		char time[9];
+		const int record_index = row - 3;
+		const ScoreManager::Record& record = Score.scoreList[difficulty].record[record_index];
+		_fill_score_line(line);
+		_write_int_right(line, 0, 2, record_index + 1);
+		line[2] = '.';
+		_write_text(line, 5, record.name, 3);
+		_write_int_right(line, 9, 7, record.score);
+		_write_int_right(line, 17, 4, record.level);
+		_write_text(line, 22, FrameCountToStr(record.time, time), 8);
+	}
+}
 
 void ScoreDisplay ::Fade_In()
 {
@@ -193,17 +293,17 @@ void ScoreDisplay ::Fade_In()
 	FadeLevel+=5;
 }
 
-
 int ScoreDisplay::Fade_Out()
 {
 	dxg->TexturePos();
 	dxg->ColorChange(1,true);
 	dxg->Draw(image->i[BLANK_IMG],0,0,true,255-FadeLevel);
 	FadeLevel-=5;
-	if(FadeLevel <= 0){
+	if(FadeLevel <= 0)
+	{
+		textBg.reset();
 		scoreBg.reset();
 		*scene = TITLE_SCENE;
 	}
 	return ++count;
-
 }
