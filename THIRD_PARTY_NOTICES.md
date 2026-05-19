@@ -6,7 +6,9 @@ The lower-case `credits/` and `licenses/` directories, when present, are Butano 
 
 ## Project Code
 
-- Hextris Advance source code: MIT License, see `LICENSE`.
+- Hextris Advance GBA source code, implementation, and MK-created visual assets: MIT License, see `LICENSE`.
+- Original Hextris game: created by David Markley. Official site: https://hextris.com/. Hextris Advance is an unofficial fan port / remake and is not affiliated with, endorsed by, or authorized by the original Hextris rights holder.
+- The Hextris title and original game design are not covered by this repository's MIT License.
 
 ## Engine And Libraries
 

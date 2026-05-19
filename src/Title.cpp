@@ -6,7 +6,7 @@
 namespace{
 	const int MENU_WORD_INDEX[] = {0, 2};
 	const int MENU_ROW_INDEX[] = {1, 2};
-	const char COPYRIGHT_TEXT[] = "COPYRIGHT 2006,2026 MK (X ID : @__mk)";
+	const char COPYRIGHT_TEXT[] = "UNOFFICIAL GBA PORT 2026 MK (X:@__mk)";
 	const int COPYRIGHT_X = 46;
 	const int COPYRIGHT_Y = 190;
 }
