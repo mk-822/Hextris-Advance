@@ -39,6 +39,7 @@ public:
 	void OutMenu();
 	void HighlightMenu();
 	void OffsetMenuSprite();
+	void DrawCopyright();
 };
 
 #endif

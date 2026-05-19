@@ -6,6 +6,9 @@
 namespace{
 	const int MENU_WORD_INDEX[] = {0, 2};
 	const int MENU_ROW_INDEX[] = {1, 2};
+	const char COPYRIGHT_TEXT[] = "COPYRIGHT 2006,2026 MK (X ID : @__mk)";
+	const int COPYRIGHT_X = 46;
+	const int COPYRIGHT_Y = 190;
 }
 
 Title::Title(){
@@ -54,6 +57,7 @@ void Title::Main(){
 		//dxg->Draw(image->i[TITLE_IMG], 0, 0, true, count*(256/FADETIME));
 		bn::blending::set_fade_alpha((float)1 - (float)count / FADETIME);
 		InMenu();
+		DrawCopyright();
 		
 		if(count>=FADETIME){
 			phase = 1;
@@ -67,6 +71,7 @@ void Title::Main(){
 		dxg->TexturePos();
 		dxg->Draw(image->i[TITLE_IMG], 0, 0);
 		scene_tmp = Select();
+		DrawCopyright();
 		if(scene_tmp != -1){
 			phase = 2;
 			count = 0;
@@ -80,6 +85,7 @@ void Title::Main(){
 		//dxg->Draw(image->i[TITLE_IMG], 0, 0, true, 255-count*(256/FADETIME));
 		bn::blending::set_fade_alpha((float)count / FADETIME);
 		OutMenu();
+		DrawCopyright();
 
 		if(count>=FADETIME){
 			switch(scene_tmp){
@@ -152,6 +158,10 @@ void Title::InMenu(){
 	cursor[1]->set_position(MENUX+CURSOR_OFFSET_X+48, (float)(MENUY+MENU_ROW_INDEX[current]*16));
 	cursor[0]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + curPattern * 256 / 32);
 	cursor[1]->set_tiles(bn::sprite_items::words.tiles_item(), CURSOR_PAT_INDEX + 1 + curPattern * 256 / 32);
+}
+
+void Title::DrawCopyright(){
+	DrawImageFontBlended(COPYRIGHT_X, COPYRIGHT_Y, dxg, image->i[FONT_IMG], COPYRIGHT_TEXT);
 }
 
 // Method of choice

@@ -312,7 +312,8 @@ namespace
 		}
 	}
 
-	void _draw_sprite_font_impl(int x, int y, int font, int sizex, int sizey, int offsetx, const char* buffer)
+	void _draw_sprite_font_impl(
+			int x, int y, int font, int sizex, int sizey, int offsetx, bool blending_enabled, const char* buffer)
 	{
 		const int len = compat_strlen(buffer);
 		for(int i = 0; i < len && _font_sprite_used < FONT_SPRITE_MAX; ++i)
@@ -337,6 +338,7 @@ namespace
 			}
 
 			slot.sprite->set_visible(true);
+			slot.sprite->set_blending_enabled(blending_enabled);
 		}
 	}
 }
@@ -468,7 +470,19 @@ void DrawImageFont(int x, int y, draw* dxg, int font, const char* format, ...){
 	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
-	_draw_sprite_font_impl(x, y, font, 8, 8, -2, buffer);
+	_draw_sprite_font_impl(x, y, font, 8, 8, -2, false, buffer);
+}
+
+void DrawImageFontBlended(int x, int y, draw* dxg, int font, const char* format, ...){
+	(void) dxg;
+	char buffer[256];
+
+	va_list ap;
+	va_start(ap, format);
+	compat_vsprintf(buffer, format, ap);
+	va_end(ap);
+
+	_draw_sprite_font_impl(x, y, font, 8, 8, -2, true, buffer);
 }
 
 void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* format, ...){
@@ -481,7 +495,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int trans, const char* for
 	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
-	_draw_sprite_font_impl(x, y, font, 8, 8, -2, buffer);
+	_draw_sprite_font_impl(x, y, font, 8, 8, -2, false, buffer);
 }
 
 void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int offsetx, const char* format, ...){
@@ -493,7 +507,7 @@ void DrawImageFont(int x, int y, draw* dxg, int font, int sizex, int sizey, int 
 	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
-	_draw_sprite_font_impl(x, y, font, sizex, sizey, offsetx, buffer);
+	_draw_sprite_font_impl(x, y, font, sizex, sizey, offsetx, false, buffer);
 }
 
 void DrawString(int x, int y, draw* dxg, int font, const char* format, ...){
@@ -523,7 +537,7 @@ void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int siz
 	compat_vsprintf(buffer, format, ap);
 	va_end(ap);
 
-	_draw_sprite_font_impl(x, y, font, sizex, sizey, offsetx, buffer);
+	_draw_sprite_font_impl(x, y, font, sizex, sizey, offsetx, false, buffer);
 }
 
 void ReleaseFontSpriteResources(){

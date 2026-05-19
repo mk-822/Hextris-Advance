@@ -8,6 +8,7 @@
 
 // BMP Draw characters using fonts. Only alphanumeric characters.
 void DrawImageFont(int x, int y, draw* dxg, int font, const char*, ...);
+void DrawImageFontBlended(int x, int y, draw* dxg, int font, const char*, ...);
 void DrawString(int x, int y, draw* dxg, int font, const char*, ...);
 void DrawRankingFontSprite(int x, int y, draw* dxg, int font, int sizex, int sizey, int offsetx, const char* format, ...);
 void ReleaseFontSpriteResources();
