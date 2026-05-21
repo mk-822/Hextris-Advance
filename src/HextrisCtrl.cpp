@@ -1211,6 +1211,11 @@ void HextrisCtrl::ReleaseBlockSprites()
 	}
 }
 
+void HextrisCtrl::ReleaseTransientSprites()
+{
+	ReleaseBlockSprites();
+}
+
 void HextrisCtrl::ReleaseGraphics()
 {
 	ReleaseBlockSprites();
@@ -1788,6 +1793,20 @@ void HextrisCtrl::DrawBitmapText(int virtual_x, int virtual_y, const char* text)
 			HUD_CHAR_HEIGHT + 4,
 			bn::colors::black);
 	draw_hud_text(painter, screen_x, screen_y, text);
+}
+
+void HextrisCtrl::ClearPlayfieldBitmap(HexFieldDrawData* drawData)
+{
+	if(! drawData)
+	{
+		return;
+	}
+
+	ClearBitmapRect(
+			drawData->game_pos_x + GAME_POS_OFFSET_X,
+			drawData->game_pos_y + GAME_POS_OFFSET_Y,
+			FIELD_MAX_X * BLOCK_OFFSET_X + BLOCK_PIXEL_SIZE,
+			FIELD_MAX_Y * BLOCK_OFFSET_Y + BLOCK_PIXEL_SIZE);
 }
 
 void HextrisCtrl::ClearBitmapRect(int virtual_x, int virtual_y, int width, int height)

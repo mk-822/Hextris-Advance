@@ -154,6 +154,7 @@ public:
 	int queFix;
 	int queErace;
 	void SetBitmapBackground(int image_id);
+	void ReleaseTransientSprites();
 	void ReleaseGraphics();
 	void ChangeLevel(DelayData* newLevel);
 	HextrisCtrl();
@@ -165,6 +166,7 @@ public:
 	void DrawScoreTime(const char* text);
 	void DrawBgmName(const char* text);
 	void DrawBitmapText(int virtual_x, int virtual_y, const char* text);
+	void ClearPlayfieldBitmap(HexFieldDrawData* drawData);
 	void ClearBitmapRect(int virtual_x, int virtual_y, int width, int height);
 };
 

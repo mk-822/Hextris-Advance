@@ -439,7 +439,9 @@ void SoloPlay::Main(){
 
 		cur_pos--;
 		if(cur_pos <= 0){
+			hCtrl.ReleaseTransientSprites();
 			if(ScoreData.JudgeOrder(score,difficulty) != -1){
+				hCtrl.ClearPlayfieldBitmap(&drawData);
 				if((cntLevel == 1000)||((cntLevel == 300)&&(difficulty == 0))){
 					hCtrl.ClearBitmapRect(32, 80, 256, 64);
 				}
