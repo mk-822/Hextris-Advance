@@ -639,7 +639,7 @@ void SoloPlay::EraceEffect()
 	}
 
 	const int erase_left = 40 - tmp;
-	const int erase_top = 104;
+	const int erase_top = 136;
 	for(int i = 0; i < 3; ++i){
 		const int sprite_x = erase_left + 16 + i * 32 - WINDOW_WIDE / 2;
 		const int sprite_y = erase_top + 8 - WINDOW_HEIGHT / 2;
@@ -656,8 +656,8 @@ void SoloPlay::EraceEffect()
 	if(count%4){
 		font = image->i[FONT_IMG];
 	}
-	DrawImageFont(72-tmp,120,dxg,font,"%d pts",getscore);
-	int bonus_y = 132;
+	DrawImageFont(72-tmp,152,dxg,font,"%d pts",getscore);
+	int bonus_y = 164;
 	if(cntCombo >= 2){
 		DrawImageFont(56-tmp,bonus_y,dxg,font,"%d COMBO!!",cntCombo);
 		bonus_y += 12;

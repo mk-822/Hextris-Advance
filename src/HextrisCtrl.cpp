@@ -46,7 +46,7 @@ namespace
 	constexpr int HUD_BASE_X = 207;
 	constexpr int HUD_BASE_Y = 88;
 	constexpr int HUD_TIME_X = 56;
-	constexpr int HUD_TIME_Y = 96;
+	constexpr int HUD_TIME_Y = 182;
 	constexpr int HUD_LINE_STEP = 8;
 	constexpr int HUD_CHAR_ADVANCE = 6;
 	constexpr int HUD_CHAR_WIDTH = 7;
@@ -64,8 +64,9 @@ namespace
 	constexpr int NEXT_LABEL_BACKING_OFFSET_Y = 0;
 	constexpr int NEXT_LABEL_BACKING_WIDTH = 42;
 	constexpr int NEXT_LABEL_BACKING_HEIGHT = 12;
-	constexpr int NEXT_LABEL_TEXT_OFFSET_X = 25;
+	constexpr int NEXT_LABEL_TEXT_OFFSET_X = 28;
 	constexpr int NEXT_LABEL_TEXT_OFFSET_Y = 3;
+	constexpr int NEXT_PREVIEW_SPACING_Y = 28;
 	constexpr bn::color UI_BG_COLOR(1, 1, 1);
 
 	inline int virtual_to_screen_x(int value)
@@ -360,7 +361,10 @@ void HextrisCtrl::Initialize(draw* Dxg,Image* Image,JoyPadCtrl* Input,DataFileLo
 		queFloorUp[i] = -1;
 	}
 
-	nextBlock = GenerateNext(10);
+	for(int i = 0; i < NEXT_PREVIEW_COUNT; ++i)
+	{
+		nextBlocks[i] = GenerateNext(10);
+	}
 	effectFlag = 0;
 	wait = 0;
 	for(int i = 0; i < 4; ++i)
@@ -491,7 +495,6 @@ int HextrisCtrl::Main(int player){
 				NextToCurrent(0);
 			}
 
-			nextBlock = GenerateNext(10);
 			fallcount = delayData.fall;
 			fixcount = delayData.fix;
 			forcefixcount = 0;
@@ -1124,28 +1127,34 @@ void HextrisCtrl::UpdateGhostBlockSprites(HexFieldDrawData* drawData)
 
 void HextrisCtrl::UpdateNextBlockSprites(HexFieldDrawData* drawData)
 {
-	const BlockData& next_data = blockData->blockData[nextBlock];
-	for(int i = 0; i < 4; ++i)
+	for(int preview_index = 0; preview_index < NEXT_PREVIEW_COUNT; ++preview_index)
 	{
-		const int block_x = drawData->game_pos_x + NEXT_OFFSET_X + 12 - 16 + 8 +
-				(blockData->posData[next_data.pos[i]].x + next_data.center_x) * BLOCK_OFFSET_X;
-		const int block_y = drawData->game_pos_y + NEXT_OFFSET_Y + 6 + 8 +
-				(blockData->posData[next_data.pos[i]].y + next_data.center_y) * BLOCK_OFFSET_Y;
-		const int sprite_x = block_x + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
-		const int sprite_y = block_y + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;
-		const int tile_index = clamp_block_color(nextBlock + 1);
-
-		if(! nextBlockSprites[i])
+		const int next_block = nextBlocks[preview_index];
+		const BlockData& next_data = blockData->blockData[next_block];
+		for(int i = 0; i < 4; ++i)
 		{
-			nextBlockSprites[i] = bn::sprite_items::block_cell.create_sprite(sprite_x, sprite_y, tile_index);
-		}
-		else
-		{
-			nextBlockSprites[i]->set_position(sprite_x, sprite_y);
-			nextBlockSprites[i]->set_tiles(bn::sprite_items::block_cell.tiles_item(), tile_index);
-		}
+			const int block_x = drawData->game_pos_x + NEXT_OFFSET_X + 12 - 16 + 8 +
+					(blockData->posData[next_data.pos[i]].x + next_data.center_x) * BLOCK_OFFSET_X;
+			const int block_y = drawData->game_pos_y + NEXT_OFFSET_Y + 6 + 8 +
+					preview_index * NEXT_PREVIEW_SPACING_Y +
+					(blockData->posData[next_data.pos[i]].y + next_data.center_y) * BLOCK_OFFSET_Y;
+			const int sprite_x = block_x + BLOCK_PIXEL_SIZE / 2 - WINDOW_WIDE / 2;
+			const int sprite_y = block_y + BLOCK_PIXEL_SIZE / 2 - WINDOW_HEIGHT / 2;
+			const int tile_index = clamp_block_color(next_block + 1);
 
-		nextBlockSprites[i]->set_visible(true);
+			if(! nextBlockSprites[preview_index][i])
+			{
+				nextBlockSprites[preview_index][i] =
+						bn::sprite_items::block_cell.create_sprite(sprite_x, sprite_y, tile_index);
+			}
+			else
+			{
+				nextBlockSprites[preview_index][i]->set_position(sprite_x, sprite_y);
+				nextBlockSprites[preview_index][i]->set_tiles(bn::sprite_items::block_cell.tiles_item(), tile_index);
+			}
+
+			nextBlockSprites[preview_index][i]->set_visible(true);
+		}
 	}
 }
 
@@ -1173,11 +1182,14 @@ void HextrisCtrl::HideGhostBlockSprites()
 
 void HextrisCtrl::HideNextBlockSprites()
 {
-	for(int i = 0; i < 4; ++i)
+	for(int preview_index = 0; preview_index < NEXT_PREVIEW_COUNT; ++preview_index)
 	{
-		if(nextBlockSprites[i])
+		for(int i = 0; i < 4; ++i)
 		{
-			nextBlockSprites[i]->set_visible(false);
+			if(nextBlockSprites[preview_index][i])
+			{
+				nextBlockSprites[preview_index][i]->set_visible(false);
+			}
 		}
 	}
 }
@@ -1202,7 +1214,10 @@ void HextrisCtrl::ReleaseBlockSprites()
 	{
 		currentBlockSprites[i].reset();
 		ghostBlockSprites[i].reset();
-		nextBlockSprites[i].reset();
+		for(int preview_index = 0; preview_index < NEXT_PREVIEW_COUNT; ++preview_index)
+		{
+			nextBlockSprites[preview_index][i].reset();
+		}
 
 		for(int j = 0; j < FIELD_BLOCK_COLS; ++j)
 		{
@@ -1307,22 +1322,33 @@ void HextrisCtrl::ChangeLevel(DelayData *newLevel)
 
 int HextrisCtrl::NextToCurrent(int rotation)
 {
-	curBlock.color = nextBlock + 1;
-	curBlock.center_x = blockData->blockData[nextBlock].center_x + SPAWN_OFFSET_X;
-	curBlock.center_y = blockData->blockData[nextBlock].center_y;
+	const int next_block = nextBlocks[0];
+	curBlock.color = next_block + 1;
+	curBlock.center_x = blockData->blockData[next_block].center_x + SPAWN_OFFSET_X;
+	curBlock.center_y = blockData->blockData[next_block].center_y;
 	if((curBlock.center_x & 1) != (curBlock.center_y & 1))
 	{
 		// Keep spawn coordinates on valid hex lattice parity.
 		curBlock.center_y += 1;
 	}
 	for(int i=0 ; i<4 ; i++)
-		curBlock.pos[i] = blockData->blockData[nextBlock].pos[i];
+		curBlock.pos[i] = blockData->blockData[next_block].pos[i];
 
 	BlockSpin(rotation);
-	GenerateNext(10);
+	AdvanceNextBlocks();
 
 	return 0;
 } // Load next block data into current block
+
+void HextrisCtrl::AdvanceNextBlocks()
+{
+	for(int i = 0; i < NEXT_PREVIEW_COUNT - 1; ++i)
+	{
+		nextBlocks[i] = nextBlocks[i + 1];
+	}
+
+	nextBlocks[NEXT_PREVIEW_COUNT - 1] = GenerateNext(10);
+}
 
 int HextrisCtrl::GenerateNext(int max)
 {

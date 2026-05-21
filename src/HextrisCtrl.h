@@ -87,14 +87,16 @@ private:
 		NEXT_OFFSET_Y = 40,	// Next-piece preview Y offset
 		NEXT_SIZE_X = 40,	// Next-piece preview width
 		NEXT_SIZE_Y = 24,
+		NEXT_PREVIEW_COUNT = 3,
 		NEXT_IMAGE_OFFSET_Y = 0,	// next image Y offset
 		SPAWN_OFFSET_X = -1,
 		FLOORUP_MAX = 8		// Maximum queued floor-up entries
 	};
 
 	EraseData eraseData;
-	int nextBlock;
+	int nextBlocks[NEXT_PREVIEW_COUNT];
 	int GenerateNext(int max);
+	void AdvanceNextBlocks();
 	BlockData curBlock;
 	int NextToCurrent(int rotation);
 	int phase;
@@ -124,7 +126,7 @@ private:
 	bn::optional<bn::sp_direct_bitmap_bg_ptr> fieldBitmapBg;
 	bn::optional<bn::sprite_ptr> currentBlockSprites[4];
 	bn::optional<bn::sprite_ptr> ghostBlockSprites[4];
-	bn::optional<bn::sprite_ptr> nextBlockSprites[4];
+	bn::optional<bn::sprite_ptr> nextBlockSprites[NEXT_PREVIEW_COUNT][4];
 	bn::optional<bn::sprite_ptr> eraseEffectSprites[4][11];
 	void MarkAllFieldDirty();
 	void MarkFieldCellDirty(int x, int y);

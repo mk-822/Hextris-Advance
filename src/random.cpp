@@ -20,7 +20,9 @@ int GameRandomInt(int limit)
 
 const int Sub=6;
 const int BLOCK_KIND_COUNT = 10;
-const int WEIGHTED_RANDOM_COUNT = 11;
+const int STRAIGHT_BLOCK_WEIGHT = 3;
+const int OTHER_BLOCK_WEIGHT = 2;
+const int WEIGHTED_RANDOM_COUNT = STRAIGHT_BLOCK_WEIGHT + (BLOCK_KIND_COUNT - 1) * OTHER_BLOCK_WEIGHT;
 const int STRAIGHT_BLOCK_NO = 0;
 
 
@@ -36,15 +38,17 @@ random :: random()
 
 int random::Decision(){
 	do{
-		num = GameRandomInt(WEIGHTED_RANDOM_COUNT);
-		if(num == BLOCK_KIND_COUNT){
+		const int weighted_num = GameRandomInt(WEIGHTED_RANDOM_COUNT);
+		if(weighted_num < STRAIGHT_BLOCK_WEIGHT){
 			num = STRAIGHT_BLOCK_NO;
+		}else{
+			num = 1 + (weighted_num - STRAIGHT_BLOCK_WEIGHT) / OTHER_BLOCK_WEIGHT;
 		}
 		cnt[num].count2++;
 		switch(cnt[num].num)
 		{
 		case 0:
-			if(cnt[num].count2 == Sub+1){
+			if(cnt[num].count2 == Sub+3){
 				cnt[num].count2 = 0;
 				return cnt[num].num;
 			}

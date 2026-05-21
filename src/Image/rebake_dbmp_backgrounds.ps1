@@ -28,7 +28,7 @@ try {
         $src.Dispose()
 
         Darken-Rect $dst 88 8 67 144
-        Darken-Rect $dst 16 8 50 34
+        Darken-Rect $dst 16 8 50 86
 
         for($fy = 0; $fy -lt 160; $fy++) {
             for($fx = 2; $fx -lt 81; $fx++) {
