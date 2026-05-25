@@ -36,6 +36,8 @@ namespace
 	constexpr int BLOCK_PIXEL_SIZE = 8;
 	constexpr int FIELD_BLOCK_COLS = 11;
 	constexpr int FIELD_LOGICAL_ROWS = 18;
+	// HexField keeps one playable offscreen row above the visible ceiling; the row above it is a wall.
+	constexpr int FIELD_HIDDEN_TOP_ROWS = 1;
 	constexpr int FIELD_DRAW_ROWS = FIELD_LOGICAL_ROWS * 2;
 	constexpr int FIELD_MAX_X = FIELD_BLOCK_COLS - 1;
 	constexpr int FIELD_MAX_Y = FIELD_DRAW_ROWS - 1;
@@ -107,8 +109,8 @@ namespace
 			adjusted_y -= 1;
 		}
 
-		// Spawn and rotation can legitimately place cells above the visible top.
-		return adjusted_y > FIELD_MAX_Y;
+		// Spawn and rotation can legitimately place cells in the hidden rows above the visible top.
+		return adjusted_y < -FIELD_HIDDEN_TOP_ROWS * 2 || adjusted_y > FIELD_MAX_Y;
 	}
 
 	inline int logical_row_from_draw_row(int x, int draw_row)
@@ -638,8 +640,8 @@ int HextrisCtrl::Main(int player){
 						if(erased_line > dirty_max_line){
 							dirty_max_line = erased_line;
 						}
-						for(int j=erased_line ; j>=0 ; j--){
-							if(j==0){
+						for(int j=erased_line ; j>=-FIELD_HIDDEN_TOP_ROWS ; j--){
+							if(j==-FIELD_HIDDEN_TOP_ROWS){
 								hField.SetField(k,j,0);
 							}else{
 								hField.SetField(k,j,hField.GetField(k,j-1));
@@ -1514,6 +1516,10 @@ int HextrisCtrl::BlockFix()
 	for(int i=0 ; i<4 ; i++){
 		const int raw_x = blockData->posData[curBlock.pos[i]].x + curBlock.center_x;
 		const int raw_y = blockData->posData[curBlock.pos[i]].y + curBlock.center_y;
+		if(out_of_playfield(raw_x, raw_y)){
+			continue;
+		}
+
 		MarkFieldCellDirty(raw_x, raw_y);
 		hField.Set(raw_x, raw_y, curBlock.color);
 	}
